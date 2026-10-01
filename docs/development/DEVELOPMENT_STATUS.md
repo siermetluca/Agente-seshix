@@ -9,7 +9,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 
 - Phase: DOMAIN FOUNDATION
 - Canonical branch: `main`
-- Current canonical base: `9975a3940c2dc8b361c2854e06df14b8ea1838c6`
+- Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0001](tasks/DEV-0001/)
 - Active DEV_TASK: NONE
 - Current step: READY_FOR_NEXT_DEV_TASK
