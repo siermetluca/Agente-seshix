@@ -1,0 +1,35 @@
+dev_task_id: DEV-0016
+title: Source / Evidence Intake Use Case
+status: PROPOSED
+request: Implement the first operational SOURCE -> EVIDENCE intake use case over explicit source input and the existing EvidenceRepository port.
+source:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+rationale: SKILL_01 needs a deterministic intake boundary that records source-backed Evidence before any classification or PRIMARY_CONTEXT update.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Accept explicit evidence_id, source_ref, claim, evidence payload and version.
+  - Validate non-empty identity/source/claim/version before persistence.
+  - Construct domain SourceReference and Evidence.
+  - Reject duplicate evidence_id when the repository already contains that id.
+  - Save the Evidence through EvidenceRepository.
+  - Return the persisted Evidence object.
+constraints:
+  - No scraping or autonomous acquisition.
+  - No FATTO/IPOTESI/UNKNOWN classification.
+  - No PRIMARY_CONTEXT write.
+  - No evidence scoring or semantic validation.
+  - No persistence implementation.
+  - No external side effects beyond the repository port.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Successful SOURCE -> EVIDENCE persistence.
+  - Invalid input rejection.
+  - Duplicate evidence id rejection without overwrite.
+  - Payload preservation.
+  - Full unit suite must remain passing.
+recovery_plan: Revert the task commit.

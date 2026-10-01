@@ -1,0 +1,22 @@
+change_plan_id: CP-DEV-0016-v1
+dev_task_id: DEV-0016
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/evidence_intake.py
+    - tests/unit/test_evidence_intake.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0016
+implementation:
+  - Add immutable EvidenceIntakeCommand.
+  - Add EvidenceAlreadyExists application error.
+  - Add EvidenceIntakeUseCase using EvidenceRepository.
+  - Build SourceReference and Evidence from explicit input and persist once.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: PORT_ONLY
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
