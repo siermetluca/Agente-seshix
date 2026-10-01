@@ -12,7 +12,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0019](tasks/DEV-0019/)
 - Active DEV_TASK: [DEV-0020](tasks/DEV-0020/)
-- Current step: STRESS_TEST_DESIGN
+- Current step: STRESS_TESTING
 - Blockers: NONE
 
 ## Implemented
