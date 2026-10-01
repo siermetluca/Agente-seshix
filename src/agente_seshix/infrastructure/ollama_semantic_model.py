@@ -26,7 +26,7 @@ class OllamaSemanticModel:
         payload = {
             "model": self.model,
             "stream": False,
-            "format": "json",
+            "format": self._response_schema(),
             "options": {"temperature": 0},
             "prompt": self._prompt(request),
         }
@@ -77,6 +77,62 @@ class OllamaSemanticModel:
                 if isinstance(item, dict)
             )
         )
+
+    def _candidate_schema(
+        self,
+        classification: str,
+        *,
+        allow_null: bool,
+    ) -> dict:
+        value_schema = {"type": "null"} if allow_null else {
+            "type": ["string", "number", "integer", "boolean", "array", "object"]
+        }
+        return {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "enum": [
+                        "company.name",
+                        "company.activities",
+                        "company.employees",
+                        "company.owner_count",
+                        "company.admin_staff",
+                        "company.country",
+                        "company.revenue",
+                    ],
+                },
+                "claim": {"type": "string"},
+                "classification": {"const": classification},
+                "value": value_schema,
+            },
+            "required": [
+                "key",
+                "claim",
+                "classification",
+                "value",
+            ],
+            "additionalProperties": False,
+        }
+
+    def _response_schema(self) -> dict:
+        return {
+            "type": "object",
+            "properties": {
+                "candidates": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            self._candidate_schema("FATTO", allow_null=False),
+                            self._candidate_schema("IPOTESI", allow_null=False),
+                            self._candidate_schema("UNKNOWN", allow_null=True),
+                        ]
+                    },
+                }
+            },
+            "required": ["candidates"],
+            "additionalProperties": False,
+        }
 
     def _prompt(self, request: SemanticModelRequest) -> str:
         return f"""You are a constrained semantic extractor for company context.
