@@ -11,8 +11,8 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0018](tasks/DEV-0018/)
-- Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0019_SKILL01_NODE
+- Active DEV_TASK: [DEV-0019](tasks/DEV-0019/)
+- Current step: CHANGE_PLAN_APPROVED
 - Blockers: NONE
 
 ## Implemented
@@ -127,7 +127,7 @@ Review verification: 61/61 unit tests PASS.
 4. DEV-0016 — Source/Evidence Intake Use Case — PASS
 5. DEV-0017 — SKILL_01 Context Construction Runtime — PASS
 6. DEV-0018 — SKILL_01 Validation + Activation — PASS
-7. DEV-0019 — SKILL_01 Node Runtime Integration — NEXT
+7. DEV-0019 — SKILL_01 Node Runtime Integration — ACTIVE
 8. DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure
 9. DEV-0021 — Structured Semantic Model Port
 10. DEV-0022 — SKILL_02 Company Analysis Runtime
