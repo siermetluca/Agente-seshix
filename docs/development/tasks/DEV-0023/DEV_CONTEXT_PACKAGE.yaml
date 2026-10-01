@@ -1,0 +1,18 @@
+dev_context_package_id: DEVCTX-0023-v1
+dev_task_id: DEV-0023
+status: CONTEXT_RESOLVED
+canonical_remote_base_sha: bfb0aa0cbe8ae461dca9126835100d967fb9cfcc
+local_start_sha: 0b76041059a7d699b98df31096fe03057668f100
+provider_for_human_test:
+  type: local_ollama
+  endpoint: http://127.0.0.1:11434
+  model: llama3.1:8b
+canonical_context_refs:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/development/tasks/DEV-0021/RESULT.md
+  - docs/development/tasks/DEV-0022/RESULT.md
+repository:
+  id: PUBLIC_CORE_REPO
+  name: siermetluca/Agente-seshix
+classification: PUBLIC_SAFE
+blocking_unknowns: []

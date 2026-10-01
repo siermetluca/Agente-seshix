@@ -1,0 +1,110 @@
+from __future__ import annotations
+
+import json
+import urllib.error
+import urllib.request
+from dataclasses import dataclass
+
+from agente_seshix.application.semantic_model import (
+    RawSemanticCandidate,
+    RawSemanticOutput,
+    SemanticModelRequest,
+)
+
+
+class OllamaSemanticModelError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True, slots=True)
+class OllamaSemanticModel:
+    model: str = "llama3.1:8b"
+    endpoint: str = "http://127.0.0.1:11434"
+    timeout_seconds: float = 120.0
+
+    def generate(self, request: SemanticModelRequest) -> RawSemanticOutput:
+        payload = {
+            "model": self.model,
+            "stream": False,
+            "format": "json",
+            "options": {"temperature": 0},
+            "prompt": self._prompt(request),
+        }
+        http_request = urllib.request.Request(
+            f"{self.endpoint.rstrip('/')}/api/generate",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(
+                http_request,
+                timeout=self.timeout_seconds,
+            ) as response:
+                envelope = json.loads(response.read().decode("utf-8"))
+        except (OSError, urllib.error.URLError, json.JSONDecodeError) as error:
+            raise OllamaSemanticModelError(
+                f"Ollama request failed: {error}"
+            ) from error
+
+        raw_text = envelope.get("response")
+        if not isinstance(raw_text, str) or not raw_text.strip():
+            raise OllamaSemanticModelError(
+                "Ollama response did not contain structured response text"
+            )
+        try:
+            decoded = json.loads(raw_text)
+        except json.JSONDecodeError as error:
+            raise OllamaSemanticModelError(
+                "Ollama semantic response is not valid JSON"
+            ) from error
+
+        candidates = decoded.get("candidates")
+        if not isinstance(candidates, list):
+            raise OllamaSemanticModelError(
+                "Ollama semantic response must contain candidates list"
+            )
+
+        return RawSemanticOutput(
+            candidates=tuple(
+                RawSemanticCandidate(
+                    key=item.get("key"),
+                    claim=item.get("claim"),
+                    classification=item.get("classification"),
+                    value=item.get("value"),
+                )
+                for item in candidates
+                if isinstance(item, dict)
+            )
+        )
+
+    def _prompt(self, request: SemanticModelRequest) -> str:
+        return f"""You are a constrained semantic extractor for company context.
+Return JSON only, with exactly this top-level shape:
+{{"candidates":[{{"key":"...","claim":"...","classification":"FATTO|IPOTESI|UNKNOWN","value":...}}]}}
+
+Allowed keys:
+- company.name
+- company.activities
+- company.employees
+- company.owner_count
+- company.admin_staff
+- company.country
+- company.revenue
+
+Rules:
+- Extract only information supported by the source text.
+- FATTO: explicitly stated information.
+- IPOTESI: interpretation explicitly signaled as uncertain/possible.
+- UNKNOWN: relevant information explicitly missing or unavailable; value must be null.
+- Never create a candidate merely because an allowed key exists.
+- Never use runtime/control words such as WAITING_HITL, REQUIRES_HITL, ALLOW, DENY as business values.
+- Preserve numeric values as JSON numbers when clearly numeric.
+- company.activities may be a JSON list of strings.
+- claim must be a short natural-language statement grounded in the source.
+- Do not add explanations outside the JSON.
+
+Purpose: {request.purpose}
+Source:
+{request.source_text}
+"""

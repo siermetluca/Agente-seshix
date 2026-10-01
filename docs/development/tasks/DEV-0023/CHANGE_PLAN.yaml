@@ -1,0 +1,33 @@
+change_plan_id: CP-DEV-0023-v1
+dev_task_id: DEV-0023
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/infrastructure/ollama_semantic_model.py
+    - src/agente_seshix/application/skill_01_semantic_intake.py
+    - tests/unit/test_skill_01_semantic_intake.py
+    - tests/integration/test_skill_01_semantic_ollama.py
+    - scripts/skill_01_human_acceptance_v2.py
+    - docs/development/tasks/DEV-0023/HUMAN_TEST_GUIDE.md
+    - docs/development/tasks/DEV-0023/RESULT.md
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+implementation:
+  - Add local Ollama SemanticModelPort adapter using stdlib HTTP.
+  - Add explicit semantic intake key catalog v1.
+  - Add preview/analyze phase with no mutation.
+  - Add commit phase over validated candidates through existing node runtime.
+  - Add new natural-language human acceptance harness.
+tests:
+  - provider JSON mapping;
+  - out-of-catalog rejection;
+  - control-token rejection inherited from DEV-0022;
+  - UNKNOWN clarification/no-write;
+  - multi-candidate version chaining;
+  - preview has zero mutations;
+  - real local Ollama smoke integration;
+  - all integration + unit regression.
+architecture_impact: NONE
+persistent_state_impact: PORT_ONLY
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
