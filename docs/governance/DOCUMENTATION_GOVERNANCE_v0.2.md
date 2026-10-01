@@ -1,8 +1,8 @@
-# DOCUMENTATION GOVERNANCE v0.1
+# DOCUMENTATION GOVERNANCE v0.2
 
-Status: SUPERSEDED
+Status: CANONICAL
 
-Superseded_by: DOCUMENTATION_GOVERNANCE_v0.2
+Supersedes: DOCUMENTATION_GOVERNANCE_v0.1
 
 ## Purpose
 
@@ -22,6 +22,7 @@ Govern canonical project documentation without duplicating sources of truth.
 - docs/governance/: human-readable canonical governance.
 - docs/skills/: human-readable canonical skill definitions and process behavior.
 - docs/development/: development bootstrap, entry conditions, migration/extraction maps and development documentation.
+- docs/development/DEVELOPMENT_STATUS.md: derived operational index of the current development state; it never overrides task artifacts or canonical governance.
 - docs/decisions/: ADR records.
 - contracts/: structured canonical contracts intended for deterministic consumption or validation.
 - README.md: project overview, navigation and current high-level status. It is not the detailed source of truth for contracts.

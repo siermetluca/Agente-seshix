@@ -1,8 +1,8 @@
-# DEVELOPMENT GOVERNANCE v0.1
+# DEVELOPMENT GOVERNANCE v0.2
 
-Status: SUPERSEDED
+Status: CANONICAL
 
-Superseded_by: DEVELOPMENT_GOVERNANCE_v0.2
+Supersedes: DEVELOPMENT_GOVERNANCE_v0.1
 
 CODE CHANGE must be traceable to an approved requirement.
 REQUIREMENT must be traceable to canonical context or an approved change proposal.
@@ -24,3 +24,8 @@ Hard rules:
 - TEST NOT EXECUTED != PASS
 - CODE CANNOT OVERRIDE CONTEXT
 - governance/architecture changes require their own change proposal.
+
+Development status rule:
+- every DEV_TASK must keep `docs/development/DEVELOPMENT_STATUS.md` aligned with its current plan and state;
+- test execution/result is indexed there but evidence remains in the task artifact;
+- a task is not operationally closed until the index reflects its final state and next step.

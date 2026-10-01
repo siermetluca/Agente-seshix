@@ -2,6 +2,7 @@
 
 - Canonical governance lives under docs/ and contracts/.
 - Real development requires an approved DEV_TASK and CHANGE_PLAN.
+- Every development task must keep docs/development/DEVELOPMENT_STATUS.md aligned as the operational index of plan, step, test/result status, blockers and next action.
 - Direct writes to main are forbidden by policy.
 - Work must occur on a task branch.
 - Repository scope may not expand silently.
