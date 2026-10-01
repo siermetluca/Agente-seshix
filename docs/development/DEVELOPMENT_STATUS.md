@@ -10,9 +10,9 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: DOMAIN FOUNDATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0009](tasks/DEV-0009/)
+- Last completed DEV_TASK: [DEV-0010](tasks/DEV-0010/)
 - Active DEV_TASK: NONE
-- Current step: READY_FOR_NEXT_DEV_TASK
+- Current step: FOUNDATION_BLOCK_COMPLETE_REVIEW_NEXT_GAP
 - Blockers: NONE
 
 ## Implemented
@@ -74,6 +74,13 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
   - tests: 57/57 PASS (full unit suite)
   - result: [RESULT.md](tasks/DEV-0009/RESULT.md)
 
+- DEV-0010 — Task Context Resolver use-case — PASS
+  - `TaskContextResolver`
+  - `TaskContextPackage`
+  - required/optional section validation
+  - tests: 61/61 PASS (full unit suite)
+  - result: [RESULT.md](tasks/DEV-0010/RESULT.md)
+
 ## Current development plan
 
 1. DEV-0002 — SourceReference + Evidence — PASS
@@ -84,7 +91,13 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 6. DEV-0007 — Context repository ports — PASS
 7. DEV-0008 — Evidence repository ports — PASS
 8. DEV-0009 — Context update application use-case — PASS
-9. DEV-0010 — Task Context Resolver use-case — NEXT
+9. DEV-0010 — Task Context Resolver use-case — PASS
+
+## Foundation milestone
+
+- DEV-0001 → DEV-0010 — COMPLETE
+- DOMAIN/APPLICATION FOUNDATION — COMPLETE_FOR_CURRENT_SCOPE
+- Next DEV_TASK — NOT YET DEFINED; must derive from the next verified implementation gap.
 
 ## Component index
 

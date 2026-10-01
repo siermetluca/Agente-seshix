@@ -1,0 +1,22 @@
+change_plan_id: CP-DEV-0010-v1
+dev_task_id: DEV-0010
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/task_context_resolver.py
+    - tests/unit/test_task_context_resolver.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0010
+implementation:
+  - Add immutable ResolvedContextSection and TaskContextPackage.
+  - Add MissingRequiredContext and TaskContextRequirementsMismatch application errors.
+  - Add TaskContextResolver resolving only requested sections.
+  - Required missing sections fail deterministically; optional missing sections are omitted.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
