@@ -12,7 +12,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0020](tasks/DEV-0020/)
 - Active DEV_TASK: NONE
-- Current step: HUMAN_ACCEPTANCE_HARNESS
+- Current step: WAITING_HUMAN_ACCEPTANCE
 - Blockers: NONE
 
 ## Implemented
@@ -129,7 +129,7 @@ Review verification: 61/61 unit tests PASS.
 6. DEV-0018 — SKILL_01 Validation + Activation — PASS
 7. DEV-0019 — SKILL_01 Node Runtime Integration — PASS
 8. DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure — PASS
-9. DEV-0021 — SKILL_01 Human Acceptance Harness — ACTIVE
+9. DEV-0021 — SKILL_01 Human Acceptance Harness — WAITING_HUMAN_ACCEPTANCE
 10. DEV-0022 — Structured Semantic Model Port
 11. DEV-0023 — SKILL_02 Company Analysis Runtime
 12. DEV-0024 — SKILL_02 Validation + Activation
