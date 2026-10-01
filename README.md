@@ -232,7 +232,7 @@ LLM OUTPUT
 PRIMARY_CONTEXT
 ```
 
-### SKILL_01 — Costruzione Contesto Aziendale
+### Ownership SKILL_01 — Costruzione Contesto Aziendale
 
 **Fonti utilizzabili**
 
@@ -322,7 +322,7 @@ limiti
 
 SKILL_01 non deve trasformare automaticamente analisi, opportunità, previsioni o ipotesi in fatti aziendali.
 
-### SKILL_02 — Analisi Aziendale
+### Ownership SKILL_02 — Analisi Aziendale
 
 **Fonti utilizzate**
 
@@ -382,7 +382,7 @@ CONTEXT_CHANGE_CANDIDATE
 → SKILL_01
 ```
 
-### SKILL_03 — Analisi Esterna e Validazione di Mercato
+### Ownership SKILL_03 — Analisi Esterna e Validazione di Mercato
 
 **Fonti utilizzate**
 
@@ -440,7 +440,7 @@ MISSING_DATA
 
 SKILL_03 non trasforma evidenze di mercato in fatti interni dell'azienda.
 
-### SKILL_04 — Formulazione e Selezione Opportunità
+### Ownership SKILL_04 — Formulazione e Selezione Opportunità
 
 **Fonti utilizzate**
 
@@ -485,7 +485,7 @@ abandon condition
 
 Un'opportunità è un oggetto decisionale derivato e non modifica automaticamente il PRIMARY_CONTEXT.
 
-### SKILL_05 — Validazione Pratica / Commerciale
+### Ownership SKILL_05 — Validazione Pratica / Commerciale
 
 **Fonti utilizzate**
 
@@ -593,7 +593,7 @@ CONTEXT_CHANGE_CANDIDATE
 → SKILL_01
 ```
 
-### SKILL_06 — Definizione Prodotto / Servizio
+### Ownership SKILL_06 — Definizione Prodotto / Servizio
 
 **Fonti utilizzate**
 
@@ -668,7 +668,7 @@ MVP_HANDLING
 
 SKILL_06 non modifica direttamente il PRIMARY_CONTEXT e non inventa prezzo, margine, capability o promessa commerciale.
 
-### SKILL_07 — Progettazione Soluzione e Piano Delivery / MVP
+### Ownership SKILL_07 — Progettazione Soluzione e Piano Delivery / MVP
 
 **Fonti utilizzate**
 
