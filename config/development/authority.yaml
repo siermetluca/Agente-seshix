@@ -1,0 +1,20 @@
+version: "0.1"
+status: CANONICAL
+actors:
+  HUMAN_OWNER:
+    type: HITL
+    final_authority: true
+  DEV_AGENT:
+    type: AGENT
+actions:
+  read_repository: ALLOW
+  create_task_branch: ALLOW_WITH_APPROVED_CHANGE_PLAN
+  write_task_branch: ALLOW_WITH_APPROVED_CHANGE_PLAN
+  create_commit: ALLOW_WITH_APPROVED_CHANGE_PLAN
+  open_pull_request: ALLOW_WITH_APPROVED_CHANGE_PLAN
+  direct_write_main: DENY
+  merge_pull_request: REQUIRES_RELEASE_GATE_AND_HITL
+  create_release: REQUIRES_RELEASE_GATE_AND_HITL
+  destructive_operation: REQUIRES_HITL
+remote_repository_channel: GITHUB_CONNECTOR_AUTHORIZED
+local_gh_cli_required: false

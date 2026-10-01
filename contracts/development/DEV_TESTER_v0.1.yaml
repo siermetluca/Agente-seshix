@@ -1,0 +1,11 @@
+skill_id: DEV_TESTER
+version: "0.1"
+status: CANONICAL
+purpose: "Verify the exact implementation against the test contract"
+input_contract: [IMPLEMENTATION_REF, APPROVED_CHANGE_PLAN, TEST_CONTRACT, DEV_CONTEXT_PACKAGE]
+output_contract: TEST_RESULT
+required_authority: [EXECUTE_TESTS]
+stop_conditions: [IMPLEMENTATION_REF_MISSING, TEST_CONTRACT_AMBIGUOUS, TEST_ENV_UNAVAILABLE, TEST_EVIDENCE_UNVERIFIABLE]
+escalation_conditions: [DEV_IMPLEMENTER, TEST_CONTRACT_CHANGE_PROPOSAL]
+evidence_requirements: [EXACT_IMPLEMENTATION_REF, TEST_RESULTS, LOGS, ENVIRONMENT_REF]
+traceability: "IMPLEMENTATION_REF -> TEST_RESULT"
