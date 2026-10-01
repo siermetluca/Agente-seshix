@@ -10,7 +10,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: DOMAIN FOUNDATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0002](tasks/DEV-0002/)
+- Last completed DEV_TASK: [DEV-0003](tasks/DEV-0003/)
 - Active DEV_TASK: NONE
 - Current step: READY_FOR_NEXT_DEV_TASK
 - Blockers: NONE
@@ -30,11 +30,17 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
   - tests: 13/13 PASS (full unit suite)
   - result: [RESULT.md](tasks/DEV-0002/RESULT.md)
 
+- DEV-0003 — Primary Context Record + Version — PASS
+  - `PrimaryContextRecord`
+  - `PrimaryContextVersion`
+  - tests: 20/20 PASS (full unit suite)
+  - result: [RESULT.md](tasks/DEV-0003/RESULT.md)
+
 ## Current development plan
 
 1. DEV-0002 — SourceReference + Evidence — PASS
-2. DEV-0003 — Primary Context Record + Version — NEXT
-3. DEV-0004 — Derived State + Dependency + Staleness — PLANNED
+2. DEV-0003 — Primary Context Record + Version — PASS
+3. DEV-0004 — Derived State + Dependency + Staleness — NEXT
 4. DEV-0005 — Authority Decision domain model — PLANNED
 5. DEV-0006 — Task + Task Context requirements — PLANNED
 6. DEV-0007 — Context repository ports — PLANNED

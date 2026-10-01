@@ -1,0 +1,22 @@
+change_plan_id: CP-DEV-0003-v1
+dev_task_id: DEV-0003
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/domain/primary_context.py
+    - tests/unit/test_primary_context.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0003
+implementation:
+  - Add immutable PrimaryContextRecord.
+  - Add immutable PrimaryContextVersion.
+  - Reuse ContextValue from DEV-0001.
+  - Validate only explicit non-empty identity/version invariants.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

@@ -1,0 +1,32 @@
+dev_task_id: DEV-0003
+title: Primary Context Record + Version
+status: PROPOSED
+request: Implement pure-domain PrimaryContextRecord and PrimaryContextVersion for the verified/versioned PRIMARY_CONTEXT.
+source:
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: The canonical architecture requires PRIMARY_CONTEXT to be explicit and versioned before persistence or context-manager use cases are introduced.
+affected_components:
+  - src/agente_seshix/domain
+  - tests/unit
+requirements:
+  - Represent one primary-context record explicitly.
+  - A record must have a stable non-empty record id and key.
+  - A record must contain a ContextValue from DEV-0001.
+  - Represent an immutable primary-context version explicitly.
+  - A version must have a non-empty version id.
+  - A version may reference the immediately previous version id.
+  - A version contains an immutable collection of primary-context records.
+constraints:
+  - Pure DOMAIN code only.
+  - No persistence implementation or database schema.
+  - No Context Manager runtime behavior.
+  - No SKILL_01 execution logic.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Unit tests for valid and invalid records/versions.
+  - Full existing unit suite must remain passing.
+recovery_plan: Revert the task commit.
