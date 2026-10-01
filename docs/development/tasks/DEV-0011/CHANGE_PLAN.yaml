@@ -1,0 +1,25 @@
+change_plan_id: CP-DEV-0011-v1
+dev_task_id: DEV-0011
+status: APPROVED
+scope:
+  update:
+    - src/agente_seshix/domain/context_evidence.py
+    - src/agente_seshix/application/update_primary_context.py
+    - tests/unit/test_context_evidence.py
+    - tests/unit/test_update_primary_context.py
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0011
+implementation:
+  - Extend Provenance with optional evidence_id for backward-compatible exact evidence traceability.
+  - Extend UpdatePrimaryContextCommand with non-empty unique evidence_ids.
+  - Inject EvidenceRepository into UpdatePrimaryContextUseCase.
+  - Resolve all evidence ids before creating/saving a new context version.
+  - Rebuild ContextValue provenance from resolved Evidence source_ref + evidence_id.
+  - Preserve value, classification and ContextValue version from the proposed record.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: PORT_ONLY
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

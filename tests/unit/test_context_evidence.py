@@ -66,6 +66,10 @@ class ContextEvidenceTests(unittest.TestCase):
                 version="",
             )
 
+    def test_blank_evidence_id_is_rejected_when_provided(self) -> None:
+        with self.assertRaises(ValueError):
+            Provenance("source://example", evidence_id="   ")
+
 
 if __name__ == "__main__":
     unittest.main()

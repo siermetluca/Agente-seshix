@@ -14,10 +14,13 @@ class EvidenceClassification(str, Enum):
 @dataclass(frozen=True, slots=True)
 class Provenance:
     source_ref: str
+    evidence_id: str | None = None
 
     def __post_init__(self) -> None:
         if not self.source_ref.strip():
             raise ValueError("source_ref must not be empty")
+        if self.evidence_id is not None and not self.evidence_id.strip():
+            raise ValueError("evidence_id must not be empty when provided")
 
 
 @dataclass(frozen=True, slots=True)
