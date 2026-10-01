@@ -12,7 +12,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0020](tasks/DEV-0020/)
 - Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0021
+- Current step: WAITING_HUMAN_ACCEPTANCE
 - Blockers: NONE
 
 ## Implemented
@@ -129,22 +129,22 @@ Review verification: 61/61 unit tests PASS.
 6. DEV-0018 — SKILL_01 Validation + Activation — PASS
 7. DEV-0019 — SKILL_01 Node Runtime Integration — PASS
 8. DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure — PASS
-9. DEV-0021 — Structured Semantic Model Port — NEXT
-10. DEV-0022 — SKILL_02 Company Analysis Runtime
-11. DEV-0023 — SKILL_02 Validation + Activation
-12. DEV-0024 — Source Acquisition Capability Port
-13. DEV-0025 — SKILL_03 External Validation Runtime
-14. DEV-0026 — SKILL_03 Validation + Activation
-15. DEV-0027 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
-16. DEV-0028 — PostgreSQL Repository Adapters
-17. DEV-0029 — Temporal Durable Flow
+9. DEV-0021 — SKILL_01 Human Acceptance Harness — WAITING_HUMAN_ACCEPTANCE
+10. DEV-0022 — Structured Semantic Model Port
+11. DEV-0023 — SKILL_02 Company Analysis Runtime
+12. DEV-0024 — SKILL_02 Validation + Activation
+13. DEV-0025 — Source Acquisition Capability Port
+14. DEV-0026 — SKILL_03 External Validation Runtime
+15. DEV-0027 — SKILL_03 Validation + Activation
+16. DEV-0028 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
+17. DEV-0029 — PostgreSQL Repository Adapters
+18. DEV-0030 — Temporal Durable Flow
 
 Hard gate before SKILL_02 work:
 
 ```text
-DEV-0019 PASS
-+ DEV-0020 PASS
-+ SKILL_01_CLOSED = PASS
+SKILL_01_CLOSED = PASS
++ SKILL_01_HUMAN_ACCEPTANCE = PASS
 ```
 
 Then extend the same validated lifecycle to SKILL_04–07.
@@ -213,7 +213,7 @@ Then extend the same validated lifecycle to SKILL_04–07.
 - DOMAIN FOUNDATION — FROZEN
 - APPLICATION FOUNDATION — FROZEN
 - FLOW RUNTIME — OPERATIONAL_V1
-- SKILL_01 — CLOSED_V1
+- SKILL_01 — AUTO_CLOSED_V1 / HUMAN_ACCEPTANCE_PENDING
 - SKILL_02 — NOT_STARTED
 - SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED

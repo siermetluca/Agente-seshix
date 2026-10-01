@@ -205,9 +205,29 @@ SKILL_01_CLOSED = PASS
 
 Only after this gate may development move to the semantic boundary required by SKILL_02.
 
-## Stage 4 — Semantic execution boundary
+## Stage 4 — Human acceptance of SKILL_01
 
-### DEV-0021 — Structured Semantic Model Port
+### DEV-0021 — SKILL_01 Human Acceptance Harness
+
+Goal:
+
+- expose the complete SKILL_01 node through a local interactive CLI;
+- let the human owner see every FlowRun step/state;
+- let the human owner personally exercise a normal FACT path, context HITL/resume and authority HITL/approval;
+- record human acceptance separately from automated closure.
+
+Hard gate:
+
+```text
+SKILL_01_CLOSED = PASS
++ SKILL_01_HUMAN_ACCEPTANCE = PASS
+```
+
+No SKILL_02 work is allowed until both are true.
+
+## Stage 5 — Semantic execution boundary
+
+### DEV-0022 — Structured Semantic Model Port
 
 Goal:
 
@@ -222,9 +242,9 @@ Gate:
 MODEL_OUTPUT_WITHOUT_VALIDATION_CANNOT_ENTER_STATE = PASS
 ```
 
-## Stage 5 — SKILL_02 executable
+## Stage 6 — SKILL_02 executable
 
-### DEV-0022 — SKILL_02 Company Analysis Runtime
+### DEV-0023 — SKILL_02 Company Analysis Runtime
 
 Goal:
 
@@ -240,16 +260,16 @@ PRIMARY_CONTEXT → ANALISI_AZIENDALE_BASELINE = PASS
 DERIVED_OUTPUT != PRIMARY_CONTEXT = PASS
 ```
 
-### DEV-0023 — SKILL_02 Validation + Activation
+### DEV-0024 — SKILL_02 Validation + Activation
 
 Goal:
 
 - stress positive, missing-context, contradictory-context and unsupported-conclusion cases;
 - promote to `ACTIVE` only after repeatable validated behavior.
 
-## Stage 6 — External-source capability boundary
+## Stage 7 — External-source capability boundary
 
-### DEV-0024 — Source Acquisition Capability Port
+### DEV-0025 — Source Acquisition Capability Port
 
 Goal:
 
@@ -265,9 +285,9 @@ CAPABILITY != AUTHORITY = PASS
 SOURCE_PROVENANCE = PASS
 ```
 
-## Stage 7 — SKILL_03 executable
+## Stage 8 — SKILL_03 executable
 
-### DEV-0025 — SKILL_03 External Validation Runtime
+### DEV-0026 — SKILL_03 External Validation Runtime
 
 Goal:
 
@@ -276,7 +296,7 @@ Goal:
 - output structured validated market analysis with source/provenance and explicit missing/contradictory data;
 - enforce `NESSUNA EVIDENZA SUFFICIENTE → NESSUNA CONCLUSIONE`.
 
-### DEV-0026 — SKILL_03 Validation + Activation
+### DEV-0027 — SKILL_03 Validation + Activation
 
 Goal:
 
@@ -286,9 +306,9 @@ Goal:
 - context mismatch;
 - activate only after gates pass.
 
-## Stage 8 — First end-to-end skill flow
+## Stage 9 — First end-to-end skill flow
 
-### DEV-0027 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
+### DEV-0028 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
 
 Scenario:
 
@@ -327,16 +347,16 @@ SKILL_02 = ACTIVE
 SKILL_03 = ACTIVE
 ```
 
-## Stage 9 — Persistence and durability
+## Stage 10 — Persistence and durability
 
 Only after the behavior above is stable:
 
-### DEV-0028 — PostgreSQL Repository Adapters
+### DEV-0029 — PostgreSQL Repository Adapters
 
 - implement existing context/evidence persistence ports;
 - integration tests for history, append/version behavior and restart persistence.
 
-### DEV-0029 — Temporal Durable Flow
+### DEV-0030 — Temporal Durable Flow
 
 - move durable coordination to Temporal;
 - activities own side effects;
