@@ -154,9 +154,60 @@ Goal:
 - verify provenance, targeted update, contradictions/missing data handling and no silent overwrite;
 - promote `SKILL_01` from `TESTING` to `ACTIVE` only if all gates pass.
 
-## Stage 3 — Semantic execution boundary
+## Stage 3 — Close SKILL_01 as a complete node
 
-### DEV-0019 — Structured Semantic Model Port
+### DEV-0019 — SKILL_01 Node Runtime Integration
+
+Goal:
+
+- build the actual SKILL_01 node coordinator over the already validated components;
+- accept a real SKILL_01 task/run input;
+- resolve task context;
+- resolve the exact ACTIVE SKILL_01 version from SkillRegistry;
+- perform authority evaluation before execution;
+- ingest explicit source input when present;
+- execute Skill01ContextRuntime;
+- map WRITTEN / UNKNOWN / WAITING_HITL / errors into FlowExecutionEnvelope states;
+- return one traceable node-run result.
+
+The node must orchestrate existing behavior, not duplicate business rules already owned by the components.
+
+Gate:
+
+```text
+SKILL_01_NODE_HAPPY_PATH = PASS
+SKILL_01_NODE_AUTHORITY_PATHS = PASS
+SKILL_01_NODE_HITL_RESUME = PASS
+SKILL_01_NODE_TRACEABILITY = PASS
+```
+
+### DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure
+
+Goal:
+
+- execute the complete SKILL_01 node repeatedly against realistic positive and negative scenarios;
+- test missing context, missing evidence, malformed input, conflicting updates, repeated updates, authority denial, HITL/resume, unsupported facts, hypotheses and UNKNOWN handling;
+- identify real defects or missing runtime behavior;
+- improve only where tests demonstrate a concrete need;
+- rerun regression after every correction;
+- close SKILL_01 only when the whole node is repeatable and all closure gates pass.
+
+Closure gate:
+
+```text
+SKILL_01_NODE_COMPLETE = PASS
+SKILL_01_NODE_NEGATIVE_SUITE = PASS
+SKILL_01_NODE_REPEATABILITY = PASS
+SKILL_01_NO_SILENT_STATE_MUTATION = PASS
+SKILL_01_HITL_RESUME = PASS
+SKILL_01_CLOSED = PASS
+```
+
+Only after this gate may development move to the semantic boundary required by SKILL_02.
+
+## Stage 4 — Semantic execution boundary
+
+### DEV-0021 — Structured Semantic Model Port
 
 Goal:
 
@@ -171,9 +222,9 @@ Gate:
 MODEL_OUTPUT_WITHOUT_VALIDATION_CANNOT_ENTER_STATE = PASS
 ```
 
-## Stage 4 — SKILL_02 executable
+## Stage 5 — SKILL_02 executable
 
-### DEV-0020 — SKILL_02 Company Analysis Runtime
+### DEV-0022 — SKILL_02 Company Analysis Runtime
 
 Goal:
 
@@ -189,16 +240,16 @@ PRIMARY_CONTEXT → ANALISI_AZIENDALE_BASELINE = PASS
 DERIVED_OUTPUT != PRIMARY_CONTEXT = PASS
 ```
 
-### DEV-0021 — SKILL_02 Validation + Activation
+### DEV-0023 — SKILL_02 Validation + Activation
 
 Goal:
 
 - stress positive, missing-context, contradictory-context and unsupported-conclusion cases;
 - promote to `ACTIVE` only after repeatable validated behavior.
 
-## Stage 5 — External-source capability boundary
+## Stage 6 — External-source capability boundary
 
-### DEV-0022 — Source Acquisition Capability Port
+### DEV-0024 — Source Acquisition Capability Port
 
 Goal:
 
@@ -214,9 +265,9 @@ CAPABILITY != AUTHORITY = PASS
 SOURCE_PROVENANCE = PASS
 ```
 
-## Stage 6 — SKILL_03 executable
+## Stage 7 — SKILL_03 executable
 
-### DEV-0023 — SKILL_03 External Validation Runtime
+### DEV-0025 — SKILL_03 External Validation Runtime
 
 Goal:
 
@@ -225,7 +276,7 @@ Goal:
 - output structured validated market analysis with source/provenance and explicit missing/contradictory data;
 - enforce `NESSUNA EVIDENZA SUFFICIENTE → NESSUNA CONCLUSIONE`.
 
-### DEV-0024 — SKILL_03 Validation + Activation
+### DEV-0026 — SKILL_03 Validation + Activation
 
 Goal:
 
@@ -235,9 +286,9 @@ Goal:
 - context mismatch;
 - activate only after gates pass.
 
-## Stage 7 — First end-to-end skill flow
+## Stage 8 — First end-to-end skill flow
 
-### DEV-0025 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
+### DEV-0027 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
 
 Scenario:
 
@@ -271,21 +322,21 @@ Milestone:
 
 ```text
 INITIAL_SKILL_FLOW_OPERATIONAL = PASS
-SKILL_01 = ACTIVE
+SKILL_01 = CLOSED
 SKILL_02 = ACTIVE
 SKILL_03 = ACTIVE
 ```
 
-## Stage 8 — Persistence and durability
+## Stage 9 — Persistence and durability
 
 Only after the behavior above is stable:
 
-### DEV-0026 — PostgreSQL Repository Adapters
+### DEV-0028 — PostgreSQL Repository Adapters
 
 - implement existing context/evidence persistence ports;
 - integration tests for history, append/version behavior and restart persistence.
 
-### DEV-0027 — Temporal Durable Flow
+### DEV-0029 — Temporal Durable Flow
 
 - move durable coordination to Temporal;
 - activities own side effects;
@@ -325,7 +376,7 @@ contract/context requirements
 ## Immediate next action
 
 ```text
-DEV-0013 — Authority Policy Evaluator
+DEV-0019 — SKILL_01 Node Runtime Integration
 ```
 
-This is the first runtime prerequisite because the canonical operating flow requires authority control before actions/escalations, and skill contracts declare authority requirements.
+SKILL_01 components are validated, but the complete node is not closed. The next action is to orchestrate the whole node, then stress/improve/close it in DEV-0020 before any SKILL_02 work.
