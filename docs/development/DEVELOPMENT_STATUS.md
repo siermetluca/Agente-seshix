@@ -11,8 +11,8 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0019](tasks/DEV-0019/)
-- Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0020_SKILL01_CLOSURE
+- Active DEV_TASK: [DEV-0020](tasks/DEV-0020/)
+- Current step: STRESS_TEST_DESIGN
 - Blockers: NONE
 
 ## Implemented
@@ -128,7 +128,7 @@ Review verification: 61/61 unit tests PASS.
 5. DEV-0017 — SKILL_01 Context Construction Runtime — PASS
 6. DEV-0018 — SKILL_01 Validation + Activation — PASS
 7. DEV-0019 — SKILL_01 Node Runtime Integration — PASS
-8. DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure — NEXT
+8. DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure — ACTIVE
 9. DEV-0021 — Structured Semantic Model Port
 10. DEV-0022 — SKILL_02 Company Analysis Runtime
 11. DEV-0023 — SKILL_02 Validation + Activation
@@ -205,7 +205,7 @@ Then extend the same validated lifecycle to SKILL_04–07.
 - DOMAIN FOUNDATION — FROZEN
 - APPLICATION FOUNDATION — FROZEN
 - FLOW RUNTIME — OPERATIONAL_V1
-- SKILL_01 — NODE_RUNTIME_OPERATIONAL / NOT_CLOSED
+- SKILL_01 — NODE_RUNTIME_OPERATIONAL / CLOSURE_TESTING
 - SKILL_02 — NOT_STARTED
 - SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED

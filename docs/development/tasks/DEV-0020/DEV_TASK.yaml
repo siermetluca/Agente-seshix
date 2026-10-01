@@ -1,0 +1,29 @@
+dev_task_id: DEV-0020
+title: SKILL_01 Full Node Stress, Improvement + Closure
+status: PROPOSED
+request: Stress the complete SKILL_01 node, fix only demonstrated runtime defects, rerun all regressions and close SKILL_01 only if every closure gate passes.
+source:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/development/tasks/DEV-0019/RESULT.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+rationale: SKILL_01 is executable but not yet closed; closure requires realistic negative, repeatability, mutation-safety and HITL-resume evidence.
+affected_components:
+  - src/agente_seshix/application/skill_01_node.py
+  - tests/integration
+  - docs/development
+requirements:
+  - Stress missing task context, inactive/missing skill, malformed input, missing Evidence, duplicate Evidence, authority denial, repeated HITL, context HITL, optional UNKNOWN, IPOTESI, conflicting/repeated updates and unsupported FATTO attempts.
+  - Expected operational failures must produce traceable FlowRun terminal/wait states rather than silently mutate state.
+  - Preserve no-write-before-authority and no invented fact invariants.
+  - Verify prior PrimaryContext versions and Evidence records are never silently overwritten.
+  - Verify deterministic behavior across repeated equivalent fresh runs.
+  - Re-run node, integration and unit regression after every demonstrated correction.
+  - Set SKILL_01_CLOSED only if every closure gate passes.
+constraints:
+  - No SKILL_02 or semantic-model work.
+  - No PostgreSQL or Temporal.
+  - No autonomous acquisition.
+  - No speculative refactor without failing closure evidence.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+recovery_plan: Revert DEV-0020 commits.
