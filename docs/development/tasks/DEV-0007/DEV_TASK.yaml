@@ -1,0 +1,32 @@
+dev_task_id: DEV-0007
+title: Context repository ports
+status: PROPOSED
+request: Define the application port for persisting and retrieving PrimaryContextVersion without introducing a concrete database adapter.
+source:
+  - docs/architecture/ARCHITECTURE_BASELINE_v0.2.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: Application use cases must depend on a stable persistence abstraction before PostgreSQL infrastructure is introduced.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Define an application-level PrimaryContextRepository port.
+  - The port must save a PrimaryContextVersion.
+  - The port must retrieve a PrimaryContextVersion by version_id.
+  - Missing versions must be representable without infrastructure exceptions.
+  - The port must depend only on domain types and standard-library typing.
+constraints:
+  - No PostgreSQL implementation.
+  - No Django ORM.
+  - No latest/current-context semantics.
+  - No tenant/context aggregate identifier introduced.
+  - No transaction/locking policy.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Unit/contract-style tests proving a minimal in-memory implementation satisfies the port shape.
+  - Full existing unit suite must remain passing.
+recovery_plan: Revert the task commit.
