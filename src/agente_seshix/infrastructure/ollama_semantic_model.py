@@ -150,6 +150,9 @@ Allowed keys:
 
 Rules:
 - Extract only information supported by the source text.
+- FATTO must be extractive: never add actions, services, capabilities or qualifiers absent from the source.
+- Keep FATTO claim and string values in the source language and wording whenever possible.
+- For company.activities, preserve coordinated phrases as complete phrases instead of splitting a modifier into a standalone activity.
 - FATTO: explicitly stated information.
 - IPOTESI: interpretation explicitly signaled as uncertain/possible.
 - UNKNOWN: relevant information explicitly missing or unavailable; value must be null.

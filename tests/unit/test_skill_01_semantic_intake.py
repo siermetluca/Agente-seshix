@@ -176,6 +176,39 @@ class Skill01SemanticIntakeTests(unittest.TestCase):
         )
         self.assertEqual(preview.clarification_questions, ())
 
+    def test_fact_claim_is_rebound_to_exact_source_text(self):
+        source = "azienda alpha beta"
+        service, _, _ = build_service(RawSemanticOutput(candidates=(
+            RawSemanticCandidate(
+                "company.activities",
+                "expanded interpretation",
+                "FATTO",
+                ["alpha beta"],
+            ),
+        )))
+        preview = service.analyze(
+            request_id="SEM-CLAIM-SOURCE",
+            source_text=source,
+            source_ref="human://owner",
+        )
+        self.assertEqual(preview.accepted_candidates[0].claim, source)
+
+    def test_activity_single_word_fragment_is_rejected(self):
+        service, _, _ = build_service(RawSemanticOutput(candidates=(
+            RawSemanticCandidate(
+                "company.activities",
+                "beta",
+                "FATTO",
+                ["beta"],
+            ),
+        )))
+        with self.assertRaises(Skill01SemanticIntakeError):
+            service.analyze(
+                request_id="SEM-ACTIVITY-FRAGMENT",
+                source_text="azienda alpha beta",
+                source_ref="human://owner",
+            )
+
     def test_out_of_catalog_key_is_rejected(self):
         service, _, _ = build_service(RawSemanticOutput(candidates=(
             RawSemanticCandidate("company.secret_magic", "Magic.", "FATTO", "x"),

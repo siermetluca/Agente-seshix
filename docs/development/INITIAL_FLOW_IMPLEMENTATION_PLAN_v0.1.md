@@ -264,6 +264,14 @@ SKILL_01_CLOSED = PASS
 
 Only after this gate may SKILL_02 begin.
 
+Context evolution rule after SKILL_01 v1 acceptance:
+
+```text
+CURRENT_CONTEXT_BASELINE != FINAL_CONTEXT_MODEL
+```
+
+SKILL_02 and later skills may reveal additional context requirements. Those requirements must return as CONTEXT_CHANGE_CANDIDATE to SKILL_01 for targeted, evidence-backed, versioned updates. Downstream skills never silently mutate PRIMARY_CONTEXT.
+
 Goal:
 
 - define the application boundary used by `[D-LLM]` skills;

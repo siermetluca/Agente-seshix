@@ -10,9 +10,9 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: INITIAL FLOW IMPLEMENTATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0022](tasks/DEV-0022/)
-- Active DEV_TASK: [DEV-0023](tasks/DEV-0023/)
-- Current step: WAITING_HUMAN_REACCEPTANCE_RETEST
+- Last completed DEV_TASK: [DEV-0023](tasks/DEV-0023/)
+- Active DEV_TASK: NONE
+- Current step: READY_FOR_DEV-0024_SKILL02_RUNTIME
 - Blockers: NONE
 
 ## Implemented
@@ -131,8 +131,8 @@ Review verification: 61/61 unit tests PASS.
 8. DEV-0020 — SKILL_01 Automated Closure — PASS
 9. DEV-0021 — SKILL_01 Human Acceptance — FAIL / REOPENED
 10. DEV-0022 — Structured Semantic Model Port for SKILL_01 — PASS
-11. DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance — WAITING_HUMAN_ACCEPTANCE
-12. DEV-0024 — SKILL_02 Company Analysis Runtime
+11. DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance — PASS
+12. DEV-0024 — SKILL_02 Company Analysis Runtime — NEXT
 13. DEV-0025 — SKILL_02 Validation + Activation
 14. DEV-0026 — Source Acquisition Capability Port
 15. DEV-0027 — SKILL_03 External Validation Runtime
@@ -152,8 +152,8 @@ Current gate status:
 
 ```text
 SKILL_01_CLOSED (automated) = PASS
-SKILL_01_HUMAN_ACCEPTANCE = FAIL
-SKILL_01 overall = REOPENED
+SKILL_01_HUMAN_ACCEPTANCE = PASS
+SKILL_01 overall = CLOSED_V1
 ```
 
 ## Flow runtime implemented
@@ -223,12 +223,21 @@ SKILL_01 overall = REOPENED
   - gate: MODEL_OUTPUT_WITHOUT_VALIDATION_CANNOT_ENTER_STATE = PASS
   - result: [RESULT.md](tasks/DEV-0022/RESULT.md)
 
+- DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance — PASS
+  - natural-language semantic intake
+  - adaptive HITL clarification
+  - exact-source grounding for FATTO evidence
+  - owner human acceptance: PASS
+  - context baseline remains evolutive, not final
+  - targeted semantic-intake: 9/9 PASS; integration: 23/23 PASS; full unit regression: 141/141 PASS
+  - result: [RESULT.md](tasks/DEV-0023/RESULT.md)
+
 ## Component index
 
 - DOMAIN FOUNDATION — FROZEN
 - APPLICATION FOUNDATION — FROZEN
 - FLOW RUNTIME — OPERATIONAL_V1
-- SKILL_01 — SEMANTIC_INTAKE_READY / HUMAN_REACCEPTANCE_PENDING
+- SKILL_01 — CLOSED_V1 / HUMAN_ACCEPTED / CONTEXT_BASELINE_EVOLUTIVE
 - SKILL_02 — NOT_STARTED
 - SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED
