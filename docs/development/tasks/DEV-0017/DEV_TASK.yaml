@@ -1,0 +1,43 @@
+dev_task_id: DEV-0017
+title: SKILL_01 Context Construction Runtime
+status: PROPOSED
+request: Implement the first deterministic runtime slice of SKILL_01 that consumes registered Evidence and constructs/updates PRIMARY_CONTEXT without inventing facts.
+source:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/architecture/SKILL_MODEL_v0.1.md
+rationale: The initial skill flow needs an executable SKILL_01 path from verified Evidence to versioned PRIMARY_CONTEXT, with explicit UNKNOWN/HITL handling.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Consume already-registered Evidence through EvidenceRepository.
+  - FATTO must use the resolved Evidence payload directly as the context value.
+  - FATTO must never accept a caller-invented replacement value.
+  - IPOTESI may use an explicit proposed value but remains classified as IPOTESI.
+  - Written FATTO/IPOTESI updates must reference exactly one registered Evidence id in v1.
+  - UNKNOWN must never assert a concrete value.
+  - Required UNKNOWN must return a WAITING_HITL result and must not write PRIMARY_CONTEXT.
+  - Non-required UNKNOWN must return an explicit UNKNOWN result and must not write PRIMARY_CONTEXT.
+  - Written context must use the existing evidence-backed UpdatePrimaryContextUseCase.
+  - Version history and provenance must remain preserved.
+constraints:
+  - No LLM semantic extraction/classification.
+  - No autonomous source acquisition.
+  - No contradiction resolver.
+  - No new persistence adapter.
+  - No SKILL_01 activation; activation is DEV-0018.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - FATTO from registered Evidence payload.
+  - FATTO caller replacement cannot enter state.
+  - IPOTESI remains IPOTESI.
+  - Missing required data returns WAITING_HITL and no write.
+  - Non-required UNKNOWN produces no write.
+  - Missing Evidence blocks update.
+  - Version history/provenance preservation.
+  - Full unit suite must remain passing.
+recovery_plan: Revert the task commit.

@@ -1,0 +1,25 @@
+change_plan_id: CP-DEV-0017-v1
+dev_task_id: DEV-0017
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/skill_01_context.py
+    - tests/unit/test_skill_01_context.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0017
+implementation:
+  - Add Skill01ContextStatus.
+  - Add immutable Skill01ContextCommand and Skill01ContextResult.
+  - Add Skill01ContextRuntime.
+  - Resolve exactly one evidence id for written FATTO/IPOTESI records.
+  - Use Evidence payload directly for FATTO.
+  - Route writes through UpdatePrimaryContextUseCase.
+  - Return explicit WAITING_HITL/UNKNOWN without write when data is missing.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: PORT_ONLY
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
