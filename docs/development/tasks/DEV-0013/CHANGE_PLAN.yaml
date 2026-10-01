@@ -1,0 +1,22 @@
+change_plan_id: CP-DEV-0013-v1
+dev_task_id: DEV-0013
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/authority_policy.py
+    - tests/unit/test_authority_policy.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0013
+implementation:
+  - Add immutable AuthorityPolicy and AuthorityEvaluationContext.
+  - Add AuthorityPolicyEvaluator.
+  - Map current policy expressions deterministically to AuthorityDecision outcomes.
+  - Fail closed for unknown actor/action/expression.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

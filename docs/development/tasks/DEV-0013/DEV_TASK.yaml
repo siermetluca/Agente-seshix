@@ -1,0 +1,36 @@
+dev_task_id: DEV-0013
+title: Authority Policy Evaluator
+status: PROPOSED
+request: Implement the first deterministic runtime authority evaluator over the current canonical authority policy.
+source:
+  - config/development/authority.yaml
+  - docs/architecture/ARCHITECTURE_BASELINE_v0.2.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - contracts/development/DEVELOPMENT_EXECUTION_CONTRACT_v0.1.yaml
+rationale: The initial executable flow requires deterministic authority decisions before actions or escalation.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Evaluate ALLOW as AuthorityOutcome.ALLOW.
+  - Evaluate DENY as AuthorityOutcome.DENY.
+  - Evaluate ALLOW_WITH_APPROVED_CHANGE_PLAN as ALLOW only when approved_change_plan is true; otherwise DENY.
+  - Evaluate REQUIRES_HITL as REQUIRES_HITL unless hitl_approved is true, then ALLOW.
+  - Evaluate REQUIRES_RELEASE_GATE_AND_HITL as DENY when release_gate_pass is false; REQUIRES_HITL when release gate passes but HITL is missing; ALLOW when both pass.
+  - Unknown actor, action or policy expression must fail closed as DENY.
+  - Every result must be an AuthorityDecision bound to actor, action and policy version.
+constraints:
+  - No YAML parser/loader in this task; evaluator receives an explicit policy object.
+  - No HITL orchestration.
+  - No repository side effect execution.
+  - No capability evaluation.
+  - No persistence.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Positive and negative tests for every current policy expression.
+  - Unknown actor/action/expression fail-closed tests.
+  - Full unit suite must remain passing.
+recovery_plan: Revert the task commit.
