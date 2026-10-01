@@ -1,0 +1,29 @@
+change_plan_id: CP-DEV-0024-v1
+dev_task_id: DEV-0024
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/skill_02_company_analysis.py
+    - tests/unit/test_skill_02_company_analysis.py
+    - docs/development/tasks/DEV-0024/RESULT.md
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+implementation:
+  - Add provider-agnostic CompanyAnalysisPort.
+  - Add raw and validated analysis contracts.
+  - Validate finding categories and basis keys against the exact PrimaryContextVersion.
+  - Add explicit ContextChangeCandidate for missing company data.
+  - Add Skill02CompanyAnalysisRuntime returning ANALISI_AZIENDALE_BASELINE + DerivedState dependency.
+tests:
+  - supported grounded findings;
+  - unsupported basis key rejection;
+  - context-change candidate without primary mutation;
+  - no direct context write capability;
+  - empty context handling;
+  - derived dependency bound to exact context version;
+  - duplicate ids/categories malformed output;
+  - full regression.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
