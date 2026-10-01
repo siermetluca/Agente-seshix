@@ -1,0 +1,24 @@
+change_plan_id: CP-DEV-0007-v1
+dev_task_id: DEV-0007
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/context_repository.py
+    - tests/unit/test_context_repository_port.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0007
+implementation:
+  - Add runtime-checkable PrimaryContextRepository Protocol.
+  - Define save(version) and get(version_id) operations.
+  - Use PrimaryContextVersion as the domain boundary type.
+  - Keep missing lookup semantics as None.
+tests:
+  - Verify a minimal in-memory repository structurally satisfies the port.
+  - Verify save/get round trip and missing lookup behavior.
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

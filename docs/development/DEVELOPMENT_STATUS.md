@@ -10,7 +10,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: DOMAIN FOUNDATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0006](tasks/DEV-0006/)
+- Last completed DEV_TASK: [DEV-0007](tasks/DEV-0007/)
 - Active DEV_TASK: NONE
 - Current step: READY_FOR_NEXT_DEV_TASK
 - Blockers: NONE
@@ -56,6 +56,12 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
   - tests: 45/45 PASS (full unit suite)
   - result: [RESULT.md](tasks/DEV-0006/RESULT.md)
 
+- DEV-0007 — Context repository ports — PASS
+  - `PrimaryContextRepository` Protocol
+  - save/get operations
+  - tests: 48/48 PASS (full unit suite)
+  - result: [RESULT.md](tasks/DEV-0007/RESULT.md)
+
 ## Current development plan
 
 1. DEV-0002 — SourceReference + Evidence — PASS
@@ -63,15 +69,15 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 3. DEV-0004 — Derived State + Dependency + Staleness — PASS
 4. DEV-0005 — Authority Decision domain model — PASS
 5. DEV-0006 — Task + Task Context requirements — PASS
-6. DEV-0007 — Context repository ports — NEXT
-7. DEV-0008 — Evidence repository ports — PLANNED
+6. DEV-0007 — Context repository ports — PASS
+7. DEV-0008 — Evidence repository ports — NEXT
 8. DEV-0009 — Context update application use-case — PLANNED
 9. DEV-0010 — Task Context Resolver use-case — PLANNED
 
 ## Component index
 
 - DOMAIN — IN_PROGRESS
-- APPLICATION — NOT_STARTED
+- APPLICATION — IN_PROGRESS
 - PERSISTENCE — NOT_STARTED
 - AUTHORITY ENGINE — NOT_STARTED
 - CONTEXT ENGINE — NOT_STARTED
