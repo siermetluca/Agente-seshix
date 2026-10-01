@@ -10,9 +10,9 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: INITIAL FLOW IMPLEMENTATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0017](tasks/DEV-0017/)
+- Last completed DEV_TASK: [DEV-0018](tasks/DEV-0018/)
 - Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0018
+- Current step: READY_FOR_DEV-0019
 - Blockers: NONE
 
 ## Implemented
@@ -126,8 +126,8 @@ Review verification: 61/61 unit tests PASS.
 3. DEV-0015 — Flow Execution Envelope — PASS
 4. DEV-0016 — Source/Evidence Intake Use Case — PASS
 5. DEV-0017 — SKILL_01 Context Construction Runtime — PASS
-6. DEV-0018 — SKILL_01 Validation + Activation — NEXT
-7. DEV-0019 — Structured Semantic Model Port
+6. DEV-0018 — SKILL_01 Validation + Activation — PASS
+7. DEV-0019 — Structured Semantic Model Port — NEXT
 8. DEV-0020 — SKILL_02 Company Analysis Runtime
 9. DEV-0021 — SKILL_02 Validation + Activation
 10. DEV-0022 — Source Acquisition Capability Port
@@ -176,12 +176,19 @@ Then extend the same validated lifecycle to SKILL_04–07.
   - tests: 118/118 PASS (full unit suite)
   - result: [RESULT.md](tasks/DEV-0017/RESULT.md)
 
+- DEV-0018 — SKILL_01 Validation + Activation — PASS
+  - integrated validation: 7/7 PASS
+  - unit regression: 118/118 PASS
+  - SKILL_01@0.1 DRAFT → TESTING → ACTIVE
+  - validation evidence: [VALIDATION_EVIDENCE.md](tasks/DEV-0018/VALIDATION_EVIDENCE.md)
+  - result: [RESULT.md](tasks/DEV-0018/RESULT.md)
+
 ## Component index
 
 - DOMAIN FOUNDATION — FROZEN
 - APPLICATION FOUNDATION — FROZEN
 - FLOW RUNTIME — OPERATIONAL_V1
-- SKILL_01 — TESTING_RUNTIME_READY
+- SKILL_01 — ACTIVE_V1
 - SKILL_02 — NOT_STARTED
 - SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED
