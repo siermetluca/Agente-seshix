@@ -225,9 +225,44 @@ SKILL_01_CLOSED = PASS
 
 No SKILL_02 work is allowed until both are true.
 
-## Stage 5 — Semantic execution boundary
+## Stage 5 — Semantic execution boundary required to finish SKILL_01
 
 ### DEV-0022 — Structured Semantic Model Port
+
+This boundary is now required first by SKILL_01 remediation, not by SKILL_02.
+
+Goal:
+
+- accept natural source/human input through a structured semantic request;
+- produce schema-constrained candidate facts/hypotheses/unknowns;
+- validate output before any Evidence/PRIMARY_CONTEXT mutation;
+- provider remains replaceable; no provider owns business rules.
+
+Gate:
+
+```text
+MODEL_OUTPUT_WITHOUT_VALIDATION_CANNOT_ENTER_STATE = PASS
+```
+
+### DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance
+
+Goal:
+
+- replace developer-facing key/claim entry with human/source input;
+- extract candidate key/value/claim/classification semantically;
+- reject or query ambiguous/nonsensical inputs;
+- retain provenance and authority guarantees;
+- rerun full automated SKILL_01 closure tests;
+- repeat human acceptance with the owner.
+
+Hard gate:
+
+```text
+SKILL_01_CLOSED = PASS
++ SKILL_01_HUMAN_ACCEPTANCE = PASS
+```
+
+Only after this gate may SKILL_02 begin.
 
 Goal:
 
@@ -244,7 +279,7 @@ MODEL_OUTPUT_WITHOUT_VALIDATION_CANNOT_ENTER_STATE = PASS
 
 ## Stage 6 — SKILL_02 executable
 
-### DEV-0023 — SKILL_02 Company Analysis Runtime
+### DEV-0024 — SKILL_02 Company Analysis Runtime
 
 Goal:
 
@@ -260,7 +295,7 @@ PRIMARY_CONTEXT → ANALISI_AZIENDALE_BASELINE = PASS
 DERIVED_OUTPUT != PRIMARY_CONTEXT = PASS
 ```
 
-### DEV-0024 — SKILL_02 Validation + Activation
+### DEV-0025 — SKILL_02 Validation + Activation
 
 Goal:
 
@@ -269,7 +304,7 @@ Goal:
 
 ## Stage 7 — External-source capability boundary
 
-### DEV-0025 — Source Acquisition Capability Port
+### DEV-0026 — Source Acquisition Capability Port
 
 Goal:
 
@@ -287,7 +322,7 @@ SOURCE_PROVENANCE = PASS
 
 ## Stage 8 — SKILL_03 executable
 
-### DEV-0026 — SKILL_03 External Validation Runtime
+### DEV-0027 — SKILL_03 External Validation Runtime
 
 Goal:
 
@@ -296,7 +331,7 @@ Goal:
 - output structured validated market analysis with source/provenance and explicit missing/contradictory data;
 - enforce `NESSUNA EVIDENZA SUFFICIENTE → NESSUNA CONCLUSIONE`.
 
-### DEV-0027 — SKILL_03 Validation + Activation
+### DEV-0028 — SKILL_03 Validation + Activation
 
 Goal:
 
@@ -308,7 +343,7 @@ Goal:
 
 ## Stage 9 — First end-to-end skill flow
 
-### DEV-0028 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
+### DEV-0029 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
 
 Scenario:
 
@@ -351,12 +386,12 @@ SKILL_03 = ACTIVE
 
 Only after the behavior above is stable:
 
-### DEV-0029 — PostgreSQL Repository Adapters
+### DEV-0030 — PostgreSQL Repository Adapters
 
 - implement existing context/evidence persistence ports;
 - integration tests for history, append/version behavior and restart persistence.
 
-### DEV-0030 — Temporal Durable Flow
+### DEV-0031 — Temporal Durable Flow
 
 - move durable coordination to Temporal;
 - activities own side effects;
