@@ -10,9 +10,9 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: INITIAL FLOW IMPLEMENTATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0013](tasks/DEV-0013/)
+- Last completed DEV_TASK: [DEV-0014](tasks/DEV-0014/)
 - Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0014
+- Current step: READY_FOR_DEV-0015
 - Blockers: NONE
 
 ## Implemented
@@ -122,8 +122,8 @@ Review verification: 61/61 unit tests PASS.
 ## Flow implementation plan
 
 1. DEV-0013 — Authority Policy Evaluator — PASS
-2. DEV-0014 — Skill Registry + Lifecycle — NEXT
-3. DEV-0015 — Flow Execution Envelope
+2. DEV-0014 — Skill Registry + Lifecycle — PASS
+3. DEV-0015 — Flow Execution Envelope — NEXT
 4. DEV-0016 — Source/Evidence Intake Use Case
 5. DEV-0017 — SKILL_01 Context Construction Runtime
 6. DEV-0018 — SKILL_01 Validation + Activation
@@ -148,6 +148,13 @@ Then extend the same validated lifecycle to SKILL_04–07.
   - tests: 80/80 PASS (full unit suite)
   - result: [RESULT.md](tasks/DEV-0013/RESULT.md)
 
+- DEV-0014 — Skill Registry + Lifecycle — PASS
+  - `SkillRegistry`
+  - explicit version/state metadata
+  - validation-gated activation
+  - tests: 94/94 PASS (full unit suite)
+  - result: [RESULT.md](tasks/DEV-0014/RESULT.md)
+
 ## Component index
 
 - DOMAIN FOUNDATION — FROZEN
@@ -159,7 +166,7 @@ Then extend the same validated lifecycle to SKILL_04–07.
 - PERSISTENCE — NOT_STARTED
 - AUTHORITY ENGINE — OPERATIONAL_V1
 - CONTEXT ENGINE — NOT_STARTED
-- SKILL RUNTIME — NOT_STARTED
+- SKILL RUNTIME — OPERATIONAL_V1
 - WORKFLOW / TEMPORAL — NOT_STARTED
 - AGENTIC / LANGGRAPH — NOT_STARTED
 - INTERFACES / DJANGO API — NOT_STARTED

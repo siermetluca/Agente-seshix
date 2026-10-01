@@ -1,0 +1,43 @@
+dev_task_id: DEV-0014
+title: Skill Registry + Lifecycle
+status: PROPOSED
+request: Implement the first deterministic skill registry and lifecycle that prevents unvalidated skill activation.
+source:
+  - docs/architecture/SKILL_RUNTIME_MODEL_v0.1.md
+  - docs/architecture/SKILL_MODEL_v0.1.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+rationale: The runtime must know available skill versions and states, and must not auto-activate newly created or unvalidated skills.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Represent states DRAFT, TESTING, ACTIVE, DEPRECATED, DISABLED explicitly.
+  - Register skills by explicit skill_id + version.
+  - Store domain, supported task types, compatibility declarations and state.
+  - Reject duplicate skill_id + version registrations.
+  - New registrations start in DRAFT only.
+  - Allow DRAFT -> TESTING.
+  - Allow TESTING -> ACTIVE only when validation_passed is explicitly true.
+  - Prevent direct DRAFT -> ACTIVE.
+  - Allow ACTIVE -> DEPRECATED and any non-disabled state -> DISABLED.
+  - DISABLED is terminal in this version.
+  - Resolve only ACTIVE skills for execution.
+constraints:
+  - No semantic-version ordering or automatic latest-version selection.
+  - No auto-update.
+  - No persistence/database adapter.
+  - No skill execution.
+  - No authority orchestration beyond lifecycle rules.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Positive lifecycle tests.
+  - Direct activation rejection.
+  - Activation without validation rejection.
+  - Duplicate registration rejection.
+  - Disabled terminal-state test.
+  - ACTIVE-only resolution test.
+  - Full unit suite must remain passing.
+recovery_plan: Revert the task commit.
