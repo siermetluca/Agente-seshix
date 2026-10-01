@@ -1,0 +1,25 @@
+dev_task_id: DEV-0019
+title: SKILL_01 Node Runtime Integration
+status: PROPOSED
+request: Build the complete SKILL_01 node coordinator over the already validated runtime components before any SKILL_02 work.
+source:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/development/tasks/DEV-0018/VALIDATION_EVIDENCE.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+rationale: SKILL_01 component behavior is validated, but the complete operational node has not yet been orchestrated and closed.
+affected_components:
+  - src/agente_seshix/application
+  - tests/integration
+requirements:
+  - Orchestrate task/context resolution, active skill resolution, authority evaluation, evidence intake when present, SKILL_01 execution and flow-state mapping.
+  - Produce one traceable node-run result.
+  - Preserve existing component ownership; do not duplicate business rules.
+  - Support ALLOW, DENY, WAITING_HITL and successful write paths.
+  - Prepare explicit resume behavior for HITL within current in-memory runtime.
+constraints:
+  - No SKILL_02 work.
+  - No LLM semantic model.
+  - No PostgreSQL or Temporal.
+  - No autonomous acquisition.
+risk: DEV_RISK_1
+status_note: Planned only; implementation not started in this planning correction.
