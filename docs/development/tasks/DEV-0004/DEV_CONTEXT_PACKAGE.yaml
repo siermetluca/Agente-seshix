@@ -1,0 +1,19 @@
+dev_context_package_id: DEVCTX-0004-v1
+dev_task_id: DEV-0004
+status: CONTEXT_RESOLVED
+canonical_base_sha: 21b57769ce75e7a26701a695a94de32c4f9a7b96
+canonical_context_refs:
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - contracts/development/DEVELOPMENT_EXECUTION_CONTRACT_v0.1.yaml
+architecture_baseline_ref: docs/architecture/ARCHITECTURE_BASELINE_v0.2.md
+development_architecture_ref: docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+development_governance_ref: docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+repository_governance_ref: docs/governance/REPOSITORY_GOVERNANCE_v0.1.md
+documentation_governance_ref: docs/governance/DOCUMENTATION_GOVERNANCE_v0.2.md
+authority_policy_ref: config/development/authority.yaml
+repository:
+  id: PUBLIC_CORE_REPO
+  name: siermetluca/Agente-seshix
+  base_sha: 21b57769ce75e7a26701a695a94de32c4f9a7b96
+classification: PUBLIC_SAFE
+blocking_unknowns: []

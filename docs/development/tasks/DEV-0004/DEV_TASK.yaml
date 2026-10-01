@@ -1,0 +1,33 @@
+dev_task_id: DEV-0004
+title: Derived State + Dependency + Staleness
+status: PROPOSED
+request: Implement the pure-domain model for derived state, explicit dependency references and staleness.
+source:
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - contracts/development/DEVELOPMENT_EXECUTION_CONTRACT_v0.1.yaml
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: Derived outputs must remain distinct from PRIMARY_CONTEXT, retain their dependencies, and be invalidatable/recalculable when affected upstream state changes.
+affected_components:
+  - src/agente_seshix/domain
+  - tests/unit
+requirements:
+  - Represent a dependency reference explicitly.
+  - A dependency reference must identify both the dependency and the referenced version.
+  - Represent derived state explicitly and separately from PrimaryContextRecord.
+  - Derived state must retain its dependencies.
+  - Derived state must expose explicit stale state.
+  - Marking stale must not mutate the prior derived-state instance.
+constraints:
+  - Pure DOMAIN code only.
+  - No dependency graph traversal.
+  - No automatic staleness propagation.
+  - No recalculation engine.
+  - No persistence or database schema.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Unit tests for dependency and derived-state invariants.
+  - Full existing unit suite must remain passing.
+recovery_plan: Revert the task commit.
