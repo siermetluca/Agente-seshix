@@ -1,0 +1,33 @@
+dev_task_id: DEV-0006
+title: Task + Task Context requirements
+status: PROPOSED
+request: Implement pure-domain Task and TaskContextRequirements objects for task-specific context selection.
+source:
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/architecture/SKILL_MODEL_v0.1.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: The Context Manager needs an explicit task and explicit required/optional context sections before repository ports or task-context resolution can be implemented.
+affected_components:
+  - src/agente_seshix/domain
+  - tests/unit
+requirements:
+  - Represent a Task with explicit id, type and objective.
+  - Represent context sections POLICY, STATE, DATA_EVIDENCE, CAPABILITIES and AUTHORITY.
+  - Represent required and optional context sections for one task.
+  - Required and optional sections must not overlap.
+  - Duplicate sections within either collection are invalid.
+  - TASK itself is not selectable because the Task object is always part of task context.
+constraints:
+  - Pure DOMAIN code only.
+  - No Context Manager resolver.
+  - No TASK_CONTEXT_PACKAGE runtime object.
+  - No skill resolution.
+  - No persistence/database schema.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Unit tests for valid Task and TaskContextRequirements invariants.
+  - Full existing unit suite must remain passing.
+recovery_plan: Revert the task commit.
