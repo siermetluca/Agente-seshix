@@ -10,7 +10,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: DOMAIN FOUNDATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0010](tasks/DEV-0010/)
+- Last completed DEV_TASK: [DEV-0011](tasks/DEV-0011/)
 - Active DEV_TASK: NONE
 - Current step: NEXT_GAP_IDENTIFIED
 - Blockers: NONE
@@ -81,6 +81,13 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
   - tests: 61/61 PASS (full unit suite)
   - result: [RESULT.md](tasks/DEV-0010/RESULT.md)
 
+- DEV-0011 — Evidence-backed Primary Context Update — PASS
+  - exact Evidence-backed provenance
+  - EvidenceRepository enforcement
+  - unresolved evidence blocks update
+  - tests: 67/67 PASS (full unit suite)
+  - result: [RESULT.md](tasks/DEV-0011/RESULT.md)
+
 ## Current development plan
 
 1. DEV-0002 — SourceReference + Evidence — PASS
@@ -98,13 +105,14 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - DEV-0001 → DEV-0010 — COMPLETE
 - DOMAIN/APPLICATION FOUNDATION — COMPLETE_FOR_CURRENT_SCOPE
 - Gap review: [FOUNDATION_GAP_REVIEW_v0.1.md](FOUNDATION_GAP_REVIEW_v0.1.md)
-- Next DEV_TASK candidate: DEV-0011 — Evidence-backed Primary Context Update
-- DEV-0011 status: NOT_YET_MATERIALIZED
+- DEV-0011 — Evidence-backed Primary Context Update — PASS
+- Next verified gap: P1 — Authority evaluator
+- Next DEV_TASK — NOT YET MATERIALIZED
 
 ## Gap priority
 
-1. P0 — Evidence → PrimaryContext verification boundary — NEXT
-2. P1 — Authority evaluator
+1. P0 — Evidence → PrimaryContext verification boundary — PASS
+2. P1 — Authority evaluator — NEXT
 3. P2 — PostgreSQL repository adapters
 4. P3 — Context retrieval source abstraction
 

@@ -1,0 +1,38 @@
+dev_task_id: DEV-0011
+title: Evidence-backed Primary Context Update
+status: PROPOSED
+request: Close the verified P0 gap by requiring explicit resolvable Evidence for PRIMARY_CONTEXT updates and preserving exact evidence provenance.
+source:
+  - docs/development/FOUNDATION_GAP_REVIEW_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: The current context update use case can accept a FATTO without proving that supporting Evidence exists. Canonical flow requires SOURCE -> EVIDENCE -> CONTEXT and source/provenance verification before a new PRIMARY_CONTEXT version.
+affected_components:
+  - src/agente_seshix/domain
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - A context update must declare one or more evidence_ids.
+  - Every declared evidence_id must resolve through EvidenceRepository.
+  - Missing evidence must reject the update before PRIMARY_CONTEXT is saved.
+  - The persisted ContextValue provenance must be rebuilt from resolved Evidence, not trusted from caller input.
+  - Provenance must retain both source_ref and exact evidence_id.
+  - Duplicate evidence_ids must be rejected.
+  - The existing targeted versioned update semantics must remain non-destructive.
+constraints:
+  - No PostgreSQL/Django adapter.
+  - No evidence quality/scoring semantics.
+  - No authority evaluator.
+  - No automatic derived-state staleness propagation.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Verify successful update with resolvable evidence.
+  - Verify exact evidence/source provenance is persisted.
+  - Verify missing evidence blocks save.
+  - Verify duplicate evidence ids are rejected.
+  - Verify caller-supplied unverified provenance is replaced.
+  - Run full unit suite.
+recovery_plan: Revert the task commit.
