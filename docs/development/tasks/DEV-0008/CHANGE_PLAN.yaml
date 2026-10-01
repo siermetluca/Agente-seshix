@@ -1,0 +1,24 @@
+change_plan_id: CP-DEV-0008-v1
+dev_task_id: DEV-0008
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/evidence_repository.py
+    - tests/unit/test_evidence_repository_port.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0008
+implementation:
+  - Add runtime-checkable EvidenceRepository Protocol.
+  - Define save(evidence) and get(evidence_id) operations.
+  - Use Evidence as the domain boundary type.
+  - Keep missing lookup semantics as None.
+tests:
+  - Verify a minimal in-memory repository structurally satisfies the port.
+  - Verify save/get round trip and missing lookup behavior.
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

@@ -1,0 +1,32 @@
+dev_task_id: DEV-0008
+title: Evidence repository ports
+status: PROPOSED
+request: Define the application port for persisting and retrieving Evidence without introducing a concrete database adapter.
+source:
+  - docs/architecture/ARCHITECTURE_BASELINE_v0.2.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: Application use cases need a stable evidence persistence abstraction before PostgreSQL infrastructure and context-update orchestration are introduced.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Define an application-level EvidenceRepository port.
+  - The port must save an Evidence object.
+  - The port must retrieve Evidence by evidence_id.
+  - Missing evidence must be representable without infrastructure exceptions.
+  - The port must depend only on domain types and standard-library typing.
+constraints:
+  - No PostgreSQL implementation.
+  - No Django ORM.
+  - No query-by-source/claim semantics.
+  - No aggregation/search API.
+  - No transaction/locking policy.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Unit/contract-style tests proving a minimal in-memory implementation satisfies the port shape.
+  - Full existing unit suite must remain passing.
+recovery_plan: Revert the task commit.
