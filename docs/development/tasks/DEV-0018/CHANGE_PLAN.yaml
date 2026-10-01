@@ -1,0 +1,22 @@
+change_plan_id: CP-DEV-0018-v1
+dev_task_id: DEV-0018
+status: APPROVED
+scope:
+  add:
+    - tests/integration/test_skill_01_validation.py
+    - docs/development/tasks/DEV-0018/VALIDATION_EVIDENCE.md
+    - docs/development/tasks/DEV-0018/RESULT.md
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+implementation:
+  - Build integrated in-memory validation harness using existing runtime components.
+  - Exercise positive/negative authority, HITL, evidence, UNKNOWN and version-history paths.
+  - Exercise registry lifecycle and activate SKILL_01 only in the passing validation scenario.
+  - Do not modify src unless a demonstrated defect requires a scoped correction.
+tests:
+  - Run tests/integration/test_skill_01_validation.py.
+  - Run full tests/unit regression suite.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

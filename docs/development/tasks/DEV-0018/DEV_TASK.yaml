@@ -1,0 +1,36 @@
+dev_task_id: DEV-0018
+title: SKILL_01 Validation + Activation
+status: PROPOSED
+request: Validate SKILL_01 end-to-end against the current in-memory runtime components and activate it only if every positive and negative gate passes.
+source:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/development/tasks/DEV-0017/RESULT.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/architecture/SKILL_RUNTIME_MODEL_v0.1.md
+rationale: A skill must not become ACTIVE merely because its runtime code exists; activation requires repeatable integrated validation evidence.
+affected_components:
+  - tests/integration
+  - docs/development
+requirements:
+  - Validate EvidenceIntake -> SKILL_01 -> versioned PRIMARY_CONTEXT happy path.
+  - Validate Authority ALLOW permits the execution path.
+  - Validate Authority DENY prevents SKILL_01 execution/state write.
+  - Validate Authority REQUIRES_HITL yields WAITING_HITL and no context write before approval.
+  - Validate required UNKNOWN yields WAITING_HITL and no context write.
+  - Validate missing Evidence prevents context write.
+  - Validate conflicting replacement of the same context key creates a new version and preserves the previous version.
+  - Validate exact provenance points to the Evidence used for each version.
+  - Validate SkillRegistry blocks direct activation and activation without validation.
+  - Promote SKILL_01 from DRAFT -> TESTING -> ACTIVE only after all validation scenarios pass.
+constraints:
+  - No new business functionality unless a test demonstrates a real defect.
+  - No persistence/Temporal/LLM/provider.
+  - In-memory integration only.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Dedicated integration validation suite.
+  - Full unit suite regression.
+  - Record activation evidence only after both suites pass.
+recovery_plan: Revert the task commit.
