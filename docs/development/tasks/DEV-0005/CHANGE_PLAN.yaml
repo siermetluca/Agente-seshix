@@ -1,0 +1,22 @@
+change_plan_id: CP-DEV-0005-v1
+dev_task_id: DEV-0005
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/domain/authority.py
+    - tests/unit/test_authority.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0005
+implementation:
+  - Add AuthorityOutcome enum with ALLOW, DENY and REQUIRES_HITL.
+  - Add immutable AuthorityDecision.
+  - Record decision id, actor id, action, outcome, policy version and optional reason.
+  - Validate only explicit required-field invariants.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

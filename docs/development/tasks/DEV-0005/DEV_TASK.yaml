@@ -1,0 +1,33 @@
+dev_task_id: DEV-0005
+title: Authority Decision domain model
+status: PROPOSED
+request: Implement the pure-domain representation of an evaluated authority decision.
+source:
+  - docs/architecture/ARCHITECTURE_BASELINE_v0.2.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - config/development/authority.yaml
+  - contracts/development/DEVELOPMENT_EXECUTION_CONTRACT_v0.1.yaml
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: Authority decisions must be explicit domain objects before policy evaluation, HITL orchestration or interfaces are implemented.
+affected_components:
+  - src/agente_seshix/domain
+  - tests/unit
+requirements:
+  - Represent final authority outcomes ALLOW, DENY and REQUIRES_HITL.
+  - Represent actor and action explicitly.
+  - Bind every decision to an explicit authority policy version.
+  - Decision identity, actor, action and policy version must be non-empty.
+  - Policy expressions such as ALLOW_WITH_APPROVED_CHANGE_PLAN are not final decision outcomes.
+constraints:
+  - Pure DOMAIN code only.
+  - No policy evaluator.
+  - No HITL workflow.
+  - No repository-action execution.
+  - No persistence/database schema.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Unit tests for valid outcomes and invalid empty required fields.
+  - Full existing unit suite must remain passing.
+recovery_plan: Revert the task commit.
