@@ -1,0 +1,30 @@
+change_plan_id: CP-DEV-0019-v1
+dev_task_id: DEV-0019
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/skill_01_node.py
+    - tests/integration/test_skill_01_node.py
+    - docs/development/tasks/DEV-0019/RESULT.md
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+implementation:
+  - Add immutable Skill01NodeCommand and Skill01NodeResult.
+  - Add Skill01NodeRuntime coordinator over existing components.
+  - Resolve TaskContextPackage before starting execution.
+  - Resolve exact ACTIVE SKILL_01 version.
+  - Evaluate authority and map DENY/HITL/ALLOW to FlowExecutionEnvelope.
+  - Optionally ingest explicit source Evidence before SKILL_01 execution.
+  - Map Skill01ContextResult into PASSED or WAITING_HITL node states.
+  - Add explicit resume operation for authority-HITL and context-HITL runs.
+tests:
+  - Happy path.
+  - Authority DENY.
+  - Authority HITL + resume.
+  - Context UNKNOWN HITL + resume with new Evidence-backed command.
+  - Exact traceability of skill, authority, evidence and context version.
+  - Full unit + integration regression.
+architecture_impact: NONE
+persistent_state_impact: PORT_ONLY
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
