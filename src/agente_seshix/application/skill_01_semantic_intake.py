@@ -1,0 +1,200 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Mapping
+
+from agente_seshix.application.authority_policy import AuthorityPolicy
+from agente_seshix.application.evidence_intake import EvidenceIntakeCommand
+from agente_seshix.application.semantic_model import (
+    SemanticCandidate,
+    SemanticModelRequest,
+    SemanticOutput,
+    StructuredSemanticService,
+)
+from agente_seshix.application.skill_01_context import Skill01ContextCommand
+from agente_seshix.application.skill_01_node import (
+    Skill01NodeCommand,
+    Skill01NodeResult,
+    Skill01NodeRuntime,
+)
+from agente_seshix.domain.context_evidence import EvidenceClassification
+from agente_seshix.domain.task_context import ContextSection, Task, TaskContextRequirements
+
+
+class Skill01SemanticIntakeError(ValueError):
+    pass
+
+
+@dataclass(frozen=True, slots=True)
+class SemanticFieldRule:
+    key: str
+    clarification_question: str
+
+
+SEMANTIC_INTAKE_CATALOG_V1: Mapping[str, SemanticFieldRule] = {
+    "company.name": SemanticFieldRule(
+        "company.name",
+        "Qual è il nome o la ragione sociale dell'azienda?",
+    ),
+    "company.activities": SemanticFieldRule(
+        "company.activities",
+        "Quali attività svolge concretamente l'azienda?",
+    ),
+    "company.employees": SemanticFieldRule(
+        "company.employees",
+        "Quanti dipendenti ha l'azienda?",
+    ),
+    "company.owner_count": SemanticFieldRule(
+        "company.owner_count",
+        "Quanti titolari/soci operativi sono presenti?",
+    ),
+    "company.admin_staff": SemanticFieldRule(
+        "company.admin_staff",
+        "Quante persone svolgono attività amministrativa?",
+    ),
+    "company.country": SemanticFieldRule(
+        "company.country",
+        "In quale paese opera principalmente l'azienda?",
+    ),
+    "company.revenue": SemanticFieldRule(
+        "company.revenue",
+        "Qual è il fatturato/ricavo dell'azienda per il periodo rilevante?",
+    ),
+}
+@dataclass(frozen=True, slots=True)
+class Skill01SemanticPreview:
+    request_id: str
+    source_text: str
+    source_ref: str
+    semantic_output: SemanticOutput
+    accepted_candidates: tuple[SemanticCandidate, ...]
+    clarification_questions: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class Skill01SemanticCommitResult:
+    preview: Skill01SemanticPreview
+    node_results: tuple[Skill01NodeResult, ...]
+
+    @property
+    def final_context_version_id(self) -> str | None:
+        for result in reversed(self.node_results):
+            if result.context_version is not None:
+                return result.context_version.version_id
+        return None
+
+
+class Skill01SemanticIntakeService:
+    def __init__(
+        self,
+        semantic_service: StructuredSemanticService,
+        node_runtime: Skill01NodeRuntime,
+    ) -> None:
+        self._semantic_service = semantic_service
+        self._node_runtime = node_runtime
+
+    def analyze(
+        self,
+        *,
+        request_id: str,
+        source_text: str,
+        source_ref: str,
+    ) -> Skill01SemanticPreview:
+        if not source_ref.strip():
+            raise Skill01SemanticIntakeError("source_ref must not be empty")
+
+        output = self._semantic_service.execute(
+            SemanticModelRequest(
+                request_id=request_id,
+                source_text=source_text,
+                purpose="extract_company_context",
+                schema_version="1",
+            )
+        )
+
+        accepted: list[SemanticCandidate] = []
+        questions: list[str] = []
+        for candidate in output.candidates:
+            rule = SEMANTIC_INTAKE_CATALOG_V1.get(candidate.key)
+            if rule is None:
+                raise Skill01SemanticIntakeError(
+                    f"semantic key outside SKILL_01 intake catalog: {candidate.key}"
+                )
+            if candidate.classification is EvidenceClassification.UNKNOWN:
+                questions.append(rule.clarification_question)
+                continue
+            accepted.append(candidate)
+
+        return Skill01SemanticPreview(
+            request_id=request_id,
+            source_text=source_text,
+            source_ref=source_ref,
+            semantic_output=output,
+            accepted_candidates=tuple(accepted),
+            clarification_questions=tuple(questions),
+        )
+    def commit(
+        self,
+        preview: Skill01SemanticPreview,
+        *,
+        task: Task,
+        context_requirements: TaskContextRequirements,
+        available_context: Mapping[ContextSection, object],
+        skill_version: str,
+        actor_id: str,
+        authority_action: str,
+        authority_policy: AuthorityPolicy,
+        base_version_id: str = "PCV-0",
+    ) -> Skill01SemanticCommitResult:
+        current_base = base_version_id
+        results: list[Skill01NodeResult] = []
+
+        for index, candidate in enumerate(preview.accepted_candidates, start=1):
+            evidence_id = f"{preview.request_id}:EV:{index}"
+            new_version_id = f"{preview.request_id}:PCV:{index}"
+            record_id = f"{preview.request_id}:CTX:{index}"
+
+            skill_command = Skill01ContextCommand(
+                base_version_id=current_base,
+                new_version_id=new_version_id,
+                record_id=record_id,
+                key=candidate.key,
+                classification=candidate.classification,
+                context_value_version=str(index),
+                evidence_id=evidence_id,
+                proposed_value=(
+                    candidate.value
+                    if candidate.classification is EvidenceClassification.IPOTESI
+                    else None
+                ),
+                required=True,
+            )
+            node_result = self._node_runtime.execute(
+                Skill01NodeCommand(
+                    run_id=f"{preview.request_id}:RUN:{index}",
+                    task=task,
+                    context_requirements=context_requirements,
+                    available_context=available_context,
+                    skill_version=skill_version,
+                    actor_id=actor_id,
+                    authority_action=authority_action,
+                    authority_policy=authority_policy,
+                    evidence_intake=EvidenceIntakeCommand(
+                        evidence_id=evidence_id,
+                        source_ref=preview.source_ref,
+                        claim=candidate.claim,
+                        evidence=candidate.value,
+                        version=str(index),
+                    ),
+                    skill_command=skill_command,
+                )
+            )
+            results.append(node_result)
+            if node_result.context_version is None:
+                break
+            current_base = node_result.context_version.version_id
+
+        return Skill01SemanticCommitResult(
+            preview=preview,
+            node_results=tuple(results),
+        )

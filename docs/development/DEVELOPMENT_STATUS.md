@@ -12,7 +12,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0022](tasks/DEV-0022/)
 - Active DEV_TASK: [DEV-0023](tasks/DEV-0023/)
-- Current step: CHANGE_PLAN_APPROVED
+- Current step: TESTING
 - Blockers: NONE
 
 ## Implemented
