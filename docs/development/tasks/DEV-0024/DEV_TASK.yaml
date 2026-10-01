@@ -1,0 +1,25 @@
+dev_task_id: DEV-0024
+title: SKILL_02 Company Analysis Runtime
+status: PLANNED
+request: Implement the first executable SKILL_02 runtime over validated PRIMARY_CONTEXT without allowing any direct primary-context mutation.
+source:
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/development/tasks/DEV-0023/RESULT.md
+requirements:
+  - Read one explicit PrimaryContextVersion.
+  - Produce ANALISI_AZIENDALE_BASELINE as derived output.
+  - Support findings for criticità, inefficienze, asset, capability, gap, improvement areas, risks and hypotheses.
+  - Every finding must be grounded in one or more existing PRIMARY_CONTEXT keys.
+  - Unsupported basis keys must fail closed.
+  - Missing company information must produce CONTEXT_CHANGE_CANDIDATE instead of a fabricated finding.
+  - Wrap output in DerivedState depending on the exact PrimaryContextVersion.
+  - Never write or update PRIMARY_CONTEXT.
+constraints:
+  - No external market sources.
+  - No SKILL_03 work.
+  - No concrete LLM/provider activation in this task.
+  - No persistence/Temporal.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
