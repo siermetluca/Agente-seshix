@@ -123,6 +123,27 @@ def show_commit(result, context_repo) -> None:
     print("=== FINE COMMIT ===\n")
 
 
+def analyze_with_retry(service, *, request_id: str, source_text: str):
+    last_error = None
+    for attempt in (1, 2):
+        try:
+            return service.analyze(
+                request_id=request_id if attempt == 1 else f"{request_id}-RETRY",
+                source_text=source_text,
+                source_ref="human://owner",
+            )
+        except (ValueError, OllamaSemanticModelError) as error:
+            last_error = error
+            if attempt == 1:
+                print(
+                    "Output semantico non valido: nessuna mutazione eseguita. "
+                    "Riprovo una volta con lo stesso input..."
+                )
+                continue
+    print(f"ANALISI BLOCCATA: {last_error}")
+    return None
+
+
 def main() -> None:
     service, evidence_repo, context_repo, model_name = build_service()
     print("==============================================")
@@ -143,36 +164,48 @@ def main() -> None:
         raise SystemExit("Descrizione vuota: test annullato.")
 
     print("\nAnalisi semantica locale in corso...")
-    try:
-        preview = service.analyze(
-            request_id="HUMAN-V2",
-            source_text=source_text,
-            source_ref="human://owner",
-        )
-    except (ValueError, OllamaSemanticModelError) as error:
-        print(f"ANALISI BLOCCATA: {error}")
-        raise SystemExit(2)
+    preview = analyze_with_retry(
+        service,
+        request_id="HUMAN-V2",
+        source_text=source_text,
+    )
+    if preview is None:
+        print("Nessuna Evidence e nessun PRIMARY_CONTEXT scritto.")
+        return
 
     show_preview(preview)
-    if preview.clarification_questions:
+    enriched_text = source_text
+    clarification_round = 0
+    while preview.clarification_questions and clarification_round < 3:
+        clarification_round += 1
         print(
-            "Il sistema ha individuato informazioni mancanti. "
-            "Puoi rispondere ora oppure lasciare vuoto."
+            "Il sistema ha individuato informazioni da chiarire. "
+            "Puoi rispondere oppure lasciare vuoto."
         )
         additions = []
         for question in preview.clarification_questions:
             answer = input(f"{question} ").strip()
             if answer:
                 additions.append(f"{question} Risposta: {answer}")
-        if additions:
-            enriched_text = source_text + "\n" + "\n".join(additions)
-            print("\nRianalisi con i chiarimenti...")
-            preview = service.analyze(
-                request_id="HUMAN-V2-CLARIFIED",
-                source_text=enriched_text,
-                source_ref="human://owner",
-            )
-            show_preview(preview)
+
+        if not additions:
+            print("Nessun ulteriore chiarimento fornito.")
+            break
+
+        enriched_text = enriched_text + "\n" + "\n".join(additions)
+        print("\nRianalisi con i chiarimenti...")
+        preview = analyze_with_retry(
+            service,
+            request_id=f"HUMAN-V2-CLARIFIED-{clarification_round}",
+            source_text=enriched_text,
+        )
+        if preview is None:
+            print("Nessuna Evidence e nessun PRIMARY_CONTEXT scritto.")
+            return
+        show_preview(preview)
+
+    if preview.clarification_questions:
+        print("Restano chiarimenti non risolti; non verranno inventati né scritti.")
 
     if not preview.accepted_candidates:
         print("Nessun candidato scrivibile. Nessuna mutazione eseguita.")

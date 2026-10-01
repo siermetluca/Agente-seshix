@@ -107,6 +107,75 @@ class Skill01SemanticIntakeTests(unittest.TestCase):
         self.assertEqual(len(preview.clarification_questions), 1)
         self.assertIn("fatturato", preview.clarification_questions[0].lower())
 
+    def test_empty_candidate_set_requests_clarification(self):
+        service, ev, ctx = build_service(RawSemanticOutput(candidates=()))
+        before_ev = dict(ev.items)
+        before_ctx = dict(ctx.items)
+        preview = service.analyze(
+            request_id="SEM-EMPTY",
+            source_text="impianti elettrici",
+            source_ref="human://owner",
+        )
+        self.assertEqual(preview.accepted_candidates, ())
+        self.assertEqual(len(preview.clarification_questions), 1)
+        self.assertIn("impianti elettrici", preview.clarification_questions[0])
+        self.assertEqual(ev.items, before_ev)
+        self.assertEqual(ctx.items, before_ctx)
+
+    def test_generic_company_name_is_not_accepted_as_fact(self):
+        service, _, _ = build_service(RawSemanticOutput(candidates=(
+            RawSemanticCandidate(
+                "company.name",
+                "La mia azienda",
+                "FATTO",
+                "La mia azienda",
+            ),
+            RawSemanticCandidate(
+                "company.activities",
+                "Installa impianti elettrici",
+                "FATTO",
+                ["installa impianti elettrici"],
+            ),
+        )))
+        preview = service.analyze(
+            request_id="SEM-GENERIC-NAME",
+            source_text="La mia azienda installa impianti elettrici.",
+            source_ref="human://owner",
+        )
+        self.assertEqual(
+            tuple(c.key for c in preview.accepted_candidates),
+            ("company.activities",),
+        )
+        self.assertTrue(
+            any("nome" in q.lower() for q in preview.clarification_questions)
+        )
+
+    def test_model_generated_unknown_is_ignored_without_explicit_unknown_source(self):
+        service, _, _ = build_service(RawSemanticOutput(candidates=(
+            RawSemanticCandidate(
+                "company.activities",
+                "Installa impianti elettrici",
+                "FATTO",
+                ["installa impianti elettrici"],
+            ),
+            RawSemanticCandidate(
+                "company.country",
+                "Country is unavailable.",
+                "UNKNOWN",
+                None,
+            ),
+        )))
+        preview = service.analyze(
+            request_id="SEM-SPURIOUS-UNKNOWN",
+            source_text="La mia azienda installa impianti elettrici.",
+            source_ref="human://owner",
+        )
+        self.assertEqual(
+            tuple(c.key for c in preview.accepted_candidates),
+            ("company.activities",),
+        )
+        self.assertEqual(preview.clarification_questions, ())
+
     def test_out_of_catalog_key_is_rejected(self):
         service, _, _ = build_service(RawSemanticOutput(candidates=(
             RawSemanticCandidate("company.secret_magic", "Magic.", "FATTO", "x"),

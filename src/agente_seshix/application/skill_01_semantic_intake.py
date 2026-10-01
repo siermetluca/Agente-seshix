@@ -85,6 +85,31 @@ class Skill01SemanticCommitResult:
 
 
 class Skill01SemanticIntakeService:
+    _GENERIC_COMPANY_NAMES = frozenset(
+        {
+            "azienda",
+            "l'azienda",
+            "la mia azienda",
+            "mia azienda",
+            "the company",
+            "my company",
+            "company",
+        }
+    )
+    _UNKNOWN_MARKERS = (
+        "non so",
+        "non conosco",
+        "non noto",
+        "non nota",
+        "non disponibile",
+        "non è disponibile",
+        "sconosciuto",
+        "sconosciuta",
+        "unknown",
+        "unavailable",
+        "not known",
+    )
+
     def __init__(
         self,
         semantic_service: StructuredSemanticService,
@@ -121,9 +146,28 @@ class Skill01SemanticIntakeService:
                     f"semantic key outside SKILL_01 intake catalog: {candidate.key}"
                 )
             if candidate.classification is EvidenceClassification.UNKNOWN:
+                if self._source_explicitly_marks_unknown(source_text):
+                    questions.append(rule.clarification_question)
+                continue
+
+            if (
+                candidate.key == "company.name"
+                and isinstance(candidate.value, str)
+                and candidate.value.strip().lower() in self._GENERIC_COMPANY_NAMES
+            ):
                 questions.append(rule.clarification_question)
                 continue
+
             accepted.append(candidate)
+
+        if not accepted and not questions:
+            questions.append(
+                "L'input non contiene ancora un fatto aziendale sufficientemente "
+                "esplicito. Hai scritto: "
+                f"{source_text!r}. "
+                "Descrivi in una frase completa cosa fa concretamente la tua azienda "
+                "e, se vuoi, aggiungi nome, numero di persone e paese."
+            )
 
         return Skill01SemanticPreview(
             request_id=request_id,
@@ -133,6 +177,10 @@ class Skill01SemanticIntakeService:
             accepted_candidates=tuple(accepted),
             clarification_questions=tuple(questions),
         )
+    def _source_explicitly_marks_unknown(self, source_text: str) -> bool:
+        normalized = source_text.strip().lower()
+        return any(marker in normalized for marker in self._UNKNOWN_MARKERS)
+
     def commit(
         self,
         preview: Skill01SemanticPreview,
