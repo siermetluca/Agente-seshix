@@ -998,7 +998,8 @@ Mantiene inoltre la separazione già prevista dal framework:
 
 ```text
 SKILL_01
-→ acquisizione e costruzione del contesto
+
+[executed on device: lucas-Aspire-A315-59 (9ca13855-8d14-42a5-880a-eb86f81c36c0)]→ acquisizione e costruzione del contesto
 
 SKILL_02
 → analisi interna dell'azienda
@@ -1999,6 +2000,7 @@ SAMPLE_RECEIVED
 → capability match;
 → delivery
 
+[executed on device: lucas-Aspire-A315-59 (9ca13855-8d14-42a5-880a-eb86f81c36c0)]
 CORRECTION_REQUESTED
 → classificare la causa;
 → modificare solo il livello realmente responsabile
@@ -2999,6 +3001,7 @@ Se il dato necessario non è disponibile:
 ESTIMATION_GAP
 ```
 
+[executed on device: lucas-Aspire-A315-59 (9ca13855-8d14-42a5-880a-eb86f81c36c0)]
 Le stime devono rimanere compatibili con vincoli di budget, capacità e authority.
 
 ### Test plan
@@ -3389,22 +3392,30 @@ Questi meccanismi non sono ancora chiusi: saranno definiti e validati durante sv
 
 ## Stato del progetto
 
-Il progetto è attualmente nella fase di definizione dell'architettura e dei contratti concettuali.
+Il progetto ha completato la definizione della baseline architetturale e della governance necessaria ad avviare lo sviluppo controllato.
 
-Non sono ancora definitive:
+Definiti / congelati per lo sviluppo:
 
-- struttura del repository;
-- schema database;
-- stack finale;
-- API interne;
-- formato delle competenze;
-- contratti del Context Manager;
+- Architecture Baseline v0.2;
+- Development Architecture v0.1;
+- Repository Architecture v0.1;
+- Development Governance v0.1;
+- Repository Governance v0.1;
+- Development Skills v0.1;
+- Development Execution Contract v0.1.
+
+Restano da definire progressivamente:
+
+- schema database definitivo;
+- API interne definitive;
+- contratti runtime del Context Manager;
 - protocollo Opportunity Network;
-- modello di autorizzazione;
+- implementazione concreta dell'Authority Engine;
+- architettura della repository privata Agent-web-siermet;
 - piani commerciali;
 - licenza open source.
 
-Questi elementi saranno definiti prima dell'implementazione produttiva.
+FROZEN_FOR_DEVELOPMENT non significa FINAL_FOREVER: ogni modifica alle baseline congelate deve passare dal relativo processo governato di change proposal.
 
 ---
 
@@ -3431,3 +3442,5 @@ CODICE
 ```
 
 L'obiettivo è combinare capacità cognitiva e comportamento controllabile, verificabile e riproducibile.
+
+[executed on device: lucas-Aspire-A315-59 (9ca13855-8d14-42a5-880a-eb86f81c36c0)]

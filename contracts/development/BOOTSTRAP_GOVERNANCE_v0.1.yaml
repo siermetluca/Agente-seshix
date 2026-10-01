@@ -1,0 +1,22 @@
+contract_id: BOOTSTRAP_GOVERNANCE
+version: "0.1"
+status: CANONICAL
+gates:
+  B02:
+    name: PUBLIC_MAIN_GOVERNANCE
+    repository_policy: NO_DIRECT_MAIN_WRITE
+    remote_protection_required: true
+  B04:
+    name: ACTOR_AUTHORITY
+    authority_policy: config/development/authority.yaml
+  B05:
+    name: EVIDENCE_TRACEABILITY
+    schema: schemas/development/traceability_record.schema.json
+  B06:
+    name: AUTHORITY_HITL_ENFORCEMENT
+    human_authority: HUMAN_OWNER
+  B07:
+    name: PUBLIC_PRIVATE_LEAKAGE
+    checker: scripts/bootstrap_governance_check.py
+    semantic_unknown: REQUIRES_HITL
+hard_rule: ONE_REQUIRED_GATE_FAILS__ENTRY_GATE_BLOCKED

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Development Traceability Record v0.1",
+  "type": "object",
+  "required": [
+    "dev_task_id",
+    "dev_context_package_id",
+    "change_plan_id",
+    "implementation_ref",
+    "test_result_ref",
+    "review_result_ref",
+    "architecture_audit_ref",
+    "context_audit_ref",
+    "release_gate_ref"
+  ],
+  "properties": {
+    "dev_task_id": {"type": "string", "minLength": 1},
+    "dev_context_package_id": {"type": "string", "minLength": 1},
+    "change_plan_id": {"type": "string", "minLength": 1},
+    "implementation_ref": {"type": "string", "minLength": 1},
+    "test_result_ref": {"type": "string", "minLength": 1},
+    "review_result_ref": {"type": "string", "minLength": 1},
+    "architecture_audit_ref": {"type": "string", "minLength": 1},
+    "context_audit_ref": {"type": "string", "minLength": 1},
+    "release_gate_ref": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,11 @@
+skill_id: DEV_REVIEWER
+version: "0.1"
+status: CANONICAL
+purpose: "Review correctness, scope, security and maintainability"
+input_contract: [APPROVED_CHANGE_PLAN, IMPLEMENTATION_REF, ACTUAL_DIFF, TEST_RESULT]
+output_contract: REVIEW_RESULT
+required_authority: [REVIEW_CHANGE]
+stop_conditions: [MISSING_IMPLEMENTATION_REF, STALE_TEST_EVIDENCE, UNREVIEWABLE_DIFF, MISSING_SCOPE_PROVENANCE]
+escalation_conditions: [DEV_IMPLEMENTER, DEV_CHANGE_PLANNER, DEV_ARCHITECTURE_AUDITOR]
+evidence_requirements: [REVIEWED_REF, DIFF, FINDINGS, RULE_REFS]
+traceability: "IMPLEMENTATION_REF -> REVIEW_RESULT"
