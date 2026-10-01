@@ -1,0 +1,21 @@
+change_plan_id: CP-DEV-0012-v1
+dev_task_id: DEV-0012
+status: APPROVED
+scope:
+  add:
+    - docs/development/FOUNDATION_FREEZE_v0.1.md
+    - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+    - docs/development/tasks/DEV-0012/RESULT.md
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+implementation:
+  - Record the frozen foundation code baseline and change policy.
+  - Record the ordered flow-development stages, DEV_TASK candidates, gates and activation criteria.
+  - Move the operational phase from foundation construction to flow implementation.
+tests:
+  - Run full tests/unit via unittest discovery.
+  - Confirm no source/runtime file changed.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

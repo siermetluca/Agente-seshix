@@ -1,0 +1,20 @@
+dev_task_id: DEV-0012
+title: Foundation Freeze + Initial Flow Implementation Plan
+status: PROPOSED
+request: Freeze the verified DEV-0001 through DEV-0011 foundation and establish the step-by-step implementation plan for the first executable skill flow.
+source:
+  - docs/development/DEVELOPMENT_STATUS.md
+  - docs/development/FOUNDATION_GAP_REVIEW_v0.1.md
+  - docs/architecture/OPERATING_MODEL_v0.1.md
+  - docs/architecture/SKILL_MODEL_v0.1.md
+  - docs/architecture/SKILL_RUNTIME_MODEL_v0.1.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+rationale: Development must now move from isolated foundation components to executable, tested skill flows without reopening stable foundation decisions by default.
+affected_components:
+  - docs/development
+risk: DEV_RISK_0
+authority_required: DOCUMENTATION_CHANGE
+test_plan:
+  - Verify no runtime source files are changed.
+  - Run full unit suite as freeze baseline evidence.
+recovery_plan: Revert the documentation commit.
