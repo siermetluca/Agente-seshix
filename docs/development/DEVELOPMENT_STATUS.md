@@ -12,7 +12,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0010](tasks/DEV-0010/)
 - Active DEV_TASK: NONE
-- Current step: FOUNDATION_BLOCK_COMPLETE_REVIEW_NEXT_GAP
+- Current step: NEXT_GAP_IDENTIFIED
 - Blockers: NONE
 
 ## Implemented
@@ -97,7 +97,18 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 
 - DEV-0001 → DEV-0010 — COMPLETE
 - DOMAIN/APPLICATION FOUNDATION — COMPLETE_FOR_CURRENT_SCOPE
-- Next DEV_TASK — NOT YET DEFINED; must derive from the next verified implementation gap.
+- Gap review: [FOUNDATION_GAP_REVIEW_v0.1.md](FOUNDATION_GAP_REVIEW_v0.1.md)
+- Next DEV_TASK candidate: DEV-0011 — Evidence-backed Primary Context Update
+- DEV-0011 status: NOT_YET_MATERIALIZED
+
+## Gap priority
+
+1. P0 — Evidence → PrimaryContext verification boundary — NEXT
+2. P1 — Authority evaluator
+3. P2 — PostgreSQL repository adapters
+4. P3 — Context retrieval source abstraction
+
+Review verification: 61/61 unit tests PASS.
 
 ## Component index
 
