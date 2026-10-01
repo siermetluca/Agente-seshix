@@ -1,0 +1,24 @@
+change_plan_id: CP-DEV-0002-v1
+dev_task_id: DEV-0002
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/domain/evidence.py
+    - tests/unit/test_evidence.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+    - tests/unit/test_context_evidence.py
+  documentation:
+    - docs/development/tasks/DEV-0002
+implementation:
+  - Add immutable SourceReference value object.
+  - Add immutable Evidence entity/value object.
+  - Validate required identity, claim, source reference and version.
+  - Keep Evidence independent from EvidenceClassification.
+  - Remove the pre-existing non-Python tool-output line accidentally persisted in test_context_evidence.py so the existing DEV-0001 tests are runnable.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

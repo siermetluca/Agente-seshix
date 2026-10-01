@@ -1,0 +1,29 @@
+dev_task_id: DEV-0002
+title: SourceReference + Evidence
+status: PROPOSED
+request: Implement pure-domain SourceReference and Evidence objects representing the SOURCE -> EVIDENCE boundary.
+source:
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: Canonical context architecture requires evidence to retain an explicit source before it can contribute to context or derived state.
+affected_components:
+  - src/agente_seshix/domain
+  - tests/unit
+requirements:
+  - Represent a source reference explicitly.
+  - Represent an evidence record explicitly.
+  - Evidence must reference exactly one source in this minimal model.
+  - Evidence identity, claim, source and version must be explicit and non-empty.
+  - Evidence must not automatically become FATTO, IPOTESI or UNKNOWN.
+constraints:
+  - Pure DOMAIN code only.
+  - No persistence, framework, network or provider dependency.
+  - No database schema or migration.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Unit tests for valid evidence/source states and invalid empty required fields.
+  - Existing unit tests must remain passing.
+recovery_plan: Revert the task commit.

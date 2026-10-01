@@ -69,5 +69,3 @@ class ContextEvidenceTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
-[executed on device: lucas-Aspire-A315-59 (9ca13855-8d14-42a5-880a-eb86f81c36c0)]
