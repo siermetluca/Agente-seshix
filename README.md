@@ -199,6 +199,7 @@ L'architettura della repository privata `Agent-web-siermet` sarà definita separ
 | Governance | [docs/governance/](docs/governance/) |
 | Skill di processo | [docs/skills/](docs/skills/) |
 | Development | [docs/development/](docs/development/) |
+| Development status | [DEVELOPMENT_STATUS.md](docs/development/DEVELOPMENT_STATUS.md) |
 | Decisioni / ADR | [docs/decisions/](docs/decisions/) |
 | Contratti strutturati | [contracts/](contracts/) |
 
