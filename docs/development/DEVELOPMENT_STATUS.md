@@ -11,8 +11,8 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0024](tasks/DEV-0024/)
-- Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0025_SKILL02_VALIDATION
+- Active DEV_TASK: [DEV-0025](tasks/DEV-0025/)
+- Current step: CHANGE_PLAN_APPROVED
 - Blockers: NONE
 
 ## Implemented
@@ -133,7 +133,7 @@ Review verification: 61/61 unit tests PASS.
 10. DEV-0022 — Structured Semantic Model Port for SKILL_01 — PASS
 11. DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance — PASS
 12. DEV-0024 — SKILL_02 Company Analysis Runtime — PASS
-13. DEV-0025 — SKILL_02 Validation + Activation — NEXT
+13. DEV-0025 — SKILL_02 Validation + Activation — ACTIVE
 14. DEV-0026 — Source Acquisition Capability Port
 15. DEV-0027 — SKILL_03 External Validation Runtime
 16. DEV-0028 — SKILL_03 Validation + Activation

@@ -1,0 +1,20 @@
+dev_context_package_id: DEVCTX-0025-v1
+dev_task_id: DEV-0025
+status: CONTEXT_RESOLVED
+canonical_remote_base_sha: 4ef70f93dac3b0d84e364b9cddd0b42a18328c6d
+canonical_remote_base_tree: 33a2d1548af030e60e1a6826dc0afbd3516cb5a1
+local_start_tree: 33a2d1548af030e60e1a6826dc0afbd3516cb5a1
+base_equivalence: EXACT_TREE_MATCH
+provider_for_validation:
+  type: local_ollama
+  endpoint: http://127.0.0.1:11434
+  default_model: qwen2.5:3b
+canonical_context_refs:
+  - docs/development/tasks/DEV-0024/RESULT.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+repository:
+  id: PUBLIC_CORE_REPO
+  name: siermetluca/Agente-seshix
+classification: PUBLIC_SAFE
+blocking_unknowns: []

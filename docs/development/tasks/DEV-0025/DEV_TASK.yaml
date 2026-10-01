@@ -1,0 +1,24 @@
+dev_task_id: DEV-0025
+title: SKILL_02 Validation + Activation
+status: PLANNED
+request: Validate SKILL_02 with a real local analysis provider, stress non-invention guarantees, expose human acceptance, and activate only after owner approval.
+source:
+  - docs/development/tasks/DEV-0024/RESULT.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+requirements:
+  - Add a real local Ollama CompanyAnalysisPort adapter.
+  - Analyze only the supplied PRIMARY_CONTEXT; no external sources.
+  - Direct ASSET/CAPABILITY findings may describe explicit context facts.
+  - CRITICITA/INEFFICIENZA/GAP/RISK/IMPROVEMENT_AREA require explicit negative-signal context; otherwise they must be HYPOTHESIS or CONTEXT_CHANGE_CANDIDATE.
+  - Validate all basis keys against exact PRIMARY_CONTEXT version.
+  - Run real-provider positive and anti-hallucination scenarios.
+  - Provide a visible human acceptance harness.
+  - Keep SKILL_02 activation pending until the owner personally approves.
+constraints:
+  - No SKILL_03 work.
+  - No external web/market evidence.
+  - No PRIMARY_CONTEXT mutation by SKILL_02.
+  - No persistence/Temporal.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN

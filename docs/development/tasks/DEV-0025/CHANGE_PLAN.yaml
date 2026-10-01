@@ -1,0 +1,33 @@
+change_plan_id: CP-DEV-0025-v1
+dev_task_id: DEV-0025
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/infrastructure/ollama_company_analysis.py
+    - tests/unit/test_ollama_company_analysis.py
+    - tests/integration/test_skill_02_validation.py
+    - scripts/skill_02_human_acceptance.py
+    - docs/development/tasks/DEV-0025/HUMAN_TEST_GUIDE.md
+    - docs/development/tasks/DEV-0025/RESULT.md
+  update:
+    - src/agente_seshix/application/skill_02_company_analysis.py
+    - tests/unit/test_skill_02_company_analysis.py
+    - docs/development/DEVELOPMENT_STATUS.md
+implementation:
+  - Harden validator against unsupported direct negative conclusions.
+  - Add structured local Ollama analysis adapter.
+  - Add real-provider validation tests and anti-hallucination scenarios.
+  - Add human acceptance harness using a real PRIMARY_CONTEXT built from natural language.
+  - Leave activation pending until explicit human approval.
+tests:
+  - explicit asset/capability extraction;
+  - no direct negative conclusion from neutral facts;
+  - missing data -> CONTEXT_CHANGE_CANDIDATE;
+  - unsupported basis key rejected;
+  - provider structured JSON mapping;
+  - real Ollama integration;
+  - full regression.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
