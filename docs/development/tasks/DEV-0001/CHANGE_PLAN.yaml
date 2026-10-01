@@ -1,0 +1,20 @@
+change_plan_id: CP-DEV-0001-v1
+dev_task_id: DEV-0001
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/domain/context_evidence.py
+    - tests/unit/test_context_evidence.py
+  documentation:
+    - docs/development/tasks/DEV-0001
+implementation:
+  - Add EvidenceClassification enum.
+  - Add Provenance immutable value object.
+  - Add ContextValue immutable value object.
+  - Enforce only canonical deterministic invariants required by DEV-0001.
+tests:
+  - Run Python unittest for tests/unit/test_context_evidence.py.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
