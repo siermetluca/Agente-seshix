@@ -1,0 +1,16 @@
+dev_context_package_id: DEVCTX-0012-v1
+dev_task_id: DEV-0012
+status: CONTEXT_RESOLVED
+canonical_base_sha: f4306fb53e7b9c3d7d8cc3762c1ad83b6b510948
+canonical_context_refs:
+  - docs/architecture/OPERATING_MODEL_v0.1.md
+  - docs/architecture/SKILL_MODEL_v0.1.md
+  - docs/architecture/SKILL_RUNTIME_MODEL_v0.1.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/development/FOUNDATION_GAP_REVIEW_v0.1.md
+repository:
+  id: PUBLIC_CORE_REPO
+  name: siermetluca/Agente-seshix
+  base_sha: f4306fb53e7b9c3d7d8cc3762c1ad83b6b510948
+classification: PUBLIC_SAFE
+blocking_unknowns: []

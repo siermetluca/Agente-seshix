@@ -7,12 +7,12 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 
 ## Current state
 
-- Phase: DOMAIN FOUNDATION
+- Phase: INITIAL FLOW IMPLEMENTATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0011](tasks/DEV-0011/)
+- Last completed DEV_TASK: [DEV-0012](tasks/DEV-0012/)
 - Active DEV_TASK: NONE
-- Current step: NEXT_GAP_IDENTIFIED
+- Current step: READY_FOR_DEV-0013
 - Blockers: NONE
 
 ## Implemented
@@ -106,22 +106,47 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - DOMAIN/APPLICATION FOUNDATION — COMPLETE_FOR_CURRENT_SCOPE
 - Gap review: [FOUNDATION_GAP_REVIEW_v0.1.md](FOUNDATION_GAP_REVIEW_v0.1.md)
 - DEV-0011 — Evidence-backed Primary Context Update — PASS
-- Next verified gap: P1 — Authority evaluator
-- Next DEV_TASK — NOT YET MATERIALIZED
+- Foundation freeze: [FOUNDATION_FREEZE_v0.1.md](FOUNDATION_FREEZE_v0.1.md)
+- Initial flow plan: [INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md](INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md)
+- Next DEV_TASK: DEV-0013 — Authority Policy Evaluator
 
 ## Gap priority
 
 1. P0 — Evidence → PrimaryContext verification boundary — PASS
-2. P1 — Authority evaluator — NEXT
+2. P1 — Authority evaluator — DEV-0013 NEXT
 3. P2 — PostgreSQL repository adapters
 4. P3 — Context retrieval source abstraction
 
 Review verification: 61/61 unit tests PASS.
 
+## Flow implementation plan
+
+1. DEV-0013 — Authority Policy Evaluator — NEXT
+2. DEV-0014 — Skill Registry + Lifecycle
+3. DEV-0015 — Flow Execution Envelope
+4. DEV-0016 — Source/Evidence Intake Use Case
+5. DEV-0017 — SKILL_01 Context Construction Runtime
+6. DEV-0018 — SKILL_01 Validation + Activation
+7. DEV-0019 — Structured Semantic Model Port
+8. DEV-0020 — SKILL_02 Company Analysis Runtime
+9. DEV-0021 — SKILL_02 Validation + Activation
+10. DEV-0022 — Source Acquisition Capability Port
+11. DEV-0023 — SKILL_03 External Validation Runtime
+12. DEV-0024 — SKILL_03 Validation + Activation
+13. DEV-0025 — SKILL_01 → SKILL_02 → SKILL_03 E2E Flow
+14. DEV-0026 — PostgreSQL Repository Adapters
+15. DEV-0027 — Temporal Durable Flow
+
+Then extend the same validated lifecycle to SKILL_04–07.
+
 ## Component index
 
-- DOMAIN — IN_PROGRESS
-- APPLICATION — IN_PROGRESS
+- DOMAIN FOUNDATION — FROZEN
+- APPLICATION FOUNDATION — FROZEN
+- FLOW RUNTIME — NOT_STARTED
+- SKILL_01 — NOT_STARTED
+- SKILL_02 — NOT_STARTED
+- SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED
 - AUTHORITY ENGINE — NOT_STARTED
 - CONTEXT ENGINE — NOT_STARTED
