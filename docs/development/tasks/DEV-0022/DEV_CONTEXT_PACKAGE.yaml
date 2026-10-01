@@ -1,0 +1,15 @@
+dev_context_package_id: DEVCTX-0022-v1
+dev_task_id: DEV-0022
+status: CONTEXT_RESOLVED
+canonical_remote_base_sha: 430e5e09bd79dd30e972aa9a4e4f9babb8e3baf7
+local_start_sha: 6f7362bd213b073a50208128af63b7bedfcd0779
+canonical_context_refs:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/architecture/OPERATING_MODEL_v0.1.md
+  - docs/architecture/SKILL_MODEL_v0.1.md
+  - docs/development/tasks/DEV-0021/RESULT.md
+repository:
+  id: PUBLIC_CORE_REPO
+  name: siermetluca/Agente-seshix
+classification: PUBLIC_SAFE
+blocking_unknowns: []
