@@ -10,9 +10,9 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: INITIAL FLOW IMPLEMENTATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0023](tasks/DEV-0023/)
+- Last completed DEV_TASK: [DEV-0024](tasks/DEV-0024/)
 - Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0024_SKILL02_RUNTIME
+- Current step: READY_FOR_DEV-0025_SKILL02_VALIDATION
 - Blockers: NONE
 
 ## Implemented
@@ -132,8 +132,8 @@ Review verification: 61/61 unit tests PASS.
 9. DEV-0021 — SKILL_01 Human Acceptance — FAIL / REOPENED
 10. DEV-0022 — Structured Semantic Model Port for SKILL_01 — PASS
 11. DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance — PASS
-12. DEV-0024 — SKILL_02 Company Analysis Runtime — NEXT
-13. DEV-0025 — SKILL_02 Validation + Activation
+12. DEV-0024 — SKILL_02 Company Analysis Runtime — PASS
+13. DEV-0025 — SKILL_02 Validation + Activation — NEXT
 14. DEV-0026 — Source Acquisition Capability Port
 15. DEV-0027 — SKILL_03 External Validation Runtime
 16. DEV-0028 — SKILL_03 Validation + Activation
@@ -231,6 +231,13 @@ SKILL_01 overall = CLOSED_V1
   - context baseline remains evolutive, not final
   - targeted semantic-intake: 9/9 PASS; integration: 23/23 PASS; full unit regression: 141/141 PASS
   - result: [RESULT.md](tasks/DEV-0023/RESULT.md)
+
+- DEV-0024 — SKILL_02 Company Analysis Runtime — PASS
+  - grounded internal-analysis contract
+  - explicit CONTEXT_CHANGE_CANDIDATE routing to SKILL_01
+  - no PRIMARY_CONTEXT mutation capability
+  - targeted tests: 11/11 PASS; integration: 23/23 PASS; full unit regression: 152/152 PASS
+  - result: [RESULT.md](tasks/DEV-0024/RESULT.md)
 
 ## Component index
 
