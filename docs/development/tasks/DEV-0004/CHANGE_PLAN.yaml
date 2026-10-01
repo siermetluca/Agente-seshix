@@ -1,0 +1,23 @@
+change_plan_id: CP-DEV-0004-v1
+dev_task_id: DEV-0004
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/domain/derived_state.py
+    - tests/unit/test_derived_state.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0004
+implementation:
+  - Add immutable DependencyReference.
+  - Add immutable DerivedState.
+  - Store dependency/version references explicitly.
+  - Represent stale as explicit boolean state.
+  - Provide immutable mark_stale transition returning a new DerivedState.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
