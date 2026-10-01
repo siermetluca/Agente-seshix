@@ -144,9 +144,9 @@ CANONICAL CONTEXT
 
 Riferimenti:
 
-- [Development Governance v0.1](docs/governance/DEVELOPMENT_GOVERNANCE_v0.1.md)
+- [Development Governance v0.2](docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md)
 - [Repository Governance v0.1](docs/governance/REPOSITORY_GOVERNANCE_v0.1.md)
-- [Documentation Governance v0.1](docs/governance/DOCUMENTATION_GOVERNANCE_v0.1.md)
+- [Documentation Governance v0.2](docs/governance/DOCUMENTATION_GOVERNANCE_v0.2.md)
 - [Development Execution Contract v0.1](contracts/development/DEVELOPMENT_EXECUTION_CONTRACT_v0.1.yaml)
 
 Il README è una overview e un indice: i contratti dettagliati vivono nei documenti e nei file `contracts/`.
@@ -213,9 +213,9 @@ Sono definiti e congelati per lo sviluppo:
 - Architecture Baseline v0.2;
 - Development Architecture v0.1;
 - Repository Architecture v0.1;
-- Development Governance v0.1;
+- Development Governance v0.2;
 - Repository Governance v0.1;
-- Documentation Governance v0.1;
+- Documentation Governance v0.2;
 - Development Skills v0.1;
 - Development Execution Contract v0.1.
 
@@ -239,5 +239,3 @@ Restano da definire progressivamente, quando richiesti dallo sviluppo reale:
 Agente-seshix non deve delegare a un LLM ciò che può essere espresso in modo affidabile come codice, regola, contratto o macchina a stati.
 
 L'LLM viene usato dove serve comprensione semantica; authority, validazioni critiche, stato canonico e transizioni governate restano sotto controllo esplicito.
-
-[executed on device: lucas-Aspire-A315-59 (9ca13855-8d14-42a5-880a-eb86f81c36c0)]

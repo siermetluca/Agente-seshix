@@ -1,0 +1,64 @@
+# DEVELOPMENT STATUS
+
+Status: DERIVED_OPERATIONAL_INDEX
+
+Questo file è lo schermo operativo dello sviluppo.
+Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e stato corrente.
+
+## Current state
+
+- Phase: DOMAIN FOUNDATION
+- Canonical branch: `main`
+- Current canonical base: `9975a3940c2dc8b361c2854e06df14b8ea1838c6`
+- Last completed DEV_TASK: [DEV-0001](tasks/DEV-0001/)
+- Active DEV_TASK: NONE
+- Current step: READY_FOR_NEXT_DEV_TASK
+- Blockers: NONE
+
+## Implemented
+
+- DEV-0001 — Context Evidence Domain Model — PASS
+  - `EvidenceClassification`
+  - `Provenance`
+  - `ContextValue`
+  - tests: 7/7 PASS
+  - result: [RESULT.md](tasks/DEV-0001/RESULT.md)
+
+## Current development plan
+
+1. DEV-0002 — SourceReference + Evidence — NEXT
+2. DEV-0003 — Primary Context Record + Version — PLANNED
+3. DEV-0004 — Derived State + Dependency + Staleness — PLANNED
+4. DEV-0005 — Authority Decision domain model — PLANNED
+5. DEV-0006 — Task + Task Context requirements — PLANNED
+6. DEV-0007 — Context repository ports — PLANNED
+7. DEV-0008 — Evidence repository ports — PLANNED
+8. DEV-0009 — Context update application use-case — PLANNED
+9. DEV-0010 — Task Context Resolver use-case — PLANNED
+
+## Component index
+
+- DOMAIN — IN_PROGRESS
+- APPLICATION — NOT_STARTED
+- PERSISTENCE — NOT_STARTED
+- AUTHORITY ENGINE — NOT_STARTED
+- CONTEXT ENGINE — NOT_STARTED
+- SKILL RUNTIME — NOT_STARTED
+- WORKFLOW / TEMPORAL — NOT_STARTED
+- AGENTIC / LANGGRAPH — NOT_STARTED
+- INTERFACES / DJANGO API — NOT_STARTED
+- CAPABILITIES / CONNECTORS — NOT_STARTED
+- END-TO-END BUSINESS FLOWS — NOT_STARTED
+
+## Update rule
+
+Aggiornare questo indice quando:
+- viene pianificato un DEV_TASK;
+- cambia lo stato del DEV_TASK attivo;
+- viene completato uno step significativo;
+- viene eseguito un test rilevante;
+- compare o si chiude un blocker;
+- una PR viene mergiata;
+- cambia il piano immediatamente successivo.
+
+I dettagli restano negli artefatti del task. Qui si registra solo indice, stato e riferimento.
