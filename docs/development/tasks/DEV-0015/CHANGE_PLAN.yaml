@@ -1,0 +1,23 @@
+change_plan_id: CP-DEV-0015-v1
+dev_task_id: DEV-0015
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/flow_execution.py
+    - tests/unit/test_flow_execution.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0015
+implementation:
+  - Add FlowRunState and FlowStepState.
+  - Add immutable FlowStep and FlowRun snapshots.
+  - Add FlowExecutionEnvelope transition methods.
+  - Keep step ordering append-only and deterministic.
+  - Require explicit resume from WAITING_HITL.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
