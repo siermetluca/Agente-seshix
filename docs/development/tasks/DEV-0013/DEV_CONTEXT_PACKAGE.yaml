@@ -1,0 +1,16 @@
+dev_context_package_id: DEVCTX-0013-v1
+dev_task_id: DEV-0013
+status: CONTEXT_RESOLVED
+canonical_base_sha: cbaf5c6b7215cec13c6b984a4cc7e9c358632ef9
+canonical_context_refs:
+  - config/development/authority.yaml
+  - docs/architecture/ARCHITECTURE_BASELINE_v0.2.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+authority_policy_ref: config/development/authority.yaml
+repository:
+  id: PUBLIC_CORE_REPO
+  name: siermetluca/Agente-seshix
+  base_sha: cbaf5c6b7215cec13c6b984a4cc7e9c358632ef9
+classification: PUBLIC_SAFE
+blocking_unknowns: []

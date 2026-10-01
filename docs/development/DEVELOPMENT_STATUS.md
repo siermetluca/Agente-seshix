@@ -10,9 +10,9 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: INITIAL FLOW IMPLEMENTATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0012](tasks/DEV-0012/)
+- Last completed DEV_TASK: [DEV-0013](tasks/DEV-0013/)
 - Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0013
+- Current step: READY_FOR_DEV-0014
 - Blockers: NONE
 
 ## Implemented
@@ -121,8 +121,8 @@ Review verification: 61/61 unit tests PASS.
 
 ## Flow implementation plan
 
-1. DEV-0013 — Authority Policy Evaluator — NEXT
-2. DEV-0014 — Skill Registry + Lifecycle
+1. DEV-0013 — Authority Policy Evaluator — PASS
+2. DEV-0014 — Skill Registry + Lifecycle — NEXT
 3. DEV-0015 — Flow Execution Envelope
 4. DEV-0016 — Source/Evidence Intake Use Case
 5. DEV-0017 — SKILL_01 Context Construction Runtime
@@ -139,6 +139,15 @@ Review verification: 61/61 unit tests PASS.
 
 Then extend the same validated lifecycle to SKILL_04–07.
 
+## Flow runtime implemented
+
+- DEV-0013 — Authority Policy Evaluator — PASS
+  - `AuthorityPolicyEvaluator`
+  - ALLOW / DENY / conditional / HITL paths
+  - fail-closed unknown policy paths
+  - tests: 80/80 PASS (full unit suite)
+  - result: [RESULT.md](tasks/DEV-0013/RESULT.md)
+
 ## Component index
 
 - DOMAIN FOUNDATION — FROZEN
@@ -148,7 +157,7 @@ Then extend the same validated lifecycle to SKILL_04–07.
 - SKILL_02 — NOT_STARTED
 - SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED
-- AUTHORITY ENGINE — NOT_STARTED
+- AUTHORITY ENGINE — OPERATIONAL_V1
 - CONTEXT ENGINE — NOT_STARTED
 - SKILL RUNTIME — NOT_STARTED
 - WORKFLOW / TEMPORAL — NOT_STARTED
