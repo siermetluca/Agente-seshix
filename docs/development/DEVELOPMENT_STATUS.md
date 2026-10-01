@@ -10,9 +10,9 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: INITIAL FLOW IMPLEMENTATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0019](tasks/DEV-0019/)
+- Last completed DEV_TASK: [DEV-0020](tasks/DEV-0020/)
 - Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0020_SKILL01_CLOSURE
+- Current step: READY_FOR_DEV-0021
 - Blockers: NONE
 
 ## Implemented
@@ -128,8 +128,8 @@ Review verification: 61/61 unit tests PASS.
 5. DEV-0017 — SKILL_01 Context Construction Runtime — PASS
 6. DEV-0018 — SKILL_01 Validation + Activation — PASS
 7. DEV-0019 — SKILL_01 Node Runtime Integration — PASS
-8. DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure — NEXT
-9. DEV-0021 — Structured Semantic Model Port
+8. DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure — PASS
+9. DEV-0021 — Structured Semantic Model Port — NEXT
 10. DEV-0022 — SKILL_02 Company Analysis Runtime
 11. DEV-0023 — SKILL_02 Validation + Activation
 12. DEV-0024 — Source Acquisition Capability Port
@@ -200,12 +200,20 @@ Then extend the same validated lifecycle to SKILL_04–07.
   - node tests: 5/5 PASS; integration: 12/12 PASS; unit regression: 118/118 PASS
   - result: [RESULT.md](tasks/DEV-0019/RESULT.md)
 
+- DEV-0020 — SKILL_01 Full Node Stress, Improvement + Closure — PASS
+  - initial stress exposed 4 runtime defects + 1 traceability gap
+  - all demonstrated defects corrected
+  - stress: 11/11 PASS; integration: 23/23 PASS; unit regression: 118/118 PASS
+  - SKILL_01_CLOSED = PASS
+  - stress evidence: [STRESS_EVIDENCE.md](tasks/DEV-0020/STRESS_EVIDENCE.md)
+  - result: [RESULT.md](tasks/DEV-0020/RESULT.md)
+
 ## Component index
 
 - DOMAIN FOUNDATION — FROZEN
 - APPLICATION FOUNDATION — FROZEN
 - FLOW RUNTIME — OPERATIONAL_V1
-- SKILL_01 — NODE_RUNTIME_OPERATIONAL / NOT_CLOSED
+- SKILL_01 — CLOSED_V1
 - SKILL_02 — NOT_STARTED
 - SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED

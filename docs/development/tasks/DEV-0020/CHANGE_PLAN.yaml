@@ -1,0 +1,29 @@
+change_plan_id: CP-DEV-0020-v1
+dev_task_id: DEV-0020
+status: APPROVED
+scope:
+  add:
+    - tests/integration/test_skill_01_node_stress.py
+    - docs/development/tasks/DEV-0020/STRESS_EVIDENCE.md
+    - docs/development/tasks/DEV-0020/RESULT.md
+  conditional_update:
+    - src/agente_seshix/application/skill_01_node.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+implementation:
+  - Add closure stress suite first.
+  - Record failing scenarios before code corrections.
+  - Apply minimal fixes only for demonstrated defects.
+  - Rerun stress, all integration and unit regression.
+  - Record closure evidence and close SKILL_01 only on full pass.
+closure_gates:
+  - SKILL_01_NODE_COMPLETE
+  - SKILL_01_NODE_NEGATIVE_SUITE
+  - SKILL_01_NODE_REPEATABILITY
+  - SKILL_01_NO_SILENT_STATE_MUTATION
+  - SKILL_01_HITL_RESUME
+  - SKILL_01_CLOSED
+architecture_impact: NONE
+persistent_state_impact: PORT_ONLY
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE

@@ -9,6 +9,7 @@ from agente_seshix.application.authority_policy import (
     AuthorityPolicyEvaluator,
 )
 from agente_seshix.application.evidence_intake import (
+    EvidenceAlreadyExists,
     EvidenceIntakeCommand,
     EvidenceIntakeUseCase,
 )
@@ -23,8 +24,10 @@ from agente_seshix.application.skill_01_context import (
     Skill01ContextRuntime,
     Skill01ContextStatus,
 )
-from agente_seshix.application.skill_registry import SkillRegistry
+from agente_seshix.application.update_primary_context import EvidenceNotFound
+from agente_seshix.application.skill_registry import SkillNotFound, SkillRegistry
 from agente_seshix.application.task_context_resolver import (
+    MissingRequiredContext,
     TaskContextPackage,
     TaskContextResolver,
 )
@@ -92,11 +95,45 @@ class Skill01NodeRuntime:
         self._skill_runtime = skill_runtime
         self._flow = flow
     def execute(self, command: Skill01NodeCommand) -> Skill01NodeResult:
-        package = self._context_resolver.resolve(
-            command.task,
-            command.context_requirements,
-            command.available_context,
-        )
+        try:
+            package = self._context_resolver.resolve(
+                command.task,
+                command.context_requirements,
+                command.available_context,
+            )
+        except MissingRequiredContext as error:
+            requested = (
+                command.context_requirements.required_sections
+                + command.context_requirements.optional_sections
+            )
+            package = self._context_resolver.resolve(
+                command.task,
+                TaskContextRequirements(
+                    task_id=command.task.task_id,
+                    required_sections=(),
+                    optional_sections=requested,
+                ),
+                command.available_context,
+            )
+            run = self._flow.start(
+                FlowRun(
+                    run_id=command.run_id,
+                    task=command.task,
+                    context_package=package,
+                )
+            )
+            run = self._flow.begin_step(
+                run,
+                "CONTEXT",
+                "resolve task context",
+            )
+            run = self._flow.block(run, str(error))
+            return Skill01NodeResult(
+                run=run,
+                command=command,
+                context_package=package,
+            )
+
         run = self._flow.start(
             FlowRun(
                 run_id=command.run_id,
@@ -109,7 +146,18 @@ class Skill01NodeRuntime:
         run = self._flow.pass_step(run, result=package)
 
         run = self._flow.begin_step(run, "SKILL_RESOLUTION", "resolve active SKILL_01")
-        skill = self._skill_registry.resolve_active(self.SKILL_ID, command.skill_version)
+        try:
+            skill = self._skill_registry.resolve_active(
+                self.SKILL_ID,
+                command.skill_version,
+            )
+        except SkillNotFound as error:
+            run = self._flow.block(run, str(error))
+            return Skill01NodeResult(
+                run=run,
+                command=command,
+                context_package=package,
+            )
         run = self._flow.select_skill(run, skill)
         run = self._flow.pass_step(run, result=skill)
 
@@ -163,7 +211,11 @@ class Skill01NodeRuntime:
         run = self._flow.resume_after_hitl(run)
 
         if waiting_step == "AUTHORITY":
-            context = authority_context or AuthorityEvaluationContext(hitl_approved=True)
+            if authority_context is None:
+                raise ValueError(
+                    "authority_context with explicit HITL approval is required"
+                )
+            context = authority_context
             command = Skill01NodeCommand(
                 run_id=previous.command.run_id,
                 task=previous.command.task,
@@ -235,8 +287,23 @@ class Skill01NodeRuntime:
     ) -> Skill01NodeResult:
         ingested = None
         if command.evidence_intake is not None:
-            run = self._flow.begin_step(run, "EVIDENCE_INTAKE", "ingest explicit source evidence")
-            ingested = self._evidence_intake.execute(command.evidence_intake)
+            run = self._flow.begin_step(
+                run,
+                "EVIDENCE_INTAKE",
+                "ingest explicit source evidence",
+            )
+            try:
+                ingested = self._evidence_intake.execute(command.evidence_intake)
+            except EvidenceAlreadyExists as error:
+                run = self._flow.block(
+                    run,
+                    f"evidence already exists: {error}",
+                )
+                return Skill01NodeResult(
+                    run=run,
+                    command=command,
+                    context_package=package,
+                )
             run = self._flow.pass_step(run, result=ingested)
 
         return self._execute_skill_step(
@@ -258,19 +325,53 @@ class Skill01NodeRuntime:
     ) -> Skill01NodeResult:
         if evidence_intake is not None:
             if run.steps and run.steps[-1].step_id == "SKILL_EXECUTION":
-                ingested_evidence = self._evidence_intake.execute(evidence_intake)
+                try:
+                    ingested_evidence = self._evidence_intake.execute(evidence_intake)
+                except EvidenceAlreadyExists as error:
+                    run = self._flow.block(
+                        run,
+                        f"evidence already exists: {error}",
+                    )
+                    return Skill01NodeResult(
+                        run=run,
+                        command=command,
+                        context_package=package,
+                    )
             else:
                 run = self._flow.begin_step(
                     run,
                     "EVIDENCE_INTAKE_RESUME",
                     "ingest HITL evidence",
                 )
-                ingested_evidence = self._evidence_intake.execute(evidence_intake)
+                try:
+                    ingested_evidence = self._evidence_intake.execute(evidence_intake)
+                except EvidenceAlreadyExists as error:
+                    run = self._flow.block(
+                        run,
+                        f"evidence already exists: {error}",
+                    )
+                    return Skill01NodeResult(
+                        run=run,
+                        command=command,
+                        context_package=package,
+                    )
                 run = self._flow.pass_step(run, result=ingested_evidence)
 
         if not run.steps or run.steps[-1].step_id != "SKILL_EXECUTION":
             run = self._flow.begin_step(run, "SKILL_EXECUTION", "execute SKILL_01")
-        skill_result = self._skill_runtime.execute(command.skill_command)
+        try:
+            skill_result = self._skill_runtime.execute(command.skill_command)
+        except EvidenceNotFound as error:
+            run = self._flow.block(
+                run,
+                f"evidence not found: {error}",
+            )
+            return Skill01NodeResult(
+                run=run,
+                command=command,
+                context_package=package,
+                ingested_evidence=ingested_evidence,
+            )
 
         if skill_result.status is Skill01ContextStatus.WAITING_HITL:
             run = self._flow.wait_for_hitl(
