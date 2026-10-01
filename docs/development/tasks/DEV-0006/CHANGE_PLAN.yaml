@@ -1,0 +1,22 @@
+change_plan_id: CP-DEV-0006-v1
+dev_task_id: DEV-0006
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/domain/task_context.py
+    - tests/unit/test_task_context.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0006
+implementation:
+  - Add immutable Task.
+  - Add ContextSection enum for selectable task-context sections.
+  - Add immutable TaskContextRequirements.
+  - Validate non-empty Task fields, uniqueness and required/optional disjointness.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
