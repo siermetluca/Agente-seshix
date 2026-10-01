@@ -1,0 +1,13 @@
+dev_task_id: DEV-0021
+title: SKILL_01 Human Acceptance Harness
+status: IMPLEMENTING
+request: Provide a local interactive harness so the human owner can personally observe and test the complete SKILL_01 node before any SKILL_02 work.
+requirements:
+  - Show FlowRun steps and states visibly.
+  - Human can run a normal FACT path.
+  - Human can trigger required UNKNOWN and resume with new evidence.
+  - Human can trigger authority HITL and explicitly approve or deny.
+  - Show resulting PrimaryContextVersion and Evidence provenance.
+  - No external services required.
+  - Human acceptance must remain PENDING until user personally approves.
+risk: DEV_RISK_1
