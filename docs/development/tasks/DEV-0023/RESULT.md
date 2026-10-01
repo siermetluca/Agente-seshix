@@ -1,6 +1,6 @@
 # DEV-0023 RESULT
 
-Status: WAITING_HUMAN_ACCEPTANCE
+Status: PASS
 
 ## Implemented
 
@@ -44,7 +44,7 @@ After explicit preview approval, six versioned Evidence-backed context updates c
 ## Gate
 
 ```text
-SKILL_01_HUMAN_ACCEPTANCE = PENDING
+SKILL_01_HUMAN_ACCEPTANCE = PASS
 ```
 
 DEV-0023 cannot close until the owner personally reruns the v2 harness and explicitly approves the observed behavior.
@@ -95,3 +95,34 @@ unit:       139 / 139 PASS
 ```
 
 SKILL_01_HUMAN_ACCEPTANCE remains PENDING until the owner personally reruns the remediated harness.
+
+## Human acceptance decision
+
+Owner decision: APPROVED FOR CURRENT V1 SCOPE.
+
+The owner explicitly confirmed that the current SKILL_01 behavior is correct for now, with this constraint:
+
+```text
+CURRENT_CONTEXT_BASELINE != FINAL_CONTEXT_MODEL
+```
+
+The definitive company context will emerge progressively while SKILL_02 and subsequent skills are developed and tested.
+
+Governance consequence:
+
+- SKILL_01 remains the sole writer/updater of PRIMARY_CONTEXT;
+- downstream skills may identify missing facts or required context fields;
+- those findings become `CONTEXT_CHANGE_CANDIDATE`;
+- SKILL_01 performs targeted evidence-backed updates;
+- no downstream skill may silently mutate PRIMARY_CONTEXT;
+- context evolution remains versioned and provenance-preserving.
+
+Final verification after the last grounding remediation:
+
+```text
+semantic-intake targeted tests: 9 / 9 PASS
+integration suite: 23 / 23 PASS (+ 1 Ollama opt-in skipped normally)
+full unit regression: 141 / 141 PASS
+SKILL_01_HUMAN_ACCEPTANCE = PASS
+SKILL_01_CLOSED_V1 = PASS
+```

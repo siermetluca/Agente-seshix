@@ -158,6 +158,14 @@ class Skill01SemanticIntakeService:
                 questions.append(rule.clarification_question)
                 continue
 
+            self._validate_source_grounding(candidate, source_text)
+            if candidate.classification is EvidenceClassification.FATTO:
+                candidate = SemanticCandidate(
+                    key=candidate.key,
+                    claim=source_text.strip(),
+                    classification=candidate.classification,
+                    value=candidate.value,
+                )
             accepted.append(candidate)
 
         if not accepted and not questions:
@@ -180,6 +188,40 @@ class Skill01SemanticIntakeService:
     def _source_explicitly_marks_unknown(self, source_text: str) -> bool:
         normalized = source_text.strip().lower()
         return any(marker in normalized for marker in self._UNKNOWN_MARKERS)
+
+    def _validate_source_grounding(
+        self,
+        candidate: SemanticCandidate,
+        source_text: str,
+    ) -> None:
+        if candidate.classification is not EvidenceClassification.FATTO:
+            return
+
+        source = " ".join(source_text.lower().split())
+
+        value = candidate.value
+        if isinstance(value, str):
+            normalized = " ".join(value.lower().split())
+            if normalized not in source:
+                raise Skill01SemanticIntakeError(
+                    f"FATTO value not grounded in source: {value!r}"
+                )
+
+        if candidate.key == "company.activities" and isinstance(value, list):
+            for item in value:
+                if not isinstance(item, str):
+                    raise Skill01SemanticIntakeError(
+                        "company.activities items must be strings"
+                    )
+                normalized = " ".join(item.lower().split())
+                if normalized not in source:
+                    raise Skill01SemanticIntakeError(
+                        f"activity not grounded in source: {item!r}"
+                    )
+                if len(normalized.split()) < 2:
+                    raise Skill01SemanticIntakeError(
+                        f"activity is not a complete phrase: {item!r}"
+                    )
 
     def commit(
         self,
