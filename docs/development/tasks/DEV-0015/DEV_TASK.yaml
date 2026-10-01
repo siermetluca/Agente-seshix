@@ -1,0 +1,40 @@
+dev_task_id: DEV-0015
+title: Flow Execution Envelope
+status: PROPOSED
+request: Implement an in-memory deterministic execution envelope for one operational run with ordered steps, selected skill, authority result, stop/HITL paths and traceable result.
+source:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/architecture/OPERATING_MODEL_v0.1.md
+  - docs/architecture/SKILL_RUNTIME_MODEL_v0.1.md
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+rationale: The first executable skill flow needs a traceable runtime container before concrete skills are executed.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Represent run identity, Task and TaskContextPackage.
+  - Represent ordered immutable execution steps.
+  - Record selected skill id/version when applicable.
+  - Record AuthorityDecision when evaluated.
+  - Record output/result and stop reason.
+  - Provide deterministic run states READY, RUNNING, WAITING_HITL, PASSED, BLOCKED, FAILED.
+  - Provide deterministic step states PENDING, RUNNING, WAITING_HITL, PASSED, BLOCKED, FAILED.
+  - Prevent invalid transitions and execution after terminal states.
+  - WAITING_HITL must be resumable only through an explicit resume operation.
+constraints:
+  - In-memory only.
+  - No Temporal.
+  - No persistence.
+  - No actual skill execution.
+  - No LLM/provider.
+  - No external side effects.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Happy-path ordered run.
+  - Invalid transition rejection.
+  - WAITING_HITL stop and explicit resume.
+  - BLOCKED and FAILED terminal paths.
+  - Traceability of skill, authority and result.
+  - Full unit suite must remain passing.
+recovery_plan: Revert the task commit.
