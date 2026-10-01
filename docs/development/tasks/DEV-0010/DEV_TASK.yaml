@@ -1,0 +1,38 @@
+dev_task_id: DEV-0010
+title: Task Context Resolver use-case
+status: PROPOSED
+request: Implement the application use case that resolves task-specific context from available context sections according to TaskContextRequirements.
+source:
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/architecture/SKILL_MODEL_v0.1.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: Canonical context behavior requires retrieval of only relevant context, validation of required context, and construction of a TASK CONTEXT PACKAGE.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Accept a Task and TaskContextRequirements bound to the same task id.
+  - Accept available context keyed by ContextSection.
+  - Include all required sections when available.
+  - Include optional sections only when available.
+  - Reject resolution when any required section is missing.
+  - Reject requirements bound to a different task id.
+  - Exclude available sections that were not requested.
+  - Return an immutable TaskContextPackage containing the Task and resolved sections.
+constraints:
+  - No skill resolution.
+  - No external retrieval/search.
+  - No persistence adapter.
+  - No policy or capability-specific schema invention.
+  - No authority evaluation.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Test required/optional selection.
+  - Test missing required context.
+  - Test task-id mismatch.
+  - Test exclusion of unrequested context.
+  - Full existing unit suite must remain passing.
+recovery_plan: Revert the task commit.
