@@ -1,0 +1,37 @@
+dev_task_id: DEV-0009
+title: Context update application use-case
+status: PROPOSED
+request: Implement the application use case that performs a targeted update of PRIMARY_CONTEXT and persists a new PrimaryContextVersion.
+source:
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/skills/PROCESS_SKILLS_v0.1.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.2.md
+rationale: Canonical SKILL_01 behavior requires targeted, versioned context updates that preserve prior versions rather than silently mutating history.
+affected_components:
+  - src/agente_seshix/application
+  - tests/unit
+requirements:
+  - Load an explicit base PrimaryContextVersion by id.
+  - Reject the operation when the base version does not exist.
+  - Apply one targeted PrimaryContextRecord update by record key.
+  - Replace an existing record with the same key or append it if the key is new.
+  - Produce a new PrimaryContextVersion with previous_version_id bound to the base version.
+  - Save the new version through PrimaryContextRepository.
+  - Do not mutate the base version.
+constraints:
+  - No generated ids; base and new version ids are supplied explicitly.
+  - No PostgreSQL/Django adapter.
+  - No authority-policy evaluation.
+  - No full SKILL_01 runtime.
+  - No automatic derived-state staleness propagation.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Test replacement of an existing key.
+  - Test append of a new key.
+  - Test missing base version.
+  - Test base-version immutability and persistence of the new version.
+  - Full existing unit suite must remain passing.
+recovery_plan: Revert the task commit.

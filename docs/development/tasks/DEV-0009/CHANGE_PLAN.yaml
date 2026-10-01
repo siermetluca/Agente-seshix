@@ -1,0 +1,23 @@
+change_plan_id: CP-DEV-0009-v1
+dev_task_id: DEV-0009
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/update_primary_context.py
+    - tests/unit/test_update_primary_context.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0009
+implementation:
+  - Add immutable UpdatePrimaryContextCommand.
+  - Add BaseContextVersionNotFound application error.
+  - Add UpdatePrimaryContextUseCase using PrimaryContextRepository.
+  - Replace by record key or append for a new key.
+  - Save and return a new PrimaryContextVersion linked to the base version.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: PORT_ONLY
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
