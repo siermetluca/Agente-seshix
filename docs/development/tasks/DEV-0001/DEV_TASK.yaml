@@ -1,0 +1,28 @@
+dev_task_id: DEV-0001
+title: Context Evidence Domain Model
+status: PROPOSED
+request: Implement the first executable domain model for FATTO, IPOTESI, UNKNOWN and provenance.
+source:
+  - docs/architecture/CONTEXT_AND_OWNERSHIP_v0.1.md
+  - docs/architecture/DEVELOPMENT_ARCHITECTURE_v0.1.md
+  - docs/governance/DEVELOPMENT_GOVERNANCE_v0.1.md
+rationale: The canonical context model requires evidence classification, provenance and versioning before higher-level context/runtime behavior can be implemented.
+affected_components:
+  - src/agente_seshix/domain
+  - tests/unit
+requirements:
+  - Represent FATTO, IPOTESI and UNKNOWN explicitly.
+  - Represent provenance explicitly.
+  - Represent version explicitly.
+  - A FATTO must have at least one provenance reference.
+  - UNKNOWN must not assert a concrete value.
+constraints:
+  - Pure DOMAIN code only.
+  - No Django, PostgreSQL, Temporal, LangGraph or external SDK dependency.
+  - No database schema or migration.
+  - No cross-repo change.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
+test_plan:
+  - Unit tests for valid and invalid domain states.
+recovery_plan: Revert the task commit.
