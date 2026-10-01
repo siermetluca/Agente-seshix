@@ -1,6 +1,6 @@
 dev_task_id: DEV-0019
 title: SKILL_01 Node Runtime Integration
-status: PROPOSED
+status: PLANNED
 request: Build the complete SKILL_01 node coordinator over the already validated runtime components before any SKILL_02 work.
 source:
   - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
@@ -22,4 +22,4 @@ constraints:
   - No PostgreSQL or Temporal.
   - No autonomous acquisition.
 risk: DEV_RISK_1
-status_note: Planned only; implementation not started in this planning correction.
+status_note: Materialized for implementation.
