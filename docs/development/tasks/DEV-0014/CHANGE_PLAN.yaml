@@ -1,0 +1,23 @@
+change_plan_id: CP-DEV-0014-v1
+dev_task_id: DEV-0014
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/skill_registry.py
+    - tests/unit/test_skill_registry.py
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+  documentation:
+    - docs/development/tasks/DEV-0014
+implementation:
+  - Add SkillState enum.
+  - Add immutable SkillRegistration.
+  - Add deterministic SkillRegistry.
+  - Enforce explicit lifecycle transitions and validation gate.
+  - Resolve only exact ACTIVE skill versions.
+tests:
+  - Run all tests/unit via unittest discovery.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
