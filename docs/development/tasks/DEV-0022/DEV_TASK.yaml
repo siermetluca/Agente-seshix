@@ -1,0 +1,25 @@
+dev_task_id: DEV-0022
+title: Structured Semantic Model Port
+status: PLANNED
+request: Add a provider-agnostic structured semantic boundary required to remediate SKILL_01 human intake.
+source:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/architecture/OPERATING_MODEL_v0.1.md
+  - docs/architecture/SKILL_MODEL_v0.1.md
+  - docs/development/tasks/DEV-0021/RESULT.md
+requirements:
+  - Accept natural source/human text through an immutable structured request.
+  - Provider implementation must be replaceable behind a Protocol/port.
+  - Provider output must not be trusted as validated state.
+  - Represent semantic candidate records for FATTO/IPOTESI/UNKNOWN.
+  - Deterministically validate candidate shape, classification/value coherence and forbidden runtime-control tokens.
+  - Only validated semantic output may be returned by the application service.
+  - No Evidence or PRIMARY_CONTEXT mutation in this task.
+  - Reject malformed/unknown classifications and semantically unsafe control-token candidates.
+constraints:
+  - No concrete LLM provider.
+  - No network/API calls.
+  - No SKILL_02 implementation.
+  - No automatic Evidence/context write.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN

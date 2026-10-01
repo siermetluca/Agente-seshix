@@ -1,0 +1,31 @@
+change_plan_id: CP-DEV-0022-v1
+dev_task_id: DEV-0022
+status: APPROVED
+scope:
+  add:
+    - src/agente_seshix/application/semantic_model.py
+    - tests/unit/test_semantic_model.py
+    - docs/development/tasks/DEV-0022/RESULT.md
+  update:
+    - docs/development/DEVELOPMENT_STATUS.md
+implementation:
+  - Add SemanticModelRequest.
+  - Add RawSemanticCandidate and RawSemanticOutput boundary types.
+  - Add SemanticModelPort Protocol.
+  - Add validated SemanticCandidate/SemanticOutput types.
+  - Add deterministic SemanticOutputValidator.
+  - Add StructuredSemanticService that always validates provider output before returning it.
+tests:
+  - valid FATTO/IPOTESI/UNKNOWN candidates;
+  - invalid classification;
+  - FATTO without value;
+  - UNKNOWN with concrete value;
+  - empty/malformed keys and claims;
+  - runtime control token key/value rejection;
+  - raw provider output cannot bypass validator;
+  - provider replaceability via fake port;
+  - full regression suite.
+architecture_impact: NONE
+persistent_state_impact: NONE
+cross_repo_impact: NONE
+recovery_readiness: REVERSIBLE
