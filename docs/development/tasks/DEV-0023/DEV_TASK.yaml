@@ -1,0 +1,25 @@
+dev_task_id: DEV-0023
+title: SKILL_01 Semantic Intake + Human Re-Acceptance
+status: WAITING_HUMAN_ACCEPTANCE
+request: Integrate validated semantic extraction into SKILL_01 natural-language intake and provide a new real local human acceptance flow using Ollama.
+source:
+  - docs/development/INITIAL_FLOW_IMPLEMENTATION_PLAN_v0.1.md
+  - docs/development/tasks/DEV-0021/RESULT.md
+  - docs/development/tasks/DEV-0022/RESULT.md
+requirements:
+  - Accept natural company/source text from the human owner.
+  - Use a real local semantic provider through SemanticModelPort.
+  - Validate provider output before any Evidence/context write.
+  - Limit v1 semantic keys to an explicit SKILL_01 intake catalog.
+  - Separate preview from commit so the human can inspect extracted candidates before mutation.
+  - UNKNOWN candidates must not be written and must be surfaced as clarification needs.
+  - FATTO/IPOTESI candidates may be committed only through existing EvidenceIntake + Skill01 node paths.
+  - Preserve authority, provenance and version history.
+  - Human acceptance remains pending until the owner personally reruns the new harness and approves.
+constraints:
+  - Use local Ollama only for the acceptance provider.
+  - No cloud API requirement.
+  - No SKILL_02 work.
+  - No direct model writes to Evidence or PRIMARY_CONTEXT.
+risk: DEV_RISK_1
+authority_required: IMPLEMENT_APPROVED_CHANGE_PLAN
