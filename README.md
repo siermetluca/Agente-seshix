@@ -1071,6 +1071,27 @@ L'utente deve poter richiamare e modificare decisioni, configurazioni, preferenz
 
 Le revisioni devono essere versionate, non cancellate silenziosamente.
 
+
+Una skill downstream non deve modificare silenziosamente il contesto primario. Se durante l'esecuzione emerge un'informazione primaria mancante o una possibile variazione rilevante:
+
+```text
+DOWNSTREAM SKILL
+↓
+CONTEXT_CHANGE_CANDIDATE
+↓
+SKILL_01 TARGETED UPDATE
+↓
+validazione e provenienza
+↓
+nuova versione del contesto
+↓
+ritorno al punto di esecuzione sospeso
+↓
+ricalcolo delle sole dipendenze interessate
+```
+
+L'aggiornamento deve essere mirato al dato necessario; non richiede la ripetizione indiscriminata dell'intero processo di acquisizione.
+
 ### SKILL_02 — Analisi Aziendale
 
 Input principale:
@@ -1218,9 +1239,396 @@ Obiettivo:
 
 ```text
 verificare con minimo costo e minimo tempo
-se l'opportunità genera
-interesse reale, utilizzo reale o pagamento reale
+se un'opportunità già formulata genera:
+- interesse reale;
+- task reale;
+- utilizzo reale;
+- pagamento reale;
+- condizioni economiche compatibili con il contesto aziendale.
 ```
+
+SKILL_05 non deve confondere la validazione commerciale con la sola capacità tecnica di eseguire il lavoro.
+
+Principio:
+
+```text
+CAN_DO_IT
+!=
+SHOULD_DO_IT
+```
+
+La validazione comprende due rami distinti.
+
+```text
+OPERATIONAL VALIDATION
+→ possiamo eseguire il task
+  in modo stabile, delimitato,
+  ripetibile e verificabile?
+
+COMMERCIAL VALIDATION
+→ esiste un buyer reale
+  che affida, utilizza e paga
+  il risultato a condizioni sostenibili?
+```
+
+Il ramo operativo può generare evidenza sufficiente per una `SKILL_CANDIDATE`, ma non abilita automaticamente una skill `ACTIVE`.
+
+Una competenza candidata deriva dalla versione più recente del flow pertinente che abbia dimostrato sufficiente:
+
+- stabilità;
+- delimitazione;
+- ripetibilità;
+- verificabilità dell'output;
+- gestione osservabile di errori ed eccezioni;
+- separazione tra regole, capability e authority.
+
+Un singolo test riuscito non è sufficiente.
+
+#### Validazione commerciale
+
+Il processo concettuale di validazione commerciale è:
+
+```text
+DISCOVER
+→ QUALIFY
+→ MATCH
+→ APPLY
+→ WAIT
+→ CLASSIFY EVENT
+→ INTAKE
+→ DELIVERY
+→ VERIFY
+→ PAYMENT / REJECTION
+→ EVIDENCE UPDATE
+```
+
+Le singole candidature o interazioni con buyer sono istanze indipendenti e possono procedere in parallelo.
+
+Principio:
+
+```text
+WAITING_EXTERNAL_EVENT
+!=
+GLOBAL_STOP
+```
+
+Una branch può essere in attesa mentre altre attività autorizzate continuano.
+
+Il runtime commerciale non coincide con il contesto primario aziendale.
+
+```text
+PRIMARY_CONTEXT
+!=
+MARKET_VALIDATION_RUNTIME
+```
+
+Il `MARKET_VALIDATION_RUNTIME` è uno stato operativo derivato e dinamico che può contenere, quando pertinenti:
+
+```text
+opportunity
+buyer
+target hypothesis
+channel
+application
+experiment
+buyer events
+commercial evidence
+pricing evidence
+sample / task
+delivery state
+feedback
+payment / rejection
+outcome
+```
+
+Il Context Manager può quindi comporre, secondo il task:
+
+```text
+PRIMARY_CONTEXT
++
+TASK_CONTEXT
++
+MARKET_VALIDATION_RUNTIME
++
+EVIDENCE
++
+CAPABILITIES
++
+AUTHORITY
+```
+
+senza riscrivere silenziosamente il contesto primario.
+
+#### Stati ed eventi commerciali
+
+Una sequenza tipica può essere:
+
+```text
+READY
+→ APPLICATION_SUBMITTED
+→ WAITING_RESPONSE
+```
+
+Da `WAITING_RESPONSE` possono emergere eventi differenti.
+
+```text
+NO_RESPONSE_FINAL
+→ NO_EVIDENCE
+
+REJECTION
+→ registrare il motivo dichiarato;
+→ causa radice UNKNOWN se non osservabile
+
+CLARIFICATION_REQUESTED
+→ estrarre le richieste;
+→ rispondere solo con dati disponibili;
+→ non inventare prezzo, tempo o capability
+
+SAMPLE_RECEIVED
+→ intake;
+→ scope gate;
+→ privacy gate;
+→ authority gate;
+→ capability match;
+→ delivery
+
+CORRECTION_REQUESTED
+→ classificare la causa;
+→ modificare solo il livello realmente responsabile
+
+OUTPUT_REJECTED
+→ root-cause classification;
+→ non invalidare automaticamente flow o opportunità
+
+OUTPUT_ACCEPTED
+→ evidenza di accettazione/utilizzo
+
+PAYMENT
+→ evidenza commerciale forte
+
+SECOND_ORDER
+→ evidenza ulteriore di ricorrenza
+```
+
+Regole:
+
+```text
+DELIVERY_SENT
+!=
+DELIVERY_ACCEPTED
+
+CORRECTION_REQUESTED
+!=
+FLOW_FAILURE
+
+NO_RESPONSE_FINAL
+→ NO_EVIDENCE
+```
+
+La mancata risposta chiude la finestra osservata della singola candidatura, ma non costituisce automaticamente evidenza negativa sul problema, sul target, sul prezzo o sull'opportunità.
+
+Più risultati comparabili possono essere aggregati per identificare pattern, ma la causa deve rimanere `UNKNOWN` quando non è osservabile.
+
+#### Livelli di evidenza commerciale
+
+Principio:
+
+```text
+interesse dichiarato
+< task reale / campione
+< utilizzo reale
+< pagamento reale
+< riordino / ricorrenza osservata
+```
+
+Gli eventi simulati durante progettazione e test non devono essere confusi con gate commerciali reali.
+
+#### Intake e delivery
+
+Quando un buyer fornisce un task o campione, prima della delivery devono essere verificati:
+
+```text
+INTAKE
+→ SCOPE
+→ PRIVACY
+→ AUTHORITY
+→ CAPABILITY MATCH
+→ FIELD / OUTPUT CONTRACT
+→ DELIVERY
+→ QUALITY CHECK
+```
+
+Se una regola necessaria manca, l'agente deve fermare localmente la delivery e richiedere chiarimento.
+
+Non deve dedurre arbitrariamente valori, regole professionali o significati necessari all'esecuzione.
+
+#### Gestione delle correzioni
+
+Una richiesta di correzione deve essere classificata almeno rispetto al livello responsabile, per esempio:
+
+```text
+CONTEXT
+CONTRACT
+EXECUTION
+CAPABILITY
+FLOW
+TOOL
+BUYER_REQUIREMENT_CHANGE
+UNKNOWN
+```
+
+Deve essere modificato solo il livello smentito dall'evidenza.
+
+Un flow non viene sostituito quando il problema deriva da un'esecuzione errata, da un contratto di output incompleto o da una nuova preferenza del buyer già gestibile dal flow.
+
+#### Capability gap
+
+Quando il task eccede il dominio validato di una capability o skill:
+
+```text
+CAPABILITY_GAP
+↓
+STOP LOCALE
+↓
+DELIMITAZIONE
+↓
+CLASSIFICAZIONE
+↓
+RICERCA DI RIUSO
+↓
+VALUTAZIONE DELLA NECESSITÀ
+↓
+eventuale FLOW_CANDIDATE minimo
+↓
+TEST
+↓
+STABILITÀ
+↓
+RIPETIBILITÀ
+↓
+eventuale SKILL_CANDIDATE
+```
+
+Il gap non deve produrre automaticamente una nuova skill né estendere una skill esistente fuori dal proprio dominio validato.
+
+Se il gap non è necessario per un task o un'opportunità sufficientemente validata, può rimanere in backlog.
+
+#### Dati mancanti del contesto primario
+
+Una skill downstream non modifica direttamente il `PRIMARY_CONTEXT`.
+
+Quando SKILL_05 scopre un dato primario mancante che blocca una decisione:
+
+```text
+SKILL_05
+↓
+CONTEXT_CHANGE_CANDIDATE
+↓
+SKILL_01 TARGETED UPDATE
+↓
+validazione / provenienza
+↓
+nuova versione PRIMARY_CONTEXT
+↓
+ritorno a SKILL_05
+↓
+ricalcolo delle sole decisioni dipendenti
+```
+
+Il questionario o recupero dati deve essere mirato al gap emerso, senza riaprire indiscriminatamente tutto il contesto.
+
+#### Gate economico
+
+La capacità tecnica non abilita automaticamente l'accettazione commerciale.
+
+Prima di accettare un lavoro possono essere necessari:
+
+```text
+CAPABILITY_GATE
+→ possiamo eseguirlo?
+
+CAPACITY_GATE
+→ abbiamo capacità disponibile?
+
+ECONOMIC_GATE
+→ è economicamente sostenibile?
+
+AUTHORITY_GATE
+→ siamo autorizzati a impegnarci?
+```
+
+L'analisi economica deve distinguere almeno:
+
+```text
+NOMINAL_PRICE
+BILLABLE_TIME
+ACTUAL_TOTAL_TIME
+VARIABLE_COSTS
+EFFECTIVE_CONTRIBUTION
+INTERNAL_ECONOMIC_FLOOR
+```
+
+Non deve chiamare "margine" il solo fatturato o una tariffa nominale.
+
+Se i dati economici necessari sono insufficienti:
+
+```text
+ECONOMIC_GATE
+→ INSUFFICIENT_DATA
+```
+
+e viene applicato il ritorno mirato a SKILL_01 quando il dato mancante appartiene al contesto primario.
+
+Possibili decisioni del gate, quando supportate dai dati:
+
+```text
+ACCEPT
+NEGOTIATE
+DECLINE
+```
+
+Una differenza tra willingness-to-pay del buyer e floor economico interno deve essere classificata come mismatch economico circoscritto, non come invalidazione automatica del problema, del target, del flow o dell'intera opportunità.
+
+#### Automazione e retrofit
+
+L'automazione non deve essere introdotta per principio.
+
+Un bisogno di automazione può emergere da evidenza operativa o economica, per esempio quando:
+
+```text
+delivery manuale
+→ overhead elevato
+→ economics insufficienti
+```
+
+In tal caso può essere proposta e successivamente testata una capability assistita, privilegiando quando possibile:
+
+```text
+tool esistente
++
+adapter / retrofit
++
+contratto Agent-seshix
++
+HITL dove necessario
+```
+
+prima di costruire automaticamente nuovo software custom.
+
+Gli strumenti integrati dovrebbero poter fornire, quando applicabile:
+
+```text
+INPUT CONTRACT
+OUTPUT CONTRACT
+EVIDENCE
+ERROR STATE
+AUTHORITY REQUIREMENT
+AUDIT TRACE
+```
+
+La scelta concreta di tool, adapter, API e implementazione rimane da validare nelle fasi successive.
+
+#### Esiti di SKILL_05
 
 Possibili esiti:
 
@@ -1250,16 +1658,51 @@ INVALID_CONTEXT
 INVALID_CAPABILITY
 ```
 
-Principio:
+Solo una validazione sufficientemente forte abilita la fase successiva.
+
+#### Stato concettuale corrente di SKILL_05
+
+La definizione comportamentale è considerata sufficientemente completa per la fase corrente:
 
 ```text
-interesse dichiarato
-< test reale
-< utilizzo reale
-< pagamento reale
+BEHAVIORAL DEFINITION
+→ COMPLETE_FOR_CURRENT_PHASE
+
+CONCEPTUAL FLOW
+→ DEFINED
+
+STATE MODEL
+→ DEFINED
+
+STOP / RETURN CONDITIONS
+→ DEFINED
+
+CONTEXT INTERACTION
+→ DEFINED
+
+CAPABILITY GAP HANDLING
+→ DEFINED
+
+COMMERCIAL EVIDENCE HANDLING
+→ DEFINED
+
+ECONOMIC GATE
+→ DEFINED CONCEPTUALLY
+
+PARALLEL EXECUTION
+→ DEFINED
+
+REAL VALIDATION
+→ PENDING
+
+IMPLEMENTATION
+→ NOT STARTED
+
+FINAL ARCHITECTURE
+→ NOT CLOSED
 ```
 
-Solo una validazione sufficientemente forte abilita la fase successiva.
+I test reali e i benchmark operativi devono essere ripresi solo quando il contesto necessario è sufficientemente definito e versionato.
 
 ### SKILL_06 — Definizione Prodotto / Servizio
 
