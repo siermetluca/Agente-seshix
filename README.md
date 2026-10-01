@@ -1706,7 +1706,25 @@ I test reali e i benchmark operativi devono essere ripresi solo quando il contes
 
 ### SKILL_06 — Definizione Prodotto / Servizio
 
-Trasforma un'opportunità validata in un'offerta concreta, costruibile, erogabile, misurabile e vendibile.
+Trasforma un'opportunità sufficientemente validata in un'offerta concreta, costruibile, erogabile, misurabile e vendibile.
+
+SKILL_06 non deve compensare evidenze commerciali mancanti inventando prodotto, prezzo, capability o promesse. Deve definire il core dell'offerta e rendere espliciti gli elementi ancora da validare.
+
+Input concettuali:
+
+```text
+PRIMARY_CONTEXT
++
+OPPORTUNITY VALIDATA / SUFFICIENTLY VALIDATED
++
+SKILL_05 VALIDATION EVIDENCE
++
+CAPABILITIES DISPONIBILI
++
+AUTHORITY
++
+VINCOLI ECONOMICI
+```
 
 Deve definire almeno:
 
@@ -1715,18 +1733,59 @@ COSA VENDIAMO
 A CHI
 QUALE PROBLEMA RISOLVIAMO
 COSA RICEVE IL CLIENTE
+INPUT CONTRACT
+OUTPUT CONTRACT
+CRITERI DI ACCETTAZIONE
 COME VIENE EROGATO
-QUANTO COSTA
-QUANTO COSTA A NOI
-QUANTO MARGINA
+MODELLO DI PREZZO
+STRUTTURA DEI COSTI
+UNIT ECONOMICS
 QUALI RISORSE SERVONO
+CAPABILITY NECESSARIE
 COSA È INCLUSO
 COSA È ESCLUSO
+RISCHI / OBBLIGHI
 COME SI TESTA
 COME SI MISURA
 ```
 
-Regola:
+Il flusso concettuale è:
+
+```text
+VALIDATED OPPORTUNITY
+↓
+VALIDATE INPUT EVIDENCE
+↓
+DEFINE TARGET / BUYER
+↓
+DEFINE PROBLEM / JOB
+↓
+DEFINE VALUE PROPOSITION
+↓
+DEFINE DELIVERABLE
+↓
+DEFINE INPUT / OUTPUT CONTRACT
+↓
+DEFINE SCOPE
+↓
+DEFINE DELIVERY MODEL
+↓
+DEFINE PRICING MODEL
+↓
+DEFINE COST MODEL / UNIT ECONOMICS
+↓
+DEFINE CAPABILITIES / RESOURCES
+↓
+DEFINE RISKS / OBLIGATIONS
+↓
+DEFINE SUCCESS METRICS
+↓
+CLASSIFY UNKNOWN
+↓
+PRODUCT_DEFINITION_GATE
+```
+
+Regola sulle feature:
 
 ```text
 una feature entra nel perimetro solo se deriva da:
@@ -1735,7 +1794,239 @@ una feature entra nel perimetro solo se deriva da:
 - vincolo tecnico o normativo.
 ```
 
-Il resto rimane fuori scope o future feature.
+Il resto rimane fuori scope, opzionale o future feature.
+
+### Gestione degli UNKNOWN in SKILL_06
+
+SKILL_06 non deve eliminare artificialmente tutti gli `UNKNOWN`.
+
+Deve invece classificarli in base all'impatto che hanno sul passaggio a SKILL_07.
+
+```text
+UNKNOWN
+↓
+IMPACT CLASSIFICATION
+↓
+BLOCKING
+CONDITIONALLY_BLOCKING
+NON_BLOCKING
+```
+
+#### BLOCKING
+
+Un `UNKNOWN` è bloccante quando impedisce di definire o verificare in modo sufficientemente sicuro almeno uno degli elementi essenziali del prodotto/servizio, per esempio:
+
+```text
+core deliverable
+criteri di accettazione
+scope essenziale
+authority
+obblighi / compliance critici
+privacy / sicurezza critica
+capability necessaria
+fattibilità economica minima
+```
+
+Comportamento:
+
+```text
+BLOCKING UNKNOWN
+→ deve essere risolto prima di SKILL_07
+→ ritorno alla skill o fonte competente
+```
+
+#### CONDITIONALLY_BLOCKING
+
+Un `UNKNOWN` è condizionatamente bloccante quando può essere neutralizzato restringendo esplicitamente il perimetro del prodotto o dell'MVP, introducendo una fallback rule o escludendo il caso non validato.
+
+Esempio concettuale:
+
+```text
+capability narrativa non validata
+↓
+prodotto ampio
+→ BLOCKING
+
+MVP ristretto a documenti strutturati/tabellari
+→ gap escluso dallo scope
+→ non blocca SKILL_07
+```
+
+Comportamento:
+
+```text
+CONDITIONALLY_BLOCKING
+→ restringere scope / definire fallback / escludere caso
+→ registrare esplicitamente la limitazione
+```
+
+#### NON_BLOCKING
+
+Un `UNKNOWN` è non bloccante quando:
+
+```text
+- non impedisce la definizione del core value;
+- non compromette sicurezza, authority o compliance;
+- non impedisce una delivery verificabile;
+- può essere testato durante l'MVP;
+- dispone di una condizione di verifica esplicita.
+```
+
+Esempi possibili:
+
+```text
+prezzo esatto
+miglior verticale
+nome commerciale
+branding
+canale migliore
+feature opzionali
+automazione futura
+alcune soglie di performance non critiche
+```
+
+Comportamento:
+
+```text
+NON_BLOCKING UNKNOWN
+→ MVP_VALIDATION_HYPOTHESIS
+→ passa a SKILL_07 con evidenza e criterio di verifica
+```
+
+### Schema concettuale degli UNKNOWN
+
+Ogni `UNKNOWN` rilevante per SKILL_06 dovrebbe dichiarare almeno:
+
+```text
+UNKNOWN_ID
+DESCRIPTION
+IMPACT_CLASS
+REASON
+AFFECTED_PRODUCT_AREA
+RESOLUTION_PATH
+OWNER_SKILL
+MVP_HANDLING
+```
+
+Questo schema è concettuale e non definisce ancora formato tecnico, database o API.
+
+### PRODUCT_DEFINITION_GATE
+
+Il gate finale di SKILL_06 può produrre tre stati:
+
+```text
+PASS
+PARTIAL_PASS
+BLOCKED
+```
+
+#### PASS
+
+```text
+→ nessun BLOCKING UNKNOWN irrisolto
+→ prodotto sufficientemente definito
+→ SKILL_07 consentita
+```
+
+#### PARTIAL_PASS
+
+```text
+→ core sufficientemente definito
+→ nessun BLOCKING UNKNOWN irrisolto
+→ CONDITIONALLY_BLOCKING neutralizzati tramite scope/fallback
+→ NON_BLOCKING tracciati come MVP_VALIDATION_HYPOTHESIS
+→ SKILL_07 consentita
+```
+
+Principio:
+
+```text
+PARTIAL_PASS
+!=
+prodotto incompleto in modo incontrollato
+```
+
+Può significare:
+
+```text
+core sufficientemente definito
++
+ipotesi non bloccanti lasciate intenzionalmente
+alla validazione MVP
+```
+
+#### BLOCKED
+
+```text
+→ almeno un BLOCKING UNKNOWN irrisolto
+→ SKILL_07 non consentita
+→ ritorno alla skill competente
+```
+
+Regola centrale:
+
+```text
+MVP
+!=
+luogo dove nascondere UNKNOWN critici
+
+MVP
+=
+luogo dove testare ipotesi non bloccanti
+su un core già sufficientemente definito
+```
+
+Routing concettuale dei gap:
+
+```text
+missing company constraint
+→ SKILL_01
+
+internal capability / economic uncertainty
+→ SKILL_01 o SKILL_02 secondo la fonte del dato
+
+market / buyer / price uncertainty
+→ SKILL_03 o SKILL_05 secondo il tipo di evidenza richiesta
+
+opportunity no longer coherent
+→ SKILL_04
+
+commercial evidence insufficient
+→ SKILL_05
+
+capability gap
+→ capability / skill-gap lifecycle
+
+technical implementation question
+→ SKILL_07
+```
+
+Stato concettuale corrente:
+
+```text
+SKILL_06
+
+BEHAVIORAL DEFINITION
+→ COMPLETE_FOR_CURRENT_PHASE
+
+UNKNOWN CLASSIFICATION
+→ DEFINED
+
+PRODUCT_DEFINITION_GATE
+→ DEFINED
+
+SKILL_07 TRANSITION RULE
+→ DEFINED
+
+REAL VALIDATION
+→ PENDING
+
+IMPLEMENTATION
+→ NOT STARTED
+
+FINAL ARCHITECTURE
+→ NOT CLOSED
+```
 
 ### SKILL_07 — Progettazione Soluzione e Piano Delivery / MVP
 
