@@ -10,9 +10,9 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Phase: INITIAL FLOW IMPLEMENTATION
 - Canonical branch: `main`
 - Current canonical base: current `main` HEAD (the commit containing this index)
-- Last completed DEV_TASK: [DEV-0020](tasks/DEV-0020/)
+- Last completed DEV_TASK: [DEV-0022](tasks/DEV-0022/)
 - Active DEV_TASK: NONE
-- Current step: READY_FOR_DEV-0022_SKILL01_SEMANTIC_REMEDIATION
+- Current step: READY_FOR_DEV-0023_SKILL01_SEMANTIC_INTAKE
 - Blockers: NONE
 
 ## Implemented
@@ -130,8 +130,8 @@ Review verification: 61/61 unit tests PASS.
 7. DEV-0019 — SKILL_01 Node Runtime Integration — PASS
 8. DEV-0020 — SKILL_01 Automated Closure — PASS
 9. DEV-0021 — SKILL_01 Human Acceptance — FAIL / REOPENED
-10. DEV-0022 — Structured Semantic Model Port for SKILL_01 — NEXT
-11. DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance
+10. DEV-0022 — Structured Semantic Model Port for SKILL_01 — PASS
+11. DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance — NEXT
 12. DEV-0024 — SKILL_02 Company Analysis Runtime
 13. DEV-0025 — SKILL_02 Validation + Activation
 14. DEV-0026 — Source Acquisition Capability Port
@@ -214,6 +214,14 @@ SKILL_01 overall = REOPENED
   - SKILL_01_CLOSED = PASS
   - stress evidence: [STRESS_EVIDENCE.md](tasks/DEV-0020/STRESS_EVIDENCE.md)
   - result: [RESULT.md](tasks/DEV-0020/RESULT.md)
+
+- DEV-0022 — Structured Semantic Model Port — PASS
+  - provider-agnostic semantic model port
+  - deterministic structured-output validator
+  - runtime-control-token rejection
+  - semantic tests: 14/14 PASS; integration: 23/23 PASS; unit regression: 132/132 PASS
+  - gate: MODEL_OUTPUT_WITHOUT_VALIDATION_CANNOT_ENTER_STATE = PASS
+  - result: [RESULT.md](tasks/DEV-0022/RESULT.md)
 
 ## Component index
 
