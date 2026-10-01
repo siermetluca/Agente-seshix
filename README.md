@@ -2030,26 +2030,148 @@ FINAL ARCHITECTURE
 
 ### SKILL_07 — Progettazione Soluzione e Piano Delivery / MVP
 
-Trasforma il prodotto/servizio definito in una soluzione realmente costruibile ed erogabile.
+Trasforma un prodotto/servizio sufficientemente definito in una soluzione realmente costruibile, erogabile, testabile e controllabile.
 
-Deve affrontare:
+SKILL_07 non deve ridefinire problema, buyer, valore o perimetro commerciale già fissati da SKILL_06. Se durante la progettazione emerge la necessità di ampliare o modificare il prodotto, deve generare un `PRODUCT_CHANGE_CANDIDATE` e tornare alla skill competente.
 
-- requisiti;
-- MVP;
-- architettura;
-- componenti;
-- make / buy / integrate;
-- risorse;
-- dipendenze;
-- costi;
-- tempi;
-- milestone;
-- test;
-- criteri di accettazione;
-- rischi;
-- fallback;
-- rollback;
-- piano di rilascio.
+Input concettuali:
+
+```text
+PRIMARY_CONTEXT
++
+PRODUCT_SERVICE_DEFINITION
++
+PRODUCT_DEFINITION_GATE RESULT
++
+MVP_VALIDATION_HYPOTHESES
++
+AVAILABLE_CAPABILITIES
++
+CAPABILITY_GAPS
++
+AUTHORITY
++
+POLICY / OBLIGATIONS
++
+ECONOMIC / RESOURCE CONSTRAINTS
+```
+
+Regole di ingresso:
+
+```text
+SKILL_06 = BLOCKED
+→ SKILL_07 non parte
+
+SKILL_06 = PASS
+→ SKILL_07 può partire
+
+SKILL_06 = PARTIAL_PASS
+→ SKILL_07 può partire solo se:
+  - nessun BLOCKING UNKNOWN resta irrisolto;
+  - i CONDITIONALLY_BLOCKING sono stati neutralizzati;
+  - i NON_BLOCKING sono tracciati come MVP_VALIDATION_HYPOTHESES.
+```
+
+Output concettuale principale:
+
+```text
+SOLUTION_DELIVERY_PLAN
+```
+
+che dovrebbe includere almeno:
+
+```text
+MVP_SCOPE
+VALUE_TO_DELIVER
+USER / DELIVERY FLOW
+FUNCTIONAL_REQUIREMENTS
+NON_FUNCTIONAL_REQUIREMENTS
+COMPONENTS
+CAPABILITIES
+MAKE / BUY / INTEGRATE DECISIONS
+DEPENDENCIES
+RESOURCES
+DATA / INPUT REQUIREMENTS
+AUTHORITY REQUIREMENTS
+RISKS
+TEST_PLAN
+ACCEPTANCE_CRITERIA
+FALLBACK
+ROLLBACK
+COST_BOUND
+TIME_BOUND
+MVP_VALIDATION_HYPOTHESES
+DELIVERY_PLAN_STATUS
+```
+
+Il flusso concettuale è:
+
+```text
+VALIDATE INPUT
+↓
+FREEZE VALUE TO DELIVER
+↓
+DEFINE MVP SCOPE
+↓
+DEFINE END-TO-END FLOW
+↓
+DERIVE REQUIREMENTS
+↓
+MAP CAPABILITIES
+↓
+IDENTIFY CAPABILITY GAPS
+↓
+MAKE / BUY / INTEGRATE ANALYSIS
+↓
+DEFINE SOLUTION COMPONENTS
+↓
+MAP DEPENDENCIES
+↓
+RESOURCE / CAPACITY CHECK
+↓
+COST / TIME BOUNDS
+↓
+RISK / OBLIGATION CHECK
+↓
+DEFINE TEST PLAN
+↓
+DEFINE ACCEPTANCE CRITERIA
+↓
+DEFINE FALLBACK / ROLLBACK
+↓
+CLASSIFY REMAINING UNKNOWN
+↓
+DELIVERY_PLAN_GATE
+```
+
+### Freeze del valore
+
+SKILL_07 non deve ampliare automaticamente il prodotto.
+
+```text
+TARGET
+PROBLEM
+DELIVERABLE
+CORE VALUE
+SCOPE
+```
+
+rimangono congelati rispetto all'output di SKILL_06, salvo ritorno esplicito alla skill competente.
+
+Se durante la progettazione emerge:
+
+```text
+"per funzionare dobbiamo vendere anche X"
+```
+
+comportamento:
+
+```text
+PRODUCT_CHANGE_CANDIDATE
+→ ritorno SKILL_06
+```
+
+### MVP scope
 
 Principio:
 
@@ -2058,6 +2180,473 @@ MVP
 =
 minimo necessario per erogare
 il valore già validato
++
+minimo necessario per testare
+le MVP_VALIDATION_HYPOTHESES
+```
+
+Una capability, feature o componente entra nell'MVP solo se è:
+
+```text
+CORE_VALUE_REQUIRED
+oppure
+VALIDATION_REQUIRED
+oppure
+DELIVERY_REQUIRED
+oppure
+COMPLIANCE_REQUIRED
+```
+
+Il resto rimane `OUT_OF_MVP`.
+
+Principio:
+
+```text
+MVP
+!=
+software obbligatorio
+```
+
+L'MVP può essere:
+
+```text
+MANUAL
+ASSISTED
+AUTOMATED
+HYBRID
+```
+
+La forma dipende da evidenze, economics, capability, rischio e vincoli.
+
+### User / Delivery Flow
+
+SKILL_07 deve descrivere il percorso end-to-end del valore, per esempio:
+
+```text
+REQUEST
+↓
+INTAKE
+↓
+VALIDATION
+↓
+PROCESSING
+↓
+QUALITY CONTROL
+↓
+DELIVERY
+↓
+ACCEPTANCE
+↓
+OUTCOME
+```
+
+Il flow deve essere verificabile anche quando la delivery non è software.
+
+### Requirements
+
+SKILL_07 distingue:
+
+```text
+FUNCTIONAL_REQUIREMENTS
+→ cosa deve fare la soluzione
+
+NON_FUNCTIONAL_REQUIREMENTS
+→ qualità, privacy, sicurezza, tracciabilità,
+  performance, disponibilità, recoverability,
+  usability e altri requisiti pertinenti
+```
+
+Non devono essere introdotti SLA o soglie arbitrarie prive di fonte, contesto o requisito.
+
+### Capability mapping
+
+Ogni step del delivery flow deve essere mappato sulle capability necessarie.
+
+```text
+CAPABILITY_REQUIRED
+↓
+AVAILABLE
+PARTIAL
+MISSING
+```
+
+Se emerge una capability mancante:
+
+```text
+CAPABILITY_GAP
+→ applicare il capability / skill-gap lifecycle
+```
+
+Una capability in stato `TESTING` può essere utilizzata in un MVP controllato solo entro i limiti validati e con supervisione/authority adeguate.
+
+### Capability e componenti
+
+Principio:
+
+```text
+CAPABILITY
+!=
+COMPONENT
+```
+
+```text
+CAPABILITY
+→ ciò che il sistema sa fare
+
+COMPONENT
+→ ciò che materialmente realizza
+  o supporta quella capability
+```
+
+La stessa capability può essere erogata da componenti differenti.
+
+### Make / Buy / Integrate / Reuse / Manual
+
+Per ogni capability o componente necessario, SKILL_07 può valutare:
+
+```text
+BUILD
+BUY
+INTEGRATE
+REUSE
+MANUAL
+```
+
+La valutazione considera almeno, quando pertinenti:
+
+```text
+time
+cost
+risk
+quality
+vendor dependency
+data / privacy
+available capability
+maintenance burden
+```
+
+Principio corrente:
+
+```text
+REUSE / INTEGRATE
+prima di
+BUILD
+```
+
+quando strumenti o componenti esistenti soddisfano requisiti, policy e vincoli.
+
+SKILL_07 non deve costruire automaticamente software custom solo perché tecnicamente possibile.
+
+### Dependencies
+
+Ogni dipendenza critica dovrebbe dichiarare almeno:
+
+```text
+DEPENDENCY
+REQUIRED_FOR
+INTERNAL / EXTERNAL
+BLOCKING?
+FALLBACK_AVAILABLE?
+```
+
+Una dipendenza senza fallback che blocca il valore deve essere trattata come `CRITICAL_DEPENDENCY`.
+
+### Resources e capacity
+
+SKILL_07 verifica almeno:
+
+```text
+PEOPLE
+TIME
+TOOLS
+INFRASTRUCTURE
+BUDGET
+CAPACITY
+```
+
+Stati possibili:
+
+```text
+AVAILABLE
+INSUFFICIENT
+UNKNOWN
+```
+
+Una risorsa essenziale `INSUFFICIENT` può bloccare il piano oppure richiedere scope reduction, sourcing o ritorno alla skill competente.
+
+### Cost / Time Bounds
+
+SKILL_07 non deve produrre precisione fittizia.
+
+Quando i dati non permettono una stima puntuale può distinguere:
+
+```text
+KNOWN
+BOUND
+UNKNOWN
+```
+
+Se il dato necessario non è disponibile:
+
+```text
+ESTIMATION_GAP
+```
+
+Le stime devono rimanere compatibili con vincoli di budget, capacità e authority.
+
+### Test plan
+
+Ogni elemento critico del piano dovrebbe poter dichiarare:
+
+```text
+WHAT_TO_TEST
+INPUT
+EXPECTED_OUTPUT
+PASS_CONDITION
+FAIL_CONDITION
+EVIDENCE_TO_CAPTURE
+```
+
+I test possono includere, quando pertinenti:
+
+```text
+TECHNICAL TEST
+OPERATIONAL TEST
+MVP VALIDATION TEST
+```
+
+SKILL_07 non sostituisce SKILL_05 nella validazione commerciale, ma deve rendere il piano di delivery misurabile e capace di produrre le evidenze richieste.
+
+### Acceptance criteria
+
+I criteri di accettazione derivano dalla definizione di prodotto di SKILL_06.
+
+SKILL_07 può tradurli in condizioni verificabili, ma non modificarne arbitrariamente il significato.
+
+```text
+PRODUCT ACCEPTANCE CRITERIA
+↓
+IMPLEMENTABLE TEST CONDITIONS
+```
+
+Se non è possibile tradurre un criterio essenziale in una verifica:
+
+```text
+ACCEPTANCE_NOT_TESTABLE
+→ ritorno SKILL_06
+```
+
+### Fallback e rollback
+
+Principio:
+
+```text
+FALLBACK
+→ come continuiamo a erogare valore
+  se il percorso principale fallisce
+
+ROLLBACK
+→ come torniamo a uno stato precedente sicuro
+```
+
+Fallback e rollback devono essere proporzionati al rischio, compatibili con authority ed economics e non devono introdurre scope non validato.
+
+### Remaining UNKNOWN
+
+SKILL_07 eredita gli `MVP_VALIDATION_HYPOTHESES` da SKILL_06 e può individuare nuovi UNKNOWN relativi a costruibilità e delivery.
+
+La classificazione resta:
+
+```text
+BLOCKING
+CONDITIONALLY_BLOCKING
+NON_BLOCKING
+```
+
+ma il criterio specifico di SKILL_07 è:
+
+```text
+possiamo costruire, erogare e testare
+la soluzione in modo sicuro e verificabile?
+```
+
+Un `BLOCKING UNKNOWN` irrisolto impedisce il passaggio oltre il `DELIVERY_PLAN_GATE`.
+
+### DELIVERY_PLAN_GATE
+
+Il gate finale di SKILL_07 può produrre:
+
+```text
+PASS
+PARTIAL_PASS
+BLOCKED
+```
+
+#### PASS
+
+```text
+→ MVP scope definito
+→ flow definito
+→ requirements testabili
+→ capability sufficienti
+→ risorse sufficienti
+→ rischi critici controllati
+→ test plan definito
+→ acceptance criteria eseguibili
+→ fallback / rollback adeguati
+→ nessun BLOCKING UNKNOWN
+```
+
+#### PARTIAL_PASS
+
+```text
+→ core delivery plan eseguibile
+→ nessun BLOCKING UNKNOWN irrisolto
+→ remaining unknowns non bloccanti
+→ validation plan esplicito
+→ implementazione / test controllato consentito
+```
+
+#### BLOCKED
+
+```text
+→ capability critica mancante
+oppure
+→ risorse insufficienti
+oppure
+→ dipendenza critica irrisolta
+oppure
+→ problema di rischio / authority
+oppure
+→ acceptance non verificabile
+oppure
+→ BLOCKING UNKNOWN irrisolto
+```
+
+Routing concettuale:
+
+```text
+product definition issue
+→ SKILL_06
+
+market / commercial evidence issue
+→ SKILL_05
+
+opportunity issue
+→ SKILL_04
+
+context issue
+→ SKILL_01
+
+capability gap
+→ capability / skill-gap lifecycle
+
+implementation issue inside valid design
+→ specialist technical skill
+```
+
+### Esito del test concettuale su OPP-01
+
+Nel test di progettazione corrente, restringendo l'MVP a:
+
+```text
+documenti strutturati / tabellari
++
+dati non sensibili
++
+controlled human-supervised service
+```
+
+SKILL_07 ha prodotto concettualmente:
+
+```text
+SOLUTION_DELIVERY_PLAN_v1
+
+CUSTOM SOFTWARE REQUIRED
+→ NO
+
+CORE FLOW
+→ DEFINED
+
+CORE CAPABILITY
+→ Structured Record Extraction / TESTING
+
+TOOLS
+→ REUSE EXISTING TOOLS initially
+
+HITL
+→ REQUIRED
+
+TEST PLAN
+→ DEFINED
+
+ACCEPTANCE
+→ DEFINED
+
+FALLBACK
+→ DEFINED
+
+ROLLBACK
+→ DEFINED
+
+MVP VALIDATION HYPOTHESES
+→ TRACKED
+
+DELIVERY_PLAN_GATE
+→ PARTIAL_PASS_ELIGIBLE_FOR_CONTROLLED_MVP
+```
+
+Questo risultato è relativo alla simulazione e non costituisce validazione reale dell'MVP.
+
+Stato concettuale corrente:
+
+```text
+SKILL_07
+
+BEHAVIORAL DEFINITION
+→ COMPLETE_FOR_CURRENT_PHASE
+
+INPUT / OUTPUT
+→ DEFINED
+
+MVP SCOPE RULE
+→ DEFINED
+
+FLOW
+→ DEFINED
+
+REQUIREMENTS MODEL
+→ DEFINED
+
+CAPABILITY MAPPING
+→ DEFINED
+
+MAKE / BUY / INTEGRATE
+→ DEFINED CONCEPTUALLY
+
+DEPENDENCIES
+→ DEFINED
+
+RESOURCE CHECK
+→ DEFINED
+
+TEST / ACCEPTANCE
+→ DEFINED
+
+FALLBACK / ROLLBACK
+→ DEFINED
+
+DELIVERY_PLAN_GATE
+→ DEFINED
+
+REAL MVP EXECUTION
+→ PENDING
+
+IMPLEMENTATION
+→ NOT STARTED
+
+FINAL ARCHITECTURE
+→ NOT CLOSED
 ```
 
 Dopo `DELIVERY_PLAN_READY` non viene ancora fissata una singola skill universale di esecuzione.
