@@ -27,6 +27,7 @@ from agente_seshix.application.skill_01_context import (
 from agente_seshix.application.update_primary_context import EvidenceNotFound
 from agente_seshix.application.skill_registry import SkillNotFound, SkillRegistry
 from agente_seshix.application.task_context_resolver import (
+    MissingRequiredContext,
     TaskContextPackage,
     TaskContextResolver,
 )
@@ -94,11 +95,45 @@ class Skill01NodeRuntime:
         self._skill_runtime = skill_runtime
         self._flow = flow
     def execute(self, command: Skill01NodeCommand) -> Skill01NodeResult:
-        package = self._context_resolver.resolve(
-            command.task,
-            command.context_requirements,
-            command.available_context,
-        )
+        try:
+            package = self._context_resolver.resolve(
+                command.task,
+                command.context_requirements,
+                command.available_context,
+            )
+        except MissingRequiredContext as error:
+            requested = (
+                command.context_requirements.required_sections
+                + command.context_requirements.optional_sections
+            )
+            package = self._context_resolver.resolve(
+                command.task,
+                TaskContextRequirements(
+                    task_id=command.task.task_id,
+                    required_sections=(),
+                    optional_sections=requested,
+                ),
+                command.available_context,
+            )
+            run = self._flow.start(
+                FlowRun(
+                    run_id=command.run_id,
+                    task=command.task,
+                    context_package=package,
+                )
+            )
+            run = self._flow.begin_step(
+                run,
+                "CONTEXT",
+                "resolve task context",
+            )
+            run = self._flow.block(run, str(error))
+            return Skill01NodeResult(
+                run=run,
+                command=command,
+                context_package=package,
+            )
+
         run = self._flow.start(
             FlowRun(
                 run_id=command.run_id,

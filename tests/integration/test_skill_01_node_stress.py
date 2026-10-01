@@ -341,7 +341,7 @@ class Skill01NodeStressTests(unittest.TestCase):
                 evidence_id="EV-X",
                 proposed_value=999,
             )
-    def test_missing_required_task_context_is_rejected_without_state_mutation(self) -> None:
+    def test_missing_required_task_context_is_traceably_blocked_without_mutation(self) -> None:
         node, evidence_repo, context_repo = build_node()
         requirements = TaskContextRequirements(
             task_id="TASK-1",
@@ -350,17 +350,19 @@ class Skill01NodeStressTests(unittest.TestCase):
         before_context = dict(context_repo.items)
         before_evidence = dict(evidence_repo.items)
 
-        with self.assertRaises(LookupError):
-            node.execute(
-                self.command(
-                    run_id="RUN-MISSING-CONTEXT",
-                    requirements=requirements,
-                    available_context={},
-                    intake=self.intake("EV-NOT-USED"),
-                    skill_command=self.fact("EV-NOT-USED"),
-                )
+        result = node.execute(
+            self.command(
+                run_id="RUN-MISSING-CONTEXT",
+                requirements=requirements,
+                available_context={},
+                intake=self.intake("EV-NOT-USED"),
+                skill_command=self.fact("EV-NOT-USED"),
             )
+        )
 
+        self.assertEqual(result.run.state, FlowRunState.BLOCKED)
+        self.assertEqual(result.run.steps[-1].step_id, "CONTEXT")
+        self.assertIn("missing required context", result.run.stop_reason.lower())
         self.assertEqual(context_repo.items, before_context)
         self.assertEqual(evidence_repo.items, before_evidence)
 
