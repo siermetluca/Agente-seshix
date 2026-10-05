@@ -23,16 +23,21 @@ class CountingConnector:
 
 class ProviderUnavailableAdapter(GitHubConnectorAdapter):
     def _get_json(self, path: str) -> dict:
-        self._provider_calls += 1
         raise URLError("controlled provider unavailable")
 
 
 class InvalidResponseAdapter(GitHubConnectorAdapter):
     def _get_json(self, path: str) -> dict:
-        self._provider_calls += 1
-        if self._provider_calls == 1:
-            return {"unexpected": "shape"}
-        return {}
+        return {"unexpected": "shape"}
+
+
+class ReusableSuccessAdapter(GitHubConnectorAdapter):
+    def _get_json(self, path: str) -> dict:
+        if "/contents/" in path:
+            return {"sha": "b" * 40, "content": "aGVsbG8="}
+        if "/commits/" in path:
+            return {"sha": "a" * 40}
+        return {"default_branch": "main"}
 
 
 def request(*, capability="REPOSITORY_READ", repository="siermetluca/Context-Siermet", path="README.md"):
@@ -105,6 +110,28 @@ class ConnectorRuntimeStressTests(unittest.TestCase):
         self.assertEqual(result.state, ConnectorResultState.FAILED)
         self.assertEqual(result.audit.reason, "RESPONSE_INVALID")
         self.assertEqual(result.audit.provider_calls, 1)
+
+    def test_provider_call_audit_is_request_scoped_when_adapter_is_reused(self):
+        adapter = ReusableSuccessAdapter(token="controlled-token")
+        use_case = ConnectorExecutionUseCase(ConnectorResolver((adapter,)))
+
+        _, first = use_case.execute(
+            request=request(),
+            policy_action="read_repository",
+            policy=policy(),
+            authorized_resource=AUTHORIZED,
+        )
+        _, second = use_case.execute(
+            request=request(),
+            policy_action="read_repository",
+            policy=policy(),
+            authorized_resource=AUTHORIZED,
+        )
+
+        self.assertEqual(first.state, ConnectorResultState.EXECUTED)
+        self.assertEqual(second.state, ConnectorResultState.EXECUTED)
+        self.assertEqual(first.audit.provider_calls, 3)
+        self.assertEqual(second.audit.provider_calls, 3)
 
 
 if __name__ == "__main__":

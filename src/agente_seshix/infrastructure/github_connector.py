@@ -15,41 +15,53 @@ class GitHubConnectorAdapter:
     provider = "github"
     capabilities = ("REPOSITORY_READ",)
 
-    def __init__(self, *, token: str, api_base: str = "https://api.github.com", timeout_seconds: float = 30.0) -> None:
+    def __init__(
+        self,
+        *,
+        token: str,
+        api_base: str = "https://api.github.com",
+        timeout_seconds: float = 30.0,
+    ) -> None:
         if not token.strip():
             raise ValueError("token must not be empty")
         self._token = token
         self._api_base = api_base.rstrip("/")
         self._timeout_seconds = timeout_seconds
-        self._provider_calls = 0
 
     def execute(self, request: CapabilityRequest) -> ConnectorResult:
+        provider_calls = 0
+
+        def get_json(path: str) -> dict:
+            nonlocal provider_calls
+            provider_calls += 1
+            return self._get_json(path)
+
         if request.provider != self.provider or request.capability not in self.capabilities:
-            return self._failure(request, "CONNECTOR_REQUEST_MISMATCH")
+            return self._failure(request, "CONNECTOR_REQUEST_MISMATCH", provider_calls)
 
         resource = request.resource_map()
         repository = resource.get("repository")
         path = resource.get("path")
         if not repository or not path:
-            return self._failure(request, "INVALID_RESOURCE")
+            return self._failure(request, "INVALID_RESOURCE", provider_calls)
 
         try:
-            repo = self._get_json(f"/repos/{quote(repository, safe='/')}")
+            repo = get_json(f"/repos/{quote(repository, safe='/')}")
             default_branch = repo["default_branch"]
-            commit = self._get_json(
+            commit = get_json(
                 f"/repos/{quote(repository, safe='/')}/commits/{quote(default_branch, safe='')}"
             )
             commit_sha = commit["sha"]
-            item = self._get_json(
+            item = get_json(
                 f"/repos/{quote(repository, safe='/')}/contents/{quote(path, safe='/')}?ref={commit_sha}"
             )
             content = base64.b64decode(item["content"].replace("\n", ""))
         except HTTPError as exc:
-            return self._failure(request, self._http_reason(exc.code))
+            return self._failure(request, self._http_reason(exc.code), provider_calls)
         except (URLError, TimeoutError):
-            return self._failure(request, "PROVIDER_UNAVAILABLE")
+            return self._failure(request, "PROVIDER_UNAVAILABLE", provider_calls)
         except (KeyError, ValueError, TypeError, json.JSONDecodeError):
-            return self._failure(request, "RESPONSE_INVALID")
+            return self._failure(request, "RESPONSE_INVALID", provider_calls)
 
         return ConnectorResult(
             state=ConnectorResultState.EXECUTED,
@@ -57,7 +69,7 @@ class GitHubConnectorAdapter:
                 request_id=request.request_id,
                 provider=self.provider,
                 capability=request.capability,
-                provider_calls=self._provider_calls,
+                provider_calls=provider_calls,
                 resource=request.resource,
             ),
             data={
@@ -72,7 +84,6 @@ class GitHubConnectorAdapter:
         )
 
     def _get_json(self, path: str) -> dict:
-        self._provider_calls += 1
         request = Request(
             f"{self._api_base}{path}",
             headers={
@@ -86,14 +97,19 @@ class GitHubConnectorAdapter:
         with urlopen(request, timeout=self._timeout_seconds) as response:
             return json.loads(response.read().decode("utf-8"))
 
-    def _failure(self, request: CapabilityRequest, reason: str) -> ConnectorResult:
+    def _failure(
+        self,
+        request: CapabilityRequest,
+        reason: str,
+        provider_calls: int,
+    ) -> ConnectorResult:
         return ConnectorResult(
             state=ConnectorResultState.FAILED,
             audit=ConnectorAudit(
                 request_id=request.request_id,
                 provider=self.provider,
                 capability=request.capability,
-                provider_calls=self._provider_calls,
+                provider_calls=provider_calls,
                 resource=request.resource,
                 reason=reason,
             ),
