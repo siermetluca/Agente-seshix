@@ -12,7 +12,7 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0024](tasks/DEV-0024/)
 - Active DEV_TASK: [DEV-0025](tasks/DEV-0025/)
-- Current step: DEV-0025 AUTOMATED_GATE_PASS / OWNER_HUMAN_ACCEPTANCE_PENDING
+- Current step: DEV-0025 REWORK_VALIDATION_PASS / OWNER_HUMAN_RETEST_PENDING
 - Blockers: OWNER_HUMAN_ACCEPTANCE_REQUIRED_FOR_DEV-0025
 
 ## Implemented
@@ -133,7 +133,7 @@ Review verification: 61/61 unit tests PASS.
 10. DEV-0022 — Structured Semantic Model Port for SKILL_01 — PASS
 11. DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance — PASS
 12. DEV-0024 — SKILL_02 Company Analysis Runtime — PASS
-13. DEV-0025 — SKILL_02 Validation + Activation — AWAITING_HUMAN_ACCEPTANCE
+13. DEV-0025 — SKILL_02 Validation + Activation — AWAITING_HUMAN_RETEST
 14. DEV-0026 — Source Acquisition Capability Port
 15. DEV-0027 — SKILL_03 External Validation Runtime
 16. DEV-0028 — SKILL_03 Validation + Activation
@@ -239,11 +239,13 @@ SKILL_01 overall = CLOSED_V1
   - targeted tests: 11/11 PASS; integration: 23/23 PASS; full unit regression: 152/152 PASS
   - result: [RESULT.md](tasks/DEV-0024/RESULT.md)
 
-- DEV-0025 — SKILL_02 Validation + Activation — AWAITING_HUMAN_ACCEPTANCE
-  - local Ollama provider validation executed: PASS
-  - targeted/provider tests: 25/25 PASS; full unit regression: 165/165 PASS; compileall PASS
-  - human acceptance harness available
-  - activation blocked until explicit owner approval
+- DEV-0025 — SKILL_02 Validation + Activation — AWAITING_HUMAN_RETEST
+  - automated SKILL_02 gate previously PASS: 25/25 targeted/provider; 165/165 full unit; compileall PASS
+  - owner replay exposed upstream SKILL_01 noisy-input grounding defect
+  - revised plan CP-DEV-0025-v2 approved: tolerate spelling/grammar noise semantically, bind accepted FATTO back to exact source evidence, clarify ambiguity instead of assuming
+  - remediation verification: semantic-intake unit 11/11 PASS; real Ollama replay 2/2 PASS; full unit regression 167/167 PASS; compileall/diff check PASS
+  - exact owner input with `elttrici` now reaches PRIMARY_CONTEXT preview with source-grounded values
+  - activation remains blocked until explicit owner retest/approval
   - result: [RESULT.md](tasks/DEV-0025/RESULT.md)
 
 ## Component index
@@ -252,7 +254,7 @@ SKILL_01 overall = CLOSED_V1
 - APPLICATION FOUNDATION — FROZEN
 - FLOW RUNTIME — OPERATIONAL_V1
 - SKILL_01 — CLOSED_V1 / HUMAN_ACCEPTED / CONTEXT_BASELINE_EVOLUTIVE
-- SKILL_02 — AUTOMATED_VALIDATION_PASS / OWNER_HITL_PENDING
+- SKILL_02 — REWORK_VALIDATION_PASS / OWNER_HITL_PENDING
 - SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED
 - AUTHORITY ENGINE — OPERATIONAL_V1

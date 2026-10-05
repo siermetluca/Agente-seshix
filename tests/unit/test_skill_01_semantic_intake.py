@@ -118,7 +118,8 @@ class Skill01SemanticIntakeTests(unittest.TestCase):
         )
         self.assertEqual(preview.accepted_candidates, ())
         self.assertEqual(len(preview.clarification_questions), 1)
-        self.assertIn("impianti elettrici", preview.clarification_questions[0])
+        self.assertIn("senza assumere", preview.clarification_questions[0].lower())
+        self.assertIn("esempio", preview.clarification_questions[0].lower())
         self.assertEqual(ev.items, before_ev)
         self.assertEqual(ctx.items, before_ctx)
 
@@ -208,6 +209,44 @@ class Skill01SemanticIntakeTests(unittest.TestCase):
                 source_text="azienda alpha beta",
                 source_ref="human://owner",
             )
+
+    def test_obvious_typo_is_rebound_to_exact_source_span(self):
+        source = "azienda installazione di impianti tecnologici e elttrici"
+        service, _, _ = build_service(RawSemanticOutput(candidates=(
+            RawSemanticCandidate(
+                "company.activities",
+                "installazione di impianti tecnologici e elettrici",
+                "FATTO",
+                ["installazione di impianti tecnologici e elettrici"],
+            ),
+        )))
+        preview = service.analyze(
+            request_id="SEM-TYPO-REBIND",
+            source_text=source,
+            source_ref="human://owner",
+        )
+        self.assertEqual(
+            preview.accepted_candidates[0].value,
+            ["installazione di impianti tecnologici e elttrici"],
+        )
+
+    def test_low_confidence_semantic_rewrite_is_not_accepted_and_requests_clarification(self):
+        service, _, _ = build_service(RawSemanticOutput(candidates=(
+            RawSemanticCandidate(
+                "company.activities",
+                "consulenza informatica avanzata",
+                "FATTO",
+                ["consulenza informatica avanzata"],
+            ),
+        )))
+        preview = service.analyze(
+            request_id="SEM-AMBIGUOUS-REBIND",
+            source_text="facciamo cose software per clienti",
+            source_ref="human://owner",
+        )
+        self.assertEqual(preview.accepted_candidates, ())
+        self.assertEqual(len(preview.clarification_questions), 1)
+        self.assertIn("attività", preview.clarification_questions[0].lower())
 
     def test_out_of_catalog_key_is_rejected(self):
         service, _, _ = build_service(RawSemanticOutput(candidates=(

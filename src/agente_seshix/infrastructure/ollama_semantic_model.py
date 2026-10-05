@@ -149,16 +149,20 @@ Allowed keys:
 - company.revenue
 
 Rules:
-- Extract only information supported by the source text.
-- FATTO must be extractive: never add actions, services, capabilities or qualifiers absent from the source.
-- Keep FATTO claim and string values in the source language and wording whenever possible.
-- For company.activities, preserve coordinated phrases as complete phrases instead of splitting a modifier into a standalone activity.
+- Understand the user's intended semantics even when Source contains spelling mistakes, missing punctuation, informal grammar, abbreviations, or poorly formed phrases.
+- Extract only information supported by the source text. Semantic understanding may choose the correct allowed key, but it must never invent a fact that is not supported.
+- FATTO must be extractive in meaning: never add actions, services, capabilities or qualifiers absent from the source.
+- For FATTO string values, prefer the user's source wording. You may normalize an obvious spelling/grammar error only when the intended meaning is unambiguous; the deterministic caller will rebind the interpreted value to an exact source span before accepting it as evidence.
+- For company.activities, choose the complete activity phrase by meaning. Do not invent missing business meaning merely to make the sentence grammatical.
+- If the intended meaning is genuinely ambiguous or two materially different interpretations are plausible, do not guess and do not emit that FATTO candidate. The caller will ask the user for clarification.
+- For company.activities, preserve coordinated phrases as complete source phrases instead of splitting a modifier into a standalone activity.
 - FATTO: explicitly stated information.
 - IPOTESI: interpretation explicitly signaled as uncertain/possible.
 - UNKNOWN: relevant information explicitly missing or unavailable; value must be null.
 - Never create a candidate merely because an allowed key exists.
 - Never use runtime/control words such as WAITING_HITL, REQUIRES_HITL, ALLOW, DENY as business values.
-- Preserve numeric values as JSON numbers when clearly numeric.
+- For company.employees, company.owner_count and company.admin_staff, return the explicit quantity as a JSON integer, never as a phrase such as "6 dipendenti".
+- Preserve other clearly numeric values as JSON numbers when the source explicitly states them.
 - company.activities may be a JSON list of strings.
 - claim must be a short natural-language statement grounded in the source.
 - Do not add explanations outside the JSON.

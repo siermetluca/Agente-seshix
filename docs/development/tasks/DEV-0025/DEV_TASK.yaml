@@ -1,6 +1,6 @@
 dev_task_id: DEV-0025
 title: SKILL_02 Validation + Activation
-status: AWAITING_HUMAN_ACCEPTANCE
+status: AWAITING_HUMAN_RETEST
 request: Validate SKILL_02 with a real local analysis provider, stress non-invention guarantees, expose human acceptance, and activate only after owner approval.
 source:
   - docs/development/tasks/DEV-0024/RESULT.md
@@ -13,6 +13,9 @@ requirements:
   - CRITICITA/INEFFICIENZA/GAP/RISK/IMPROVEMENT_AREA require explicit negative-signal context; otherwise they must be HYPOTHESIS or CONTEXT_CHANGE_CANDIDATE.
   - Validate all basis keys against exact PRIMARY_CONTEXT version.
   - Run real-provider positive and anti-hallucination scenarios.
+  - Natural-language intake must tolerate spelling errors, informal grammar and poorly formed phrases when the intended semantics are sufficiently unambiguous.
+  - Accepted FATTO evidence must remain bound to exact source text; semantic normalization must not overwrite provenance.
+  - Ambiguous or unclear meaning must not be assumed: ask the minimum concise clarification needed, with simple guidance/examples when useful.
   - Provide a visible human acceptance harness.
   - Keep SKILL_02 activation pending until the owner personally approves.
 constraints:

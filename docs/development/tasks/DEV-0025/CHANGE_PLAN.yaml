@@ -1,6 +1,8 @@
-change_plan_id: CP-DEV-0025-v1
+change_plan_id: CP-DEV-0025-v2
 dev_task_id: DEV-0025
 status: APPROVED
+revision_of: CP-DEV-0025-v1
+revision_reason: Human acceptance exposed a real SKILL_01 semantic extraction defect. Owner clarification: natural-language intake must tolerate spelling errors and poorly formed phrases, interpret semantics when sufficiently unambiguous, preserve exact source evidence, and ask concise guided clarification instead of assuming when meaning is unclear or ambiguous.
 scope:
   add:
     - src/agente_seshix/infrastructure/ollama_company_analysis.py
@@ -12,13 +14,25 @@ scope:
   update:
     - src/agente_seshix/application/skill_02_company_analysis.py
     - tests/unit/test_skill_02_company_analysis.py
+    - src/agente_seshix/infrastructure/ollama_semantic_model.py
+    - src/agente_seshix/application/skill_01_semantic_intake.py
+    - tests/unit/test_skill_01_semantic_intake.py
+    - tests/integration/test_skill_01_semantic_ollama.py
+    - docs/development/tasks/DEV-0025/DEV_TASK.yaml
     - docs/development/DEVELOPMENT_STATUS.md
 implementation:
-  - Harden validator against unsupported direct negative conclusions.
+  - Preserve all previously approved DEV-0025 validation work.
+  - Harden SKILL_02 validator against unsupported direct negative conclusions.
   - Add structured local Ollama analysis adapter.
   - Add real-provider validation tests and anti-hallucination scenarios.
   - Add human acceptance harness using a real PRIMARY_CONTEXT built from natural language.
-  - Leave activation pending until explicit human approval.
+  - Accept noisy natural language: spelling errors, missing punctuation, informal grammar and poorly formed phrases must not be rejected when the intended meaning is sufficiently unambiguous.
+  - Separate semantic interpretation from evidence binding: the model may map noisy wording to the correct semantic key, but every accepted FATTO string/list value must remain bound to an exact source substring so provenance is preserved.
+  - Never silently invent or repair uncertain meaning. If two or more plausible interpretations remain, accept no conflicting fact and return a concise clarification question.
+  - Clarification must be low-friction: ask only the minimum missing/ambiguous point, prefer one question at a time, reuse already known context, and where useful offer a short example or bounded choices.
+  - Keep deterministic SKILL_01 grounding fail-closed, but allow a bounded source-span rebinding step for obvious surface-form differences such as spelling errors: rebinding must select one unique high-confidence contiguous source span and store that exact source text as evidence. Low-confidence or non-unique matches must not be accepted.
+  - Semantic tolerance belongs to interpretation; deterministic rebinding exists only to attach the interpreted fact back to exact source evidence, never to create meaning.
+  - Leave SKILL_02 activation pending until explicit human approval.
 tests:
   - explicit asset/capability extraction;
   - no direct negative conclusion from neutral facts;
@@ -26,6 +40,8 @@ tests:
   - unsupported basis key rejected;
   - provider structured JSON mapping;
   - real Ollama integration;
+  - exact replay of human input containing `elttrici` must reach grounded PRIMARY_CONTEXT without spelling normalization;
+  - regression: deterministic grounding still rejects model-produced wording absent from source;
   - full regression.
 architecture_impact: NONE
 persistent_state_impact: NONE

@@ -43,6 +43,39 @@ class Skill01SemanticOllamaTests(unittest.TestCase):
         self.assertIn("company.activities", by_key)
         self.assertIn("company.country", by_key)
 
+    def test_real_local_model_preserves_typo_verbatim_for_grounded_fact(self):
+        class NoopNode:
+            pass
+
+        source_text = (
+            "azienda di installazione di impianti tecnologici e elttrici, "
+            "con integrazione di sviluppo software settoriali"
+        )
+        service = Skill01SemanticIntakeService(
+            StructuredSemanticService(
+                OllamaSemanticModel(
+                    model=os.environ.get(
+                        "AGENTE_SESHIX_SEMANTIC_MODEL",
+                        "qwen2.5:3b",
+                    )
+                )
+            ),
+            NoopNode(),
+        )
+        preview = service.analyze(
+            request_id="OLLAMA-TYPO-GROUNDING",
+            source_text=source_text,
+            source_ref="human://owner",
+        )
+        by_key = {candidate.key: candidate for candidate in preview.accepted_candidates}
+        self.assertIn("company.activities", by_key)
+        activities = by_key["company.activities"].value
+        self.assertTrue(activities)
+        for activity in activities:
+            self.assertIn(activity, source_text)
+        self.assertTrue(any("elttrici" in activity for activity in activities))
+        self.assertFalse(any("elettrici" in activity for activity in activities))
+
 
 if __name__ == "__main__":
     unittest.main()

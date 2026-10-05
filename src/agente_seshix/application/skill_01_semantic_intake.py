@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from difflib import SequenceMatcher
+import re
 from typing import Mapping
 
 from agente_seshix.application.authority_policy import AuthorityPolicy
@@ -158,23 +160,25 @@ class Skill01SemanticIntakeService:
                 questions.append(rule.clarification_question)
                 continue
 
-            self._validate_source_grounding(candidate, source_text)
             if candidate.classification is EvidenceClassification.FATTO:
+                rebound = self._rebind_fact_candidate(candidate, source_text)
+                if rebound is None:
+                    questions.append(rule.clarification_question)
+                    continue
                 candidate = SemanticCandidate(
-                    key=candidate.key,
+                    key=rebound.key,
                     claim=source_text.strip(),
-                    classification=candidate.classification,
-                    value=candidate.value,
+                    classification=rebound.classification,
+                    value=rebound.value,
                 )
+            self._validate_source_grounding(candidate, source_text)
             accepted.append(candidate)
 
         if not accepted and not questions:
             questions.append(
-                "L'input non contiene ancora un fatto aziendale sufficientemente "
-                "esplicito. Hai scritto: "
-                f"{source_text!r}. "
-                "Descrivi in una frase completa cosa fa concretamente la tua azienda "
-                "e, se vuoi, aggiungi nome, numero di persone e paese."
+                "Non riesco a ricavare un fatto aziendale senza assumere. "
+                "Chiarisci solo il punto principale, anche con parole semplici. "
+                "Esempio: «installiamo impianti elettrici» oppure «sviluppiamo software per installatori»."
             )
 
         return Skill01SemanticPreview(
@@ -188,6 +192,87 @@ class Skill01SemanticIntakeService:
     def _source_explicitly_marks_unknown(self, source_text: str) -> bool:
         normalized = source_text.strip().lower()
         return any(marker in normalized for marker in self._UNKNOWN_MARKERS)
+
+    def _rebind_fact_candidate(
+        self,
+        candidate: SemanticCandidate,
+        source_text: str,
+    ) -> SemanticCandidate | None:
+        value = candidate.value
+        if isinstance(value, str):
+            rebound = self._bounded_source_span(value, source_text)
+            if rebound is None:
+                return None
+            value = rebound
+        elif candidate.key == "company.activities" and isinstance(value, list):
+            rebound_items: list[str] = []
+            for item in value:
+                if not isinstance(item, str):
+                    raise Skill01SemanticIntakeError(
+                        "company.activities items must be strings"
+                    )
+                normalized = " ".join(item.lower().split())
+                if len(normalized.split()) < 2:
+                    raise Skill01SemanticIntakeError(
+                        f"activity is not a complete phrase: {item!r}"
+                    )
+                rebound = self._bounded_source_span(item, source_text)
+                if rebound is None:
+                    return None
+                rebound_items.append(rebound)
+            value = rebound_items
+
+        return SemanticCandidate(
+            key=candidate.key,
+            claim=candidate.claim,
+            classification=candidate.classification,
+            value=value,
+        )
+
+    @staticmethod
+    def _bounded_source_span(value: str, source_text: str) -> str | None:
+        raw_value = value.strip()
+        if not raw_value:
+            return None
+
+        lower_source = source_text.lower()
+        exact_index = lower_source.find(raw_value.lower())
+        if exact_index >= 0:
+            return source_text[exact_index: exact_index + len(raw_value)]
+
+        source_tokens = list(re.finditer(r"\b[\wÀ-ÿ'-]+\b", source_text, re.UNICODE))
+        value_tokens = re.findall(r"\b[\wÀ-ÿ'-]+\b", raw_value, re.UNICODE)
+        if not source_tokens or not value_tokens:
+            return None
+
+        target = " ".join(value_tokens).lower()
+        target_len = len(value_tokens)
+        candidates: list[tuple[float, str]] = []
+        for window_len in range(max(1, target_len - 1), target_len + 2):
+            if window_len > len(source_tokens):
+                continue
+            for start in range(0, len(source_tokens) - window_len + 1):
+                end = start + window_len - 1
+                span = source_text[
+                    source_tokens[start].start(): source_tokens[end].end()
+                ]
+                normalized_span = " ".join(
+                    match.group(0) for match in source_tokens[start:start + window_len]
+                ).lower()
+                ratio = SequenceMatcher(None, target, normalized_span).ratio()
+                candidates.append((ratio, span))
+
+        if not candidates:
+            return None
+        candidates.sort(key=lambda item: item[0], reverse=True)
+        best_ratio, best_span = candidates[0]
+        second_ratio = candidates[1][0] if len(candidates) > 1 else 0.0
+
+        if best_ratio < 0.94:
+            return None
+        if second_ratio >= 0.94 and best_ratio - second_ratio < 0.02:
+            return None
+        return best_span
 
     def _validate_source_grounding(
         self,
