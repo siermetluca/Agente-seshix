@@ -1,6 +1,6 @@
 # DEV-0025 RESULT
 
-Status: REWORK_VALIDATION_PASS / AWAITING_HUMAN_RETEST
+Status: BLOCK_VALIDATION_ACTIVE
 
 ## Implemented
 
@@ -47,15 +47,15 @@ exact human input preview:               PASS
 
 Exact replay now produces grounded source evidence including `elttrici` and reaches the PRIMARY_CONTEXT confirmation gate without executing SKILL_02 automatically.
 
-## Remaining gate
+## Validation rule
 
-The approved DEV_TASK explicitly requires personal owner approval before activation.
+Owner architecture decision supersedes the previous full-flow human gate for this task:
 
 ```text
-AUTOMATED_GATE = PASS
-OWNER_HUMAN_ACCEPTANCE = PENDING
-SKILL_02_ACTIVATION = FORBIDDEN UNTIL OWNER APPROVAL
-DEV-0025 = NOT CLOSED
+VALIDATE_EACH_BLOCK_IN_ISOLATION = REQUIRED
+FULL_CHAIN_AS_ACCEPTANCE_GATE = FORBIDDEN
+HUMAN_HARNESS = OPTIONAL_DIAGNOSTIC
+ASSEMBLY = DEFERRED_TO_CODEX_ASSEMBLER_WITH_DEFINED_CONTEXT
 ```
 
-Next action: owner runs `scripts/skill_02_human_acceptance.py` following `HUMAN_TEST_GUIDE.md` and records an explicit acceptance/rejection decision.
+DEV-0025 remains open only until the remaining individual blocks in its scope have explicit PASS/FAIL evidence. A later assembler task will compose validated blocks without retroactively changing their individual validation status.

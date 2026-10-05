@@ -1,7 +1,7 @@
 dev_task_id: DEV-0025
 title: SKILL_02 Validation + Activation
-status: AWAITING_HUMAN_RETEST
-request: Validate SKILL_02 with a real local analysis provider, stress non-invention guarantees, expose human acceptance, and activate only after owner approval.
+status: BLOCK_VALIDATION_ACTIVE
+request: Validate SKILL_02 and related capability blocks independently against their explicit contracts. Full-flow assembly/orchestration is out of scope here and will be performed later by a Codex assembler agent from a defined assembly context.
 source:
   - docs/development/tasks/DEV-0024/RESULT.md
   - docs/skills/PROCESS_SKILLS_v0.1.md
@@ -16,8 +16,9 @@ requirements:
   - Natural-language intake must tolerate spelling errors, informal grammar and poorly formed phrases when the intended semantics are sufficiently unambiguous.
   - Accepted FATTO evidence must remain bound to exact source text; semantic normalization must not overwrite provenance.
   - Ambiguous or unclear meaning must not be assumed: ask the minimum concise clarification needed, with simple guidance/examples when useful.
-  - Provide a visible human acceptance harness.
-  - Keep SKILL_02 activation pending until the owner personally approves.
+  - Validate blocks one by one; do not use a complete chained flow as the acceptance criterion for an individual block.
+  - Existing human harnesses may be used diagnostically but are not the block-validation gate.
+  - Future composition is delegated to a Codex assembler agent operating from an explicit assembly context.
 constraints:
   - No SKILL_03 work.
   - No external web/market evidence.
