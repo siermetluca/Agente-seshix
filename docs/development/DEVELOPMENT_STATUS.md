@@ -12,8 +12,8 @@ Non è fonte canonica dei dettagli: indicizza piani, task, test, risultati e sta
 - Current canonical base: current `main` HEAD (the commit containing this index)
 - Last completed DEV_TASK: [DEV-0024](tasks/DEV-0024/)
 - Active DEV_TASK: [DEV-0025](tasks/DEV-0025/)
-- Current step: CHANGE_PLAN_APPROVED
-- Blockers: NONE
+- Current step: DEV-0025 AUTOMATED_GATE_PASS / OWNER_HUMAN_ACCEPTANCE_PENDING
+- Blockers: OWNER_HUMAN_ACCEPTANCE_REQUIRED_FOR_DEV-0025
 
 ## Implemented
 
@@ -133,7 +133,7 @@ Review verification: 61/61 unit tests PASS.
 10. DEV-0022 — Structured Semantic Model Port for SKILL_01 — PASS
 11. DEV-0023 — SKILL_01 Semantic Intake + Human Re-Acceptance — PASS
 12. DEV-0024 — SKILL_02 Company Analysis Runtime — PASS
-13. DEV-0025 — SKILL_02 Validation + Activation — ACTIVE
+13. DEV-0025 — SKILL_02 Validation + Activation — AWAITING_HUMAN_ACCEPTANCE
 14. DEV-0026 — Source Acquisition Capability Port
 15. DEV-0027 — SKILL_03 External Validation Runtime
 16. DEV-0028 — SKILL_03 Validation + Activation
@@ -239,13 +239,20 @@ SKILL_01 overall = CLOSED_V1
   - targeted tests: 11/11 PASS; integration: 23/23 PASS; full unit regression: 152/152 PASS
   - result: [RESULT.md](tasks/DEV-0024/RESULT.md)
 
+- DEV-0025 — SKILL_02 Validation + Activation — AWAITING_HUMAN_ACCEPTANCE
+  - local Ollama provider validation executed: PASS
+  - targeted/provider tests: 25/25 PASS; full unit regression: 165/165 PASS; compileall PASS
+  - human acceptance harness available
+  - activation blocked until explicit owner approval
+  - result: [RESULT.md](tasks/DEV-0025/RESULT.md)
+
 ## Component index
 
 - DOMAIN FOUNDATION — FROZEN
 - APPLICATION FOUNDATION — FROZEN
 - FLOW RUNTIME — OPERATIONAL_V1
 - SKILL_01 — CLOSED_V1 / HUMAN_ACCEPTED / CONTEXT_BASELINE_EVOLUTIVE
-- SKILL_02 — NOT_STARTED
+- SKILL_02 — AUTOMATED_VALIDATION_PASS / OWNER_HITL_PENDING
 - SKILL_03 — NOT_STARTED
 - PERSISTENCE — NOT_STARTED
 - AUTHORITY ENGINE — OPERATIONAL_V1

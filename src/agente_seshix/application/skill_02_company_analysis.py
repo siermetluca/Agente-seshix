@@ -45,6 +45,7 @@ class RawAnalysisFinding:
     category: Any
     statement: Any
     basis_keys: Any
+    verification_candidate_ids: Any = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,6 +74,7 @@ class AnalysisFinding:
     category: AnalysisCategory
     statement: str
     basis_keys: tuple[str, ...]
+    verification_candidate_ids: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,6 +100,49 @@ class Skill02CompanyAnalysisResult:
 
 
 class CompanyAnalysisValidator:
+    _DIRECT_NEGATIVE_CATEGORIES = frozenset(
+        {
+            AnalysisCategory.CRITICITA,
+            AnalysisCategory.INEFFICIENZA,
+            AnalysisCategory.GAP,
+            AnalysisCategory.IMPROVEMENT_AREA,
+            AnalysisCategory.RISK,
+        }
+    )
+    _NEGATIVE_SIGNAL_KEY_MARKERS = (
+        "critical",
+        "critic",
+        "inefficien",
+        "gap",
+        "risk",
+        "constraint",
+        "problem",
+        "issue",
+        "bottleneck",
+        "limitation",
+    )
+    _CAPABILITY_KEY_MARKERS = (
+        "activities",
+        "activity",
+        "capabil",
+        "competenc",
+        "skill",
+        "service",
+        "product",
+    )
+    _ASSET_KEY_MARKERS = (
+        "asset",
+        "hardware",
+        "software",
+        "equipment",
+        "tool",
+        "certification",
+        "license",
+        "vehicle",
+        "machine",
+        "property",
+    )
+
     def validate(
         self,
         request: CompanyAnalysisRequest,
@@ -113,13 +158,23 @@ class CompanyAnalysisValidator:
             for record in request.primary_context.records
         }
 
-        findings = tuple(
-            self._validate_finding(item, context_by_key)
-            for item in raw.findings
-        )
         candidates = tuple(
             self._validate_context_candidate(item, context_by_key)
             for item in raw.context_change_candidates
+        )
+        self._require_unique_ids((), candidates)
+        candidate_by_id = {
+            candidate.candidate_id: candidate
+            for candidate in candidates
+        }
+
+        findings = tuple(
+            self._validate_finding(
+                item,
+                context_by_key,
+                candidate_by_id,
+            )
+            for item in raw.findings
         )
         self._require_unique_ids(findings, candidates)
 
@@ -134,6 +189,7 @@ class CompanyAnalysisValidator:
         self,
         raw: RawAnalysisFinding,
         context_by_key: dict[str, Any],
+        candidate_by_id: dict[str, ContextChangeCandidate],
     ) -> AnalysisFinding:
         if not isinstance(raw, RawAnalysisFinding):
             raise CompanyAnalysisValidationError(
@@ -170,6 +226,30 @@ class CompanyAnalysisValidator:
                 "basis_keys must not contain duplicates"
             )
 
+        if not isinstance(
+            raw.verification_candidate_ids,
+            (tuple, list),
+        ):
+            raise CompanyAnalysisValidationError(
+                "verification_candidate_ids must be a tuple/list"
+            )
+        verification_candidate_ids = tuple(
+            self._required_text(item, "verification_candidate_id")
+            for item in raw.verification_candidate_ids
+        )
+        if len(set(verification_candidate_ids)) != len(
+            verification_candidate_ids
+        ):
+            raise CompanyAnalysisValidationError(
+                "verification_candidate_ids must not contain duplicates"
+            )
+        for candidate_id in verification_candidate_ids:
+            if candidate_id not in candidate_by_id:
+                raise CompanyAnalysisValidationError(
+                    "finding references unknown verification candidate: "
+                    f"{candidate_id}"
+                )
+
         for key in basis_keys:
             if key not in context_by_key:
                 raise CompanyAnalysisValidationError(
@@ -188,11 +268,69 @@ class CompanyAnalysisValidator:
                     "IPOTESI context may only support HYPOTHESIS findings"
                 )
 
+        if category is AnalysisCategory.HYPOTHESIS:
+            has_fact_basis = any(
+                context_by_key[key].classification
+                is EvidenceClassification.FATTO
+                for key in basis_keys
+            )
+            if has_fact_basis and not verification_candidate_ids:
+                raise CompanyAnalysisValidationError(
+                    "HYPOTHESIS from FATTO context requires at least one "
+                    "verification CONTEXT_CHANGE_CANDIDATE"
+                )
+        elif verification_candidate_ids:
+            raise CompanyAnalysisValidationError(
+                "direct findings must not declare verification candidates"
+            )
+
+        if (
+            category in self._DIRECT_NEGATIVE_CATEGORIES
+            and not any(self._has_negative_signal_key(key) for key in basis_keys)
+        ):
+            raise CompanyAnalysisValidationError(
+                "direct negative finding requires explicit negative-signal context; "
+                "use HYPOTHESIS or CONTEXT_CHANGE_CANDIDATE instead"
+            )
+
+        if (
+            category is AnalysisCategory.CAPABILITY
+            and not any(
+                self._key_matches(key, self._CAPABILITY_KEY_MARKERS)
+                for key in basis_keys
+            )
+        ):
+            raise CompanyAnalysisValidationError(
+                "direct CAPABILITY requires capability-bearing context keys; "
+                "use HYPOTHESIS otherwise"
+            )
+
+        if (
+            category is AnalysisCategory.ASSET
+            and not any(
+                self._key_matches(key, self._ASSET_KEY_MARKERS)
+                for key in basis_keys
+            )
+        ):
+            raise CompanyAnalysisValidationError(
+                "direct ASSET requires asset-bearing context keys; "
+                "use HYPOTHESIS otherwise"
+            )
+
+        statement = self._ground_statement(
+            category,
+            basis_keys,
+            context_by_key,
+            verification_candidate_ids,
+            candidate_by_id,
+        )
+
         return AnalysisFinding(
             finding_id=finding_id,
             category=category,
             statement=statement,
             basis_keys=basis_keys,
+            verification_candidate_ids=verification_candidate_ids,
         )
     def _validate_context_candidate(
         self,
@@ -253,6 +391,56 @@ class CompanyAnalysisValidator:
         if findings:
             return CompanyAnalysisStatus.ANALYZED
         return CompanyAnalysisStatus.NO_FINDINGS
+
+    def _has_negative_signal_key(self, key: str) -> bool:
+        return self._key_matches(key, self._NEGATIVE_SIGNAL_KEY_MARKERS)
+
+    def _key_matches(self, key: str, markers: tuple[str, ...]) -> bool:
+        normalized = key.lower()
+        return any(marker in normalized for marker in markers)
+
+    def _ground_statement(
+        self,
+        category: AnalysisCategory,
+        basis_keys: tuple[str, ...],
+        context_by_key: dict[str, Any],
+        verification_candidate_ids: tuple[str, ...],
+        candidate_by_id: dict[str, ContextChangeCandidate],
+    ) -> str:
+        rendered = "; ".join(
+            f"{key}={context_by_key[key].value!r}"
+            for key in basis_keys
+        )
+
+        if category is AnalysisCategory.HYPOTHESIS:
+            if verification_candidate_ids:
+                requested = "; ".join(
+                    candidate_by_id[candidate_id].requested_information
+                    for candidate_id in verification_candidate_ids
+                )
+                return (
+                    "Ipotesi da verificare: relazione da valutare tra "
+                    f"{rendered}; dati necessari: {requested}"
+                )
+            return (
+                "Ipotesi derivata da contesto IPOTESI: "
+                f"{rendered}"
+            )
+
+        labels = {
+            AnalysisCategory.CRITICITA: "Criticità interna dichiarata",
+            AnalysisCategory.INEFFICIENZA: "Inefficienza interna dichiarata",
+            AnalysisCategory.ASSET: "Asset interno dichiarato",
+            AnalysisCategory.CAPABILITY: "Capacità interna dichiarata",
+            AnalysisCategory.GAP: "Gap interno dichiarato",
+            AnalysisCategory.IMPROVEMENT_AREA: "Area di miglioramento supportata",
+            AnalysisCategory.RISK: "Rischio interno dichiarato",
+        }
+        rendered = "; ".join(
+            f"{key}={context_by_key[key].value!r}"
+            for key in basis_keys
+        )
+        return f"{labels[category]}: {rendered}"
 
     def _required_text(self, value: Any, name: str) -> str:
         if not isinstance(value, str) or not value.strip():

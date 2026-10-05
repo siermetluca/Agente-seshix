@@ -1,6 +1,6 @@
 dev_task_id: DEV-0025
 title: SKILL_02 Validation + Activation
-status: PLANNED
+status: AWAITING_HUMAN_ACCEPTANCE
 request: Validate SKILL_02 with a real local analysis provider, stress non-invention guarantees, expose human acceptance, and activate only after owner approval.
 source:
   - docs/development/tasks/DEV-0024/RESULT.md
